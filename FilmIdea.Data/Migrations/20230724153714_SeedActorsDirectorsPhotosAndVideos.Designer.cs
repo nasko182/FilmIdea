@@ -4,6 +4,7 @@ using FilmIdea.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FilmIdea.Data.Migrations
 {
     [DbContext(typeof(FilmIdeaDbContext))]
-    partial class FilmIdeaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230724153714_SeedActorsDirectorsPhotosAndVideos")]
+    partial class SeedActorsDirectorsPhotosAndVideos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +52,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Actors", (string)null);
+                    b.ToTable("Actors");
 
                     b.HasData(
                         new
@@ -161,7 +163,7 @@ namespace FilmIdea.Data.Migrations
                     b.HasIndex("GroupId")
                         .IsUnique();
 
-                    b.ToTable("Chats", (string)null);
+                    b.ToTable("Chats");
                 });
 
             modelBuilder.Entity("FilmIdea.Data.Models.Comment", b =>
@@ -190,17 +192,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasIndex("WriterId");
 
-                    b.ToTable("Comments", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("e9c281b3-2f07-4e08-aaa4-5372b1d3cce0"),
-                            CommentDate = new DateTime(2023, 7, 24, 15, 41, 38, 106, DateTimeKind.Utc).AddTicks(4488),
-                            Content = "I like the movie",
-                            ReviewId = new Guid("7dcc5bd6-1133-432b-b6a6-f6c27da75948"),
-                            WriterId = new Guid("2532ddaa-63f0-4de8-71cb-08db8c333233")
-                        });
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("FilmIdea.Data.Models.Critic", b =>
@@ -232,7 +224,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Critics", (string)null);
+                    b.ToTable("Critics");
                 });
 
             modelBuilder.Entity("FilmIdea.Data.Models.Director", b =>
@@ -263,7 +255,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Directors", (string)null);
+                    b.ToTable("Directors");
 
                     b.HasData(
                         new
@@ -299,7 +291,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genres", (string)null);
+                    b.ToTable("Genres");
 
                     b.HasData(
                         new
@@ -435,7 +427,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Groups", (string)null);
+                    b.ToTable("Groups");
                 });
 
             modelBuilder.Entity("FilmIdea.Data.Models.Join_Tables.GroupMovie", b =>
@@ -450,7 +442,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("GroupsMovies", (string)null);
+                    b.ToTable("GroupsMovies");
                 });
 
             modelBuilder.Entity("FilmIdea.Data.Models.Join_Tables.GroupUser", b =>
@@ -465,7 +457,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("GroupsUsers", (string)null);
+                    b.ToTable("GroupsUsers");
                 });
 
             modelBuilder.Entity("FilmIdea.Data.Models.Join_Tables.MovieActor", b =>
@@ -480,7 +472,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasIndex("ActorId");
 
-                    b.ToTable("MoviesActors", (string)null);
+                    b.ToTable("MoviesActors");
 
                     b.HasData(
                         new
@@ -507,7 +499,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasIndex("GenreId");
 
-                    b.ToTable("MoviesGenres", (string)null);
+                    b.ToTable("MoviesGenres");
 
                     b.HasData(
                         new
@@ -534,7 +526,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("UsersMovies", (string)null);
+                    b.ToTable("UsersMovies");
                 });
 
             modelBuilder.Entity("FilmIdea.Data.Models.Message", b =>
@@ -563,7 +555,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Messages", (string)null);
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("FilmIdea.Data.Models.Movie", b =>
@@ -607,7 +599,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasIndex("DirectorId");
 
-                    b.ToTable("Movies", (string)null);
+                    b.ToTable("Movies");
 
                     b.HasData(
                         new
@@ -662,24 +654,24 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("Photos", (string)null);
+                    b.ToTable("Photos");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("509a5043-25fc-4209-9ef9-7df179bc716a"),
+                            Id = new Guid("5e3572db-63c8-4870-b857-2e493f36e620"),
                             ActorId = 2,
                             Url = "https://dl.dropboxusercontent.com/s/oxqc24aw3xb9n9z/MV5BMTY4Mjg0NjIxOV5BMl5Ban_profile_image.jpg"
                         },
                         new
                         {
-                            Id = new Guid("2f3020b4-5d53-4686-8009-24de309f070c"),
+                            Id = new Guid("a3ea2f9d-dfb7-4c08-8f13-b63459382d9b"),
                             MovieId = 2,
                             Url = "https://dl.dropboxusercontent.com/s/kban35sz6tw0d0x/Indiana_Jones_and_the_Dial_of_Destiny_cover_image.jpg"
                         },
                         new
                         {
-                            Id = new Guid("2dc811fa-64ed-4e69-bd54-cf54b0013834"),
+                            Id = new Guid("2a9a360e-2e5c-45ec-be98-a787f8dd78e3"),
                             DirectorId = 2,
                             Url = "https://dl.dropboxusercontent.com/s/491y3cpjoc4ulzm/MV5BNDI3MzgwMmYtY2JjYy00ZWQ2LTgzN_profile_image.jpg"
                         });
@@ -713,17 +705,17 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("Reviews", (string)null);
+                    b.ToTable("Reviews");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0856c757-b85d-4b2f-ad63-7d36e5dc6700"),
+                            Id = new Guid("7dcc5bd6-1133-432b-b6a6-f6c27da75948"),
                             Content = "I like the movie",
-                            CriticId = new Guid("bcc5c503-128b-4ba6-a736-6efbeda1ee34"),
+                            CriticId = new Guid("15eb7825-840b-4528-71cc-08db8c333233"),
                             MovieId = 2,
                             Rating = 9,
-                            ReviewDate = new DateTime(2023, 7, 24, 15, 41, 38, 108, DateTimeKind.Utc).AddTicks(6357)
+                            ReviewDate = new DateTime(2023, 7, 24, 15, 37, 13, 688, DateTimeKind.Utc).AddTicks(1472)
                         });
                 });
 
@@ -748,7 +740,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRatings", (string)null);
+                    b.ToTable("UserRatings");
                 });
 
             modelBuilder.Entity("FilmIdea.Data.Models.Video", b =>
@@ -779,24 +771,24 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("Videos", (string)null);
+                    b.ToTable("Videos");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("1ddaf980-fa7d-43ca-8f62-11216ccd4530"),
+                            Id = new Guid("d06d5744-8865-4307-b504-03d1e46c8f42"),
                             MovieId = 2,
                             Url = "https://dl.dropboxusercontent.com/s/evfvsgzlf9f4vok/1434659607842-pgv4ql-1680875129724_trailer.mp4"
                         },
                         new
                         {
-                            Id = new Guid("6d673ca5-cad3-4973-8a5a-a8d5cbda211e"),
+                            Id = new Guid("2b510e78-2c9f-4f95-9905-e0170cfbb9fb"),
                             DirectorId = 2,
                             Url = "https://dl.dropboxusercontent.com/s/joz6wy1q4o55jz4/1434659607842-pgv4ql-1687560633004.mp4"
                         },
                         new
                         {
-                            Id = new Guid("480523c1-0bc8-4bd0-b0ed-bebfe2822c2b"),
+                            Id = new Guid("d860f759-bec0-4afe-a3ea-ca2b1eea1d5a"),
                             ActorId = 2,
                             Url = "https://dl.dropboxusercontent.com/s/l6151myomc65wqc/1434659607842-pgv4ql-1687556762812.mp4"
                         });

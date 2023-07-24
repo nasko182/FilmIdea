@@ -4,6 +4,7 @@ using FilmIdea.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FilmIdea.Data.Migrations
 {
     [DbContext(typeof(FilmIdeaDbContext))]
-    partial class FilmIdeaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230724154138_SeedComments")]
+    partial class SeedComments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +52,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Actors", (string)null);
+                    b.ToTable("Actors");
 
                     b.HasData(
                         new
@@ -161,7 +163,7 @@ namespace FilmIdea.Data.Migrations
                     b.HasIndex("GroupId")
                         .IsUnique();
 
-                    b.ToTable("Chats", (string)null);
+                    b.ToTable("Chats");
                 });
 
             modelBuilder.Entity("FilmIdea.Data.Models.Comment", b =>
@@ -190,7 +192,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasIndex("WriterId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
 
                     b.HasData(
                         new
@@ -232,7 +234,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Critics", (string)null);
+                    b.ToTable("Critics");
                 });
 
             modelBuilder.Entity("FilmIdea.Data.Models.Director", b =>
@@ -263,7 +265,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Directors", (string)null);
+                    b.ToTable("Directors");
 
                     b.HasData(
                         new
@@ -299,7 +301,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genres", (string)null);
+                    b.ToTable("Genres");
 
                     b.HasData(
                         new
@@ -435,7 +437,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Groups", (string)null);
+                    b.ToTable("Groups");
                 });
 
             modelBuilder.Entity("FilmIdea.Data.Models.Join_Tables.GroupMovie", b =>
@@ -450,7 +452,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("GroupsMovies", (string)null);
+                    b.ToTable("GroupsMovies");
                 });
 
             modelBuilder.Entity("FilmIdea.Data.Models.Join_Tables.GroupUser", b =>
@@ -465,7 +467,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("GroupsUsers", (string)null);
+                    b.ToTable("GroupsUsers");
                 });
 
             modelBuilder.Entity("FilmIdea.Data.Models.Join_Tables.MovieActor", b =>
@@ -480,7 +482,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasIndex("ActorId");
 
-                    b.ToTable("MoviesActors", (string)null);
+                    b.ToTable("MoviesActors");
 
                     b.HasData(
                         new
@@ -507,7 +509,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasIndex("GenreId");
 
-                    b.ToTable("MoviesGenres", (string)null);
+                    b.ToTable("MoviesGenres");
 
                     b.HasData(
                         new
@@ -534,7 +536,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("UsersMovies", (string)null);
+                    b.ToTable("UsersMovies");
                 });
 
             modelBuilder.Entity("FilmIdea.Data.Models.Message", b =>
@@ -563,7 +565,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Messages", (string)null);
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("FilmIdea.Data.Models.Movie", b =>
@@ -607,7 +609,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasIndex("DirectorId");
 
-                    b.ToTable("Movies", (string)null);
+                    b.ToTable("Movies");
 
                     b.HasData(
                         new
@@ -662,7 +664,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("Photos", (string)null);
+                    b.ToTable("Photos");
 
                     b.HasData(
                         new
@@ -713,7 +715,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("Reviews", (string)null);
+                    b.ToTable("Reviews");
 
                     b.HasData(
                         new
@@ -748,7 +750,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRatings", (string)null);
+                    b.ToTable("UserRatings");
                 });
 
             modelBuilder.Entity("FilmIdea.Data.Models.Video", b =>
@@ -779,7 +781,7 @@ namespace FilmIdea.Data.Migrations
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("Videos", (string)null);
+                    b.ToTable("Videos");
 
                     b.HasData(
                         new

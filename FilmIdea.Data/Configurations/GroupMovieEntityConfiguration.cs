@@ -3,7 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 using Models.Join_Tables;
 
-public class GroupMovieConfiguration : IEntityTypeConfiguration<GroupMovie>
+public class GroupMovieEntityConfiguration : IEntityTypeConfiguration<GroupMovie>
 {
     public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<GroupMovie> builder)
     {

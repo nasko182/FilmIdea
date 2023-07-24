@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Models;
 using Seed;
 
-public class DirectorConfiguration : IEntityTypeConfiguration<Director>
+public class DirectorEntityConfiguration : IEntityTypeConfiguration<Director>
 {
     private readonly DirectorSeeder _seeder;
 
-    public DirectorConfiguration()
+    public DirectorEntityConfiguration()
     {
         this._seeder = new DirectorSeeder();
     }

@@ -3,7 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 using Models.Join_Tables;
 
-public class GroupUserConfiguration : IEntityTypeConfiguration<GroupUser>
+public class GroupUserEntityConfiguration : IEntityTypeConfiguration<GroupUser>
 {
     public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<GroupUser> builder)
     {

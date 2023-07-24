@@ -3,7 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
 
-public class ChatConfiguration : IEntityTypeConfiguration<Chat>
+public class ChatEntityConfiguration : IEntityTypeConfiguration<Chat>
 {
     public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Chat> builder)
     {

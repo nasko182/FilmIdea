@@ -3,7 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 using Models.Join_Tables;
 
-public class UserMovieConfiguration : IEntityTypeConfiguration<UserMovie>
+public class UserMovieEntityConfiguration : IEntityTypeConfiguration<UserMovie>
 {
     public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<UserMovie> builder)
     {

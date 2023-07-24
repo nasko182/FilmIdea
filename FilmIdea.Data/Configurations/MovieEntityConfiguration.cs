@@ -2,9 +2,16 @@
 
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Seed;
 
-public class MovieConfiguration : IEntityTypeConfiguration<Movie>
+public class MovieEntityConfiguration : IEntityTypeConfiguration<Movie>
 {
+    private readonly MovieSeeder _seeder;
+
+    public MovieEntityConfiguration()
+    {
+        this._seeder= new MovieSeeder();
+    }
     public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Movie> builder)
     {
         builder.HasMany(m => m.Ratings)
@@ -46,5 +53,7 @@ public class MovieConfiguration : IEntityTypeConfiguration<Movie>
             .WithOne(v => v.Movie)
             .HasForeignKey(p => p.MovieId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasData(this._seeder.GenerateMovies());
     }
 }
