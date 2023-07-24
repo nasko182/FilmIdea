@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33723.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilmIdea.Web", "FilmIdea-WebApplication\FilmIdea.Web.csproj", "{6160E499-9926-4E26-B301-0FA037CF211B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{12E985E0-518F-41E1-9B6C-F6C4D6F097F4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilmIdea.Common", "FilmIdea.Common\FilmIdea.Common.csproj", "{B949D4A7-752C-47B4-B3D5-D4780CC14497}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{2C998826-15A5-4AF0-9C65-8F57DF9B6C3F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{0464F02E-4ECA-4A42-94A3-87C667BCC9E9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{41D8A9AB-5F41-4DE8-9CE5-D2739DF81005}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilmIdea.Data", "FilmIdea.Data\FilmIdea.Data.csproj", "{49059063-5B3F-4FC5-8307-A137223DCA2A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilmIdea.Data.Models", "FilmIdea.Data.Models\FilmIdea.Data.Models.csproj", "{7F47FCF9-6D60-4DBC-B55E-E16A6CE4DE50}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilmIdea.Web.ViewModels", "FilmIdea.Web.ViewModels\FilmIdea.Web.ViewModels.csproj", "{A78DBD50-2980-47FD-BA5F-74DE36C5DDDD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6160E499-9926-4E26-B301-0FA037CF211B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6160E499-9926-4E26-B301-0FA037CF211B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6160E499-9926-4E26-B301-0FA037CF211B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6160E499-9926-4E26-B301-0FA037CF211B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B949D4A7-752C-47B4-B3D5-D4780CC14497}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B949D4A7-752C-47B4-B3D5-D4780CC14497}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B949D4A7-752C-47B4-B3D5-D4780CC14497}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B949D4A7-752C-47B4-B3D5-D4780CC14497}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49059063-5B3F-4FC5-8307-A137223DCA2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49059063-5B3F-4FC5-8307-A137223DCA2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49059063-5B3F-4FC5-8307-A137223DCA2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49059063-5B3F-4FC5-8307-A137223DCA2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F47FCF9-6D60-4DBC-B55E-E16A6CE4DE50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F47FCF9-6D60-4DBC-B55E-E16A6CE4DE50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F47FCF9-6D60-4DBC-B55E-E16A6CE4DE50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F47FCF9-6D60-4DBC-B55E-E16A6CE4DE50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A78DBD50-2980-47FD-BA5F-74DE36C5DDDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A78DBD50-2980-47FD-BA5F-74DE36C5DDDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A78DBD50-2980-47FD-BA5F-74DE36C5DDDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A78DBD50-2980-47FD-BA5F-74DE36C5DDDD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6160E499-9926-4E26-B301-0FA037CF211B} = {2C998826-15A5-4AF0-9C65-8F57DF9B6C3F}
+		{B949D4A7-752C-47B4-B3D5-D4780CC14497} = {12E985E0-518F-41E1-9B6C-F6C4D6F097F4}
+		{49059063-5B3F-4FC5-8307-A137223DCA2A} = {0464F02E-4ECA-4A42-94A3-87C667BCC9E9}
+		{7F47FCF9-6D60-4DBC-B55E-E16A6CE4DE50} = {0464F02E-4ECA-4A42-94A3-87C667BCC9E9}
+		{A78DBD50-2980-47FD-BA5F-74DE36C5DDDD} = {2C998826-15A5-4AF0-9C65-8F57DF9B6C3F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D8A414C4-20C7-47D9-9756-321448EEE60B}
+	EndGlobalSection
+EndGlobal

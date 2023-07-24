@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aspnet-FilmIdea.Web-c7ab8396-007f-4be0-afc2-064712f8be99</UserSecretsId>
+    <RootNamespace>FilmIdea.Web</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.15" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.15" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.15" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FilmIdea.Common\FilmIdea.Common.csproj" />
+    <ProjectReference Include="..\FilmIdea.Data.Models\FilmIdea.Data.Models.csproj" />
+    <ProjectReference Include="..\FilmIdea.Data\FilmIdea.Data.csproj" />
+    <ProjectReference Include="..\FilmIdea.Web.ViewModels\FilmIdea.Web.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>
