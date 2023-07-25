@@ -7,8 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FilmIdea.Common\FilmIdea.Common.csproj" />
     <ProjectReference Include="..\FilmIdea.Data.Models\FilmIdea.Data.Models.csproj" />
+    <ProjectReference Include="..\FilmIdea.Data\FilmIdea.Data.csproj" />
+    <ProjectReference Include="..\FilmIdea.Web.ViewModels\FilmIdea.Web.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

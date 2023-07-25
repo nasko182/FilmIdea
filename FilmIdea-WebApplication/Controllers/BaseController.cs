@@ -13,8 +13,8 @@ public class BaseController : Controller
         return User.FindFirst(ClaimTypes.Name).Value;
     }
 
-    public Guid GetUserId()
+    public string GetUserId()
     {
-        return Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        return User.FindFirst(ClaimTypes.NameIdentifier).Value;
     }
 }

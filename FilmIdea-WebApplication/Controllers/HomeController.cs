@@ -1,28 +1,26 @@
-﻿namespace FilmIdea.Controllers;
+﻿namespace FilmIdea.Web.Controllers;
 
 using System.Diagnostics;
+using FilmIdea.Web.ViewModels.Home;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-using Web.Controllers;
-using Web.ViewModels.Home;
 
 public class HomeController : BaseController
 {
     [AllowAnonymous]
     public IActionResult Index()
     {
-        if (User?.Identity?.IsAuthenticated ?? false)
+        if (this.User?.Identity?.IsAuthenticated ?? false)
         {
-            return RedirectToAction("All","Movie");
+            return this.RedirectToAction("All","Movie");
         }
-        return View();
+        return this.View();
     }
 
     [AllowAnonymous]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        return this.View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier });
     }
 }

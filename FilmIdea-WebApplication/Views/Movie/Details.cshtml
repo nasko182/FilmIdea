@@ -1,0 +1,107 @@
+﻿@model MovieDetailsViewModel
+
+@{
+    ViewBag.Title = Model.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-3">
+            <img src="@Model.CoverImageUrl" class="img-fluid rounded" alt="@Model.Title">
+        </div>
+        <div class="col-md-9">
+            <h2>@Model.Title (@Model.ReleaseYear)</h2>
+            <p class="lead">Duration: @Model.Duration</p>
+            <p class="lead">Rating: @Model.Rating</p>
+            <p class="lead">User Rating: @Model.UserRating</p>
+            <a href="@Model.TrailerUrl" target="_blank" class="btn btn-primary btn-sm">Watch Trailer</a>
+            <button class="btn btn-secondary btn-sm watchlist-button" data-movie="@Model.Id">
+                <i class="fas fa-plus"></i> Add to Watchlist
+            </button>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h3>Description</h3>
+            <p class="lead">@Model.Description</p>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <h3>Directors</h3>
+            <a class="" asp-area="" asp-controller="Director" asp-action="Details" asp-route-directorId="@Model.Director.Id">@Model.Director.Name</a>
+        </div>
+        <div class="col-md-4">
+            <h3>Actors</h3>
+            <ul class="list-unstyled">
+                @foreach (var actor in Model.Actors)
+                {
+                    <li><a class="" asp-area="" asp-controller="Actor" asp-action="Details" asp-route-actorId="@actor.Id">@actor.Name</a></li>
+                }
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <h3>Genres</h3>
+            <ul class="list-unstyled">
+                @foreach (var genre in Model.Genres)
+                {
+                    <li><a class="" asp-area="" asp-controller="Genre" asp-action="Details" asp-route-genreId="@genre.Id">@genre.Name</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h3>Reviews</h3>
+            <div class="card-columns">
+                @foreach (var review in Model.Reviews)
+                {
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-text">@review.Content</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h3>Photos</h3>
+            <div class="row">
+                @foreach (var photo in Model.Photos)
+                {
+                    <div class="col-md-3 mb-4">
+                        <img src="@photo.Url" alt="@Model.Title" class="img-thumbnail">
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h3>Videos</h3>
+            <div class="row">
+                @foreach (var video in Model.Videos)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe class="embed-responsive-item" src="@video.Url" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+}

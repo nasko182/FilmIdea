@@ -1,8 +1,6 @@
 ﻿namespace FilmIdea.Data.Seed;
 
 using Models;
-using Models.Join_Tables;
-using static System.Net.WebRequestMethods;
 
 public class MovieSeeder
 {

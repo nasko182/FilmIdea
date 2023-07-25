@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilmIdea.Data.Models", "Fil
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilmIdea.Web.ViewModels", "FilmIdea.Web.ViewModels\FilmIdea.Web.ViewModels.csproj", "{A78DBD50-2980-47FD-BA5F-74DE36C5DDDD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilmIdea.Services.Data", "FilmIdea.Services\FilmIdea.Services.Data.csproj", "{98019108-97A4-45E5-B657-04037300A092}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{A78DBD50-2980-47FD-BA5F-74DE36C5DDDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A78DBD50-2980-47FD-BA5F-74DE36C5DDDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A78DBD50-2980-47FD-BA5F-74DE36C5DDDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98019108-97A4-45E5-B657-04037300A092}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98019108-97A4-45E5-B657-04037300A092}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98019108-97A4-45E5-B657-04037300A092}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98019108-97A4-45E5-B657-04037300A092}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,6 +63,7 @@ Global
 		{49059063-5B3F-4FC5-8307-A137223DCA2A} = {0464F02E-4ECA-4A42-94A3-87C667BCC9E9}
 		{7F47FCF9-6D60-4DBC-B55E-E16A6CE4DE50} = {0464F02E-4ECA-4A42-94A3-87C667BCC9E9}
 		{A78DBD50-2980-47FD-BA5F-74DE36C5DDDD} = {2C998826-15A5-4AF0-9C65-8F57DF9B6C3F}
+		{98019108-97A4-45E5-B657-04037300A092} = {41D8A9AB-5F41-4DE8-9CE5-D2739DF81005}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D8A414C4-20C7-47D9-9756-321448EEE60B}

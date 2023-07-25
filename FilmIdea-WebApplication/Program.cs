@@ -1,9 +1,10 @@
-namespace FilmIdea;
+namespace FilmIdea.Web;
 
+using FilmIdea.Data;
+using FilmIdea.Data.Models;
 using Microsoft.EntityFrameworkCore;
-
-using Data;
-using Data.Models;
+using Services.Data;
+using Services.Data.Interfaces;
 
 public class Program
 {
@@ -38,6 +39,9 @@ public class Program
                     .Configuration.GetValue<int>("Identity:Password:RequiredLength");
             })
             .AddEntityFrameworkStores<FilmIdeaDbContext>();
+
+        builder.Services.AddScoped<IFilmIdeaService, FilmIdeaService>();
+
         builder.Services.AddControllersWithViews();
 
         var app = builder.Build();

@@ -1,6 +1,5 @@
 ﻿namespace FilmIdea.Data.Models;
 
-using System.ComponentModel.DataAnnotations.Schema;
 using Join_Tables;
 using Microsoft.AspNetCore.Identity;
 
