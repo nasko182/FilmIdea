@@ -1,8 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
-@model AllMoviesViewModel
+@model NewMoviesViewModel
 @{
     Layout = "_Layout";
-    ViewBag.Title = "Full list of Movies";
+    ViewBag.Title = "List of New Movies";
 
     var movies = Model.TopMovies.ToList();
 }
@@ -34,7 +34,7 @@
 </div>
 
 <div class="m-5 center-container">
-    <h3>All Movies</h3>
+    <h3>New Movies</h3>
 </div>
 
 <div class="row">

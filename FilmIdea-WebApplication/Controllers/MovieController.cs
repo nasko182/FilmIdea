@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
 using Services.Data.Interfaces;
+using ViewModels.Movie;
 
 public class MovieController : BaseController
 {
@@ -17,9 +18,50 @@ public class MovieController : BaseController
     [AllowAnonymous]
     public async Task<IActionResult> All()
     {
-        var movies = await _filmIdeaService.GetAllMoviesAsync(GetUserId());
+        AllMoviesViewModel movies;
+        if (this.IsAuthenticated())
+        {
+            movies = await _filmIdeaService.GetAllMoviesAsync(this.GetUserId());
+        }
+        else
+        {
+            movies = await _filmIdeaService.GetAllMoviesAsync(null);
+        }
+        return View(movies);
+    }
+
+    [AllowAnonymous]
+    public async Task<IActionResult> New()
+    {
+        var movies = await _filmIdeaService.GetNewMoviesAsync(GetUserId());
 
         return View(movies);
+    }
+
+    [AllowAnonymous]
+    public async Task<IActionResult> ByGenre(int genreId,string genreName)
+    {
+        var movies = await _filmIdeaService.GetMoviesByGenreAsync(GetUserId(),genreId);
+
+        ViewBag.GenreName = genreName;
+        
+        return View(movies);
+    }
+
+    [AllowAnonymous]
+    public async Task<IActionResult> Roulette()
+    {
+        MovieViewModel movie;
+        if (this.IsAuthenticated())
+        {
+            movie = await _filmIdeaService.GetRouletteMovieAsync(GetUserId());
+        }
+        else
+        {
+            movie = await _filmIdeaService.GetRouletteMovieAsync(null);
+        }
+
+        return View(movie);
     }
 
     [AllowAnonymous]
@@ -42,4 +84,5 @@ public class MovieController : BaseController
 
         return RedirectToAction("Details", new { id = movieId });
     }
+    
 }

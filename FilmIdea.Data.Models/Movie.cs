@@ -32,7 +32,7 @@ public class Movie
     public string Description { get; set; } = null!;
 
     [Required]
-    public int ReleaseYear { get; set; }
+    public DateTime ReleaseDate { get; set; }
 
     public int Duration { get; set; }
 

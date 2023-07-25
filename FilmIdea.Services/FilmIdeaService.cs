@@ -13,18 +13,40 @@ using Web.ViewModels.Movie;
 public class FilmIdeaService : IFilmIdeaService
 {
     private readonly FilmIdeaDbContext _dbContext;
+    private readonly Random _random;
 
     public FilmIdeaService(FilmIdeaDbContext dbContext)
     {
         this._dbContext = dbContext;
+        this._random = new Random();
     }
 
-    public async Task<AllMoviesViewModel> GetAllMoviesAsync(string userId)
+    public async Task<AllMoviesViewModel> GetAllMoviesAsync(string? userId)
     {
+        var n = await this.GetMoviesForTopSectionAsync();
         return new AllMoviesViewModel()
+            {
+                TopMovies = await this.GetMoviesForTopSectionAsync(),
+                Movies = await this.GetMoviesForAllAsync(userId)
+            };
+        
+    }
+
+    public async Task<NewMoviesViewModel> GetNewMoviesAsync(string userId)
+    {
+        return new NewMoviesViewModel()
         {
             TopMovies = await this.GetMoviesForTopSectionAsync(),
-            Movies = await this.GetMoviesAsync(userId)
+            Movies = await this.GetMoviesForNewAsync(userId)
+        };
+    }
+
+    public async Task<GenreMoviesViewModel> GetMoviesByGenreAsync(string userId,int genreId)
+    {
+        return new GenreMoviesViewModel()
+        {
+            TopMovies = await this.GetMoviesForTopSectionAsync(),
+            Movies = await this.GetMoviesForGenreAsync(userId,genreId)
         };
     }
 
@@ -43,7 +65,7 @@ public class FilmIdeaService : IFilmIdeaService
                 Id = m.Id,
                 Title = m.Title,
                 Description = m.Description,
-                ReleaseYear = m.ReleaseYear,
+                ReleaseYear = m.ReleaseDate.Year,
                 CoverImageUrl = m.CoverImageUrl,
                 Duration = m.Duration,
                 Rating = m.CalculateUserRating(),
@@ -76,6 +98,78 @@ public class FilmIdeaService : IFilmIdeaService
         return movie;
     }
 
+    public async Task<MovieViewModel> GetRouletteMovieAsync(string? userId)
+    {
+        if (userId != null)
+        {
+            var moviesCount = this._dbContext.Movies.Count();
+            var movieIndex = this._random.Next(0, moviesCount);
+            var userRating = await this._dbContext.UserRatings
+                .Where(r => r.UserId.ToString() == userId)
+                .Select(r => r.Rating)
+                .FirstOrDefaultAsync();
+
+            var movie = await this._dbContext
+                .Movies
+                .Skip(movieIndex)
+                .Include(m => m.Ratings)
+                .Select(m => new MovieViewModel()
+                {
+                    Title = m.Title,
+                    CoverPhotoUrl = m.CoverImageUrl,
+                    Duration = m.Duration,
+                    Id = m.Id,
+                    Rating = m.CalculateUserRating(),
+                    ReleaseYear = m.ReleaseDate.Year,
+                    Director = new DirectorNameAndIdViewModel()
+                    {
+                        Id = m.Director.Id,
+                        Name = m.Director.Name
+                    },
+                    Actors = m.Actors.Select(a => new ActorNameAndIdViewModel()
+                    {
+                        Id = a.ActorId,
+                        Name = a.Actor.Name
+                    }).ToList(),
+                    UserRating = userRating
+                })
+                .FirstAsync();
+
+            return movie;
+        }
+        else
+        {
+            var moviesCount = this._dbContext.Movies.Count();
+            var movieIndex = this._random.Next(0, moviesCount);
+
+            var movie = await this._dbContext
+                .Movies
+                .Skip(movieIndex)
+                .Include(m => m.Ratings)
+                .Select(m => new MovieViewModel()
+                {
+                    Title = m.Title,
+                    CoverPhotoUrl = m.CoverImageUrl,
+                    Duration = m.Duration,
+                    Id = m.Id,
+                    Rating = m.CalculateUserRating(),
+                    ReleaseYear = m.ReleaseDate.Year,
+                    Director = new DirectorNameAndIdViewModel()
+                    {
+                        Id = m.Director.Id,
+                        Name = m.Director.Name
+                    },
+                    Actors = m.Actors.Select(a => new ActorNameAndIdViewModel()
+                    {
+                        Id = a.ActorId,
+                        Name = a.Actor.Name
+                    }).ToList(),
+                })
+                .FirstAsync();
+
+            return movie;
+        }
+    }
 
     public async Task AddRatingAsync(int movieId, int ratingValue, string userId)
     {
@@ -115,47 +209,214 @@ public class FilmIdeaService : IFilmIdeaService
 
 
 
-    private async Task<List<MoviesViewModel>> GetMoviesAsync(string userId)
+    private async Task<List<MovieViewModel>> GetMoviesForAllAsync(string? userId)
     {
-
-        var userRating = await this._dbContext.UserRatings
-            .Where(r => r.UserId.ToString() == userId)
-            .Select(r => r.Rating)
-            .FirstOrDefaultAsync();
-
-        var movies = await this._dbContext
-            .Movies
-            .Include(m => m.Ratings)
-            .Select(m => new MoviesViewModel()
-            {
-                Title = m.Title,
-                CoverPhotoUrl = m.CoverImageUrl,
-                Duration = m.Duration,
-                Id = m.Id,
-                Rating = m.CalculateUserRating(),
-                ReleaseYear = m.ReleaseYear,
-                Director = new DirectorNameAndIdViewModel()
+        if (userId == null)
+        {
+            var movies = await this._dbContext
+                .Movies
+                .Include(m => m.Ratings)
+                .Select(m => new MovieViewModel()
                 {
-                    Id = m.Director.Id,
-                    Name = m.Director.Name
-                },
-                Actors = m.Actors.Select(a => new ActorNameAndIdViewModel()
-                {
-                    Id = a.ActorId,
-                    Name = a.Actor.Name
-                }).ToList(),
-                UserRating = userRating
-            })
-            .ToListAsync();
+                    Title = m.Title,
+                    CoverPhotoUrl = m.CoverImageUrl,
+                    Duration = m.Duration,
+                    Id = m.Id,
+                    Rating = m.CalculateUserRating(),
+                    ReleaseYear = m.ReleaseDate.Year,
+                    Director = new DirectorNameAndIdViewModel()
+                    {
+                        Id = m.Director.Id,
+                        Name = m.Director.Name
+                    },
+                    Actors = m.Actors.Select(a => new ActorNameAndIdViewModel()
+                    {
+                        Id = a.ActorId,
+                        Name = a.Actor.Name
+                    }).ToList(),
+                })
+                .ToListAsync();
 
-        return movies;
+            return movies;
+        }
+        else
+        {
+            var userRating = await this._dbContext.UserRatings
+                .Where(r => r.UserId.ToString() == userId)
+                .Select(r => r.Rating)
+                .FirstOrDefaultAsync();
+
+            var movies = await this._dbContext
+                .Movies
+                .Include(m => m.Ratings)
+                .Select(m => new MovieViewModel()
+                {
+                    Title = m.Title,
+                    CoverPhotoUrl = m.CoverImageUrl,
+                    Duration = m.Duration,
+                    Id = m.Id,
+                    Rating = m.CalculateUserRating(),
+                    ReleaseYear = m.ReleaseDate.Year,
+                    Director = new DirectorNameAndIdViewModel()
+                    {
+                        Id = m.Director.Id,
+                        Name = m.Director.Name
+                    },
+                    Actors = m.Actors.Select(a => new ActorNameAndIdViewModel()
+                    {
+                        Id = a.ActorId,
+                        Name = a.Actor.Name
+                    }).ToList(),
+                    UserRating = userRating
+                })
+                .ToListAsync();
+
+            return movies;
+        }
+    }
+
+
+    private async Task<List<MovieViewModel>> GetMoviesForNewAsync(string? userId)
+    {
+        if (userId == null)
+        {
+            var movies = await this._dbContext
+                .Movies
+                .Where(m=>m.ReleaseDate.Year==DateTime.UtcNow.Year)
+                .Include(m => m.Ratings)
+                .Select(m => new MovieViewModel()
+                {
+                    Title = m.Title,
+                    CoverPhotoUrl = m.CoverImageUrl,
+                    Duration = m.Duration,
+                    Id = m.Id,
+                    Rating = m.CalculateUserRating(),
+                    ReleaseYear = m.ReleaseDate.Year,
+                    Director = new DirectorNameAndIdViewModel()
+                    {
+                        Id = m.Director.Id,
+                        Name = m.Director.Name
+                    },
+                    Actors = m.Actors.Select(a => new ActorNameAndIdViewModel()
+                    {
+                        Id = a.ActorId,
+                        Name = a.Actor.Name
+                    }).ToList(),
+                })
+                .ToListAsync();
+
+            return movies;
+        }
+        else
+        {
+            var userRating = await this._dbContext.UserRatings
+                .Where(r => r.UserId.ToString() == userId)
+                .Select(r => r.Rating)
+                .FirstOrDefaultAsync();
+
+            var movies = await this._dbContext
+                .Movies
+                .Where(m => m.ReleaseDate.Year == DateTime.UtcNow.Year)
+                .Include(m => m.Ratings)
+                .Select(m => new MovieViewModel()
+                {
+                    Title = m.Title,
+                    CoverPhotoUrl = m.CoverImageUrl,
+                    Duration = m.Duration,
+                    Id = m.Id,
+                    Rating = m.CalculateUserRating(),
+                    ReleaseYear = m.ReleaseDate.Year,
+                    Director = new DirectorNameAndIdViewModel()
+                    {
+                        Id = m.Director.Id,
+                        Name = m.Director.Name
+                    },
+                    Actors = m.Actors.Select(a => new ActorNameAndIdViewModel()
+                    {
+                        Id = a.ActorId,
+                        Name = a.Actor.Name
+                    }).ToList(),
+                    UserRating = userRating
+                })
+                .ToListAsync();
+
+            return movies;
+        }
+    }
+
+    private async Task<List<MovieViewModel>> GetMoviesForGenreAsync(string? userId,int genreId)
+    {
+        if (userId == null)
+        {
+            var movies = await this._dbContext
+                .Movies
+                .Where(m => m.Genres.Any(g=>g.GenreId==genreId))
+                .Include(m => m.Ratings)
+                .Select(m => new MovieViewModel()
+                {
+                    Title = m.Title,
+                    CoverPhotoUrl = m.CoverImageUrl,
+                    Duration = m.Duration,
+                    Id = m.Id,
+                    Rating = m.CalculateUserRating(),
+                    ReleaseYear = m.ReleaseDate.Year,
+                    Director = new DirectorNameAndIdViewModel()
+                    {
+                        Id = m.Director.Id,
+                        Name = m.Director.Name
+                    },
+                    Actors = m.Actors.Select(a => new ActorNameAndIdViewModel()
+                    {
+                        Id = a.ActorId,
+                        Name = a.Actor.Name
+                    }).ToList(),
+                })
+                .ToListAsync();
+
+            return movies;
+        }
+        else
+        {
+            var userRating = await this._dbContext.UserRatings
+                .Where(r => r.UserId.ToString() == userId)
+                .Select(r => r.Rating)
+                .FirstOrDefaultAsync();
+
+            var movies = await this._dbContext
+                .Movies
+                .Where(m => m.Genres.Any(g => g.GenreId == genreId))
+                .Include(m => m.Ratings)
+                .Select(m => new MovieViewModel()
+                {
+                    Title = m.Title,
+                    CoverPhotoUrl = m.CoverImageUrl,
+                    Duration = m.Duration,
+                    Id = m.Id,
+                    Rating = m.CalculateUserRating(),
+                    ReleaseYear = m.ReleaseDate.Year,
+                    Director = new DirectorNameAndIdViewModel()
+                    {
+                        Id = m.Director.Id,
+                        Name = m.Director.Name
+                    },
+                    Actors = m.Actors.Select(a => new ActorNameAndIdViewModel()
+                    {
+                        Id = a.ActorId,
+                        Name = a.Actor.Name
+                    }).ToList(),
+                    UserRating = userRating
+                })
+                .ToListAsync();
+
+            return movies;
+        }
     }
 
     private async Task<IEnumerable<TopSectionMovieViewModel>> GetMoviesForTopSectionAsync()
     {
         return await this._dbContext
             .Movies
-            .OrderByDescending(m => m.ReleaseYear)
+            .OrderByDescending(m => m.ReleaseDate)
             .Take(10)
             .Select(m => new TopSectionMovieViewModel()
             {

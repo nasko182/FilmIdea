@@ -15,7 +15,7 @@ public class MovieSeeder
                 Description =
                     "Barry Allen uses his super speed to change the past, but his attempt to save his family creates a world without super heroes, forcing him to race for his life in order to save the future.",
                 Duration = 144,
-                ReleaseYear = 2023,
+                ReleaseDate = new DateTime(2023,3,15),
                 CoverImageUrl =
                     "https://dl.dropboxusercontent.com/scl/fi/lgvgll5jt71j0ad3202d4/The_Flash_cover_image.jpg?rlkey=ya84xsnh8dioy08iw497uyjdf",
                 DirectorId = 1,
@@ -30,7 +30,7 @@ public class MovieSeeder
                 Description =
                     "Archaeologist Indiana Jones races against time to retrieve a legendary artifact that can change the course of history.",
                 Duration = 154,
-                ReleaseYear = 2023,
+                ReleaseDate = new DateTime(2023, 5, 24),
                 CoverImageUrl =
                     "https://dl.dropboxusercontent.com/s/kban35sz6tw0d0x/Indiana_Jones_and_the_Dial_of_Destiny_cover_image.jpg",
                 DirectorId = 2,

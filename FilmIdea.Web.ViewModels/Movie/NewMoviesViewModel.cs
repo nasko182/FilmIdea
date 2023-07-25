@@ -1,7 +1,7 @@
 ﻿namespace FilmIdea.Web.ViewModels.Movie;
-public class AllMoviesViewModel
+public class NewMoviesViewModel
 {
-    public AllMoviesViewModel()
+    public NewMoviesViewModel()
     {
         this.TopMovies = new HashSet<TopSectionMovieViewModel>();
         this.Movies = new HashSet<MovieViewModel>();

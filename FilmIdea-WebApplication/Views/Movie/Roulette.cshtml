@@ -1,0 +1,160 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model MovieViewModel
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "What Should I Watch?";
+}
+<div class="card-footer">
+<h1>Roulette: What Should I Watch?</h1>
+@if (!User.Identity.IsAuthenticated)
+{
+    <h3>
+        Wondering what to watch? Let Roulette, the random movie generator, pick from the FilmIdea catalog for you. Take a chance on something new with FilmIdea randomizer. Use more than FilmIdea?
+        <a asp-area="Identity" asp-page="/Account/Register">Create a free FilmIdea account!</a>
+    </h3>
+}
+else
+{
+    <h3>
+        Wondering what to watch? Let Roulette, the random movie generator, pick from the FilmIdea catalog for you. Take a chance on something new with FilmIdea randomizer.
+    </h3>
+}
+</div>
+
+<div class="center-container">
+    <div class="row">
+        <div class="col-md-4 w-auto p-0">
+            <div class="card position-relative">
+                <a href="@Url.Action("Details", "Movie", new { movieId = Model.Id })">
+                    <img src="@Model.CoverPhotoUrl" class="card-img-top" alt="@Model.Title">
+                </a>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <button class="btn btn-secondary btn-sm watchlist-button position-absolute top-0 start-0 mt-0 ms-0" data-movie="@Model.Id">
+                        <i class="fas fa-plus"></i>➕
+                    </button>
+                    <button class="btn btn-primary btn-sm position-absolute top-0 start-0 mt-5 ms-0 rate-button" data-toggle="modal" data-target="#rateModal" data-movie="@Model.Id">
+                        @if (Model.UserRating > 0)
+                        {
+                            <span>★ @Model.UserRating/10</span>
+                        }
+                        else
+                        {
+                            <span>✰</span>
+                        }
+                    </button>
+                }
+            </div>
+        </div>
+        <div class="col-md-4 w-auto p-0">
+            <div class="card position-relative">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.Title</h5>
+                    <p class="card-text"><strong>Release Year:</strong> @Model.ReleaseYear</p>
+                    <p class="card-text"><strong>Duration:</strong> @Model.Duration</p>
+                    <p class="card-text">
+                        <strong>Director:</strong>
+                        <a class="" asp-area="" asp-controller="Director" asp-action="Details" asp-route-actorId="@Model.Director.Id">@Model.Director.Name</a>
+                    </p>
+                    <p class="card-text">
+                        <strong>Actors:</strong>
+                        @foreach (var actor in Model.Actors)
+                        {
+                            <a class="" asp-area="" asp-controller="Actor" asp-action="Details" asp-route-actorId="@actor.Id">@actor.Name</a>
+                        }
+                    </p>
+                    <p class="card-text"><strong>Rating:</strong> @Model.Rating</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="rateModal" tabindex="-1" role="dialog" aria-labelledby="rateModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rateModalLabel">Rate Movie</h5>
+                    <button type="button" id="closeModal" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="ratingForm">
+                        <input type="hidden" id="movieId" name="movieId" value="" />
+                        <div class="form-group">
+                            <label for="ratingValue">Rating:</label>
+                            <select class="form-control" id="ratingValue" name="ratingValue" required>
+                                <option value="">Select Rating</option>
+                                @for (int i = 1; i <= 10; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="submitRating">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="center-container">
+    @if (User.Identity.IsAuthenticated)
+    {
+        <a href="#" class="btn btn-secondary btn-sm " data-movie="@Model.Id">
+            <i class="fas fa-plus"></i> + Watchlist
+        </a>
+    }
+    <a asp-controller="Movie" asp-action="Roulette" class="btn btn-secondary btn-sm m-3 " data-movie="@Model.Id">
+        <i class="fas fa-plus"></i> Spin Again
+    </a>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            $('.rate-button').on('click', function (e) {
+                e.preventDefault();
+                var movieId = $(this).data('movie');
+                var ratingButton = $(this);
+
+                $('#rateModal').modal('show');
+
+                $('#movieId').val(movieId);
+            });
+
+            $('.watchlist-button').on('click', function (e) {
+                e.preventDefault();
+                var movieId = $(this).data('movie');
+                alert("Added movie with ID " + movieId + " to your watchlist!");
+            });
+
+            $('#submitRating').on('click', function (e) {
+                e.preventDefault();
+                var ratingValue = $('#ratingValue').val();
+                var movieId = $('#movieId').val();
+
+                $.post('@Url.Action("AddRating", "Movie")', {
+                    movieId: movieId,
+                    ratingValue: ratingValue,
+                })
+                    .done(function (data) {
+                        var ratingButton = $('.rate-button[data-movie="' + movieId + '"]');
+                        ratingButton.html('<span>★ ' + ratingValue + '/10</span>');
+                        $('#rateModal').modal('hide');
+                    })
+                    .fail(function (error) {
+                        alert(error.message);
+                    });
+            });
+
+            $('#closeModal').on('click', function (e) {
+
+                $('#rateModal').modal('hide');
+            });
+        });
+    </script>
+}

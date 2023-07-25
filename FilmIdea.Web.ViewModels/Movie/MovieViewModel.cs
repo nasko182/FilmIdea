@@ -3,9 +3,9 @@
 using Actor;
 using Director;
 
-public class MoviesViewModel
+public class MovieViewModel
 {
-    public MoviesViewModel()
+    public MovieViewModel()
     {
         this.Actors = new HashSet<ActorNameAndIdViewModel>();
         this.Movies = new HashSet<TopSectionMovieViewModel>();
@@ -19,7 +19,7 @@ public class MoviesViewModel
 
     public int ReleaseYear { get; set; }
 
-    public int UserRating { get; set; }
+    public int? UserRating { get; set; }
 
     public int Duration { get; set; }
 

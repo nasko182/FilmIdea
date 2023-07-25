@@ -7,16 +7,16 @@
                 <p><strong>Popular</strong></p>
             </li>
             <li>
-                <a class="menu-li-popular" asp-area="" asp-controller="Home" asp-action="Index"><strong>Movie Roulette</strong></a>
+                <a class="menu-li-popular" asp-area="" asp-controller="Movie" asp-action="Roulette"><strong>Movie Roulette</strong></a>
             </li>
             <li>
-                <a class="menu-li-popular" asp-area="" asp-controller="Home" asp-action="Index"><strong>New Movies</strong></a>
+                <a class="menu-li-popular" asp-area="" asp-controller="Movie" asp-action="New"><strong>New Movies</strong></a>
             </li>
             <li>
-                <a class="menu-li-popular" asp-area="" asp-controller="Home" asp-action="Index"><strong>Top 250 Movies</strong></a>
+                <a class="menu-li-popular" asp-area="" asp-controller="Movie" asp-action="Top250"><strong>Top 250 Movies</strong></a>
             </li>
             <li>
-                <a class="menu-li-popular" asp-area="" asp-controller="Home" asp-action="Index"><strong>Browse Movies by Genre</strong></a>
+                <a class="menu-li-popular" asp-area="" asp-controller="Movie" asp-action="Genres"><strong>Browse Movies by Genre</strong></a>
             </li>
         </ul>
         <div style="position: relative; height: 136px; width: 2px; top: 43px; left: -27px; background-color: #d6d6d6;"></div>
@@ -25,16 +25,16 @@
                 <p><strong>Top Genres</strong></p>
             </li>
             <li>
-                <a class="menu-li-genres" asp-area="" asp-controller="Home" asp-action="Index"><strong>Comedy </strong></a>
+                <a class="menu-li-genres" asp-area="" asp-controller="Movie" asp-action="ByGenre" asp-route-genreId="5" asp-route-genreName="Comedy"><strong>Comedy </strong></a>
             </li>
             <li>
-                <a class="menu-li-genres" asp-area="" asp-controller="Home" asp-action="Index"><strong>Action</strong></a>
+                <a class="menu-li-genres" asp-area="" asp-controller="Movie" asp-action="ByGenre" asp-route-genreId="1" asp-route-genreName="Action"><strong>Action</strong></a>
             </li>
             <li>
-                <a class="menu-li-genres" asp-area="" asp-controller="Home" asp-action="Index"><strong>Romance</strong></a>
+                <a class="menu-li-genres" asp-area="" asp-controller="Movie" asp-action="ByGenre" asp-route-genreId="16" asp-route-genreName="Romance"><strong>Romance</strong></a>
             </li>
             <li>
-                <a class="menu-li-genres" asp-area="" asp-controller="Home" asp-action="Index"><strong>Fantasy </strong></a>
+                <a class="menu-li-genres" asp-area="" asp-controller="Movie" asp-action="ByGenre" asp-route-genreId="11" asp-route-genreName="Fantasy"><strong>Fantasy </strong></a>
             </li>
         </ul>
     </div>

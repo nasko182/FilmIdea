@@ -17,4 +17,9 @@ public class BaseController : Controller
     {
         return User.FindFirst(ClaimTypes.NameIdentifier).Value;
     }
+
+    public bool IsAuthenticated()
+    {
+        return User.Identity?.IsAuthenticated ?? false;
+    }
 }

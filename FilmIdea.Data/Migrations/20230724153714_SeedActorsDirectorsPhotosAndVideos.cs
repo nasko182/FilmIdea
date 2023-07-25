@@ -53,7 +53,7 @@ namespace FilmIdea.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Movies",
-                columns: new[] { "Id", "CoverImageUrl", "Description", "DirectorId", "Duration", "ReleaseYear", "Title", "TrailerUrl" },
+                columns: new[] { "Id", "CoverImageUrl", "Description", "DirectorId", "Duration", "ReleaseDate", "Title", "TrailerUrl" },
                 values: new object[,]
                 {
                     { 1, "https://dl.dropboxusercontent.com/scl/fi/lgvgll5jt71j0ad3202d4/The_Flash_cover_image.jpg?rlkey=ya84xsnh8dioy08iw497uyjdf", "Barry Allen uses his super speed to change the past, but his attempt to save his family creates a world without super heroes, forcing him to race for his life in order to save the future.", 1, 144, 2023, "The Flash", "https://dl.dropboxusercontent.com/scl/fi/t44ljvld1q9ybw8oeqe8z/2023-_trailer.mp4?rlkey=wnapnzwvtfhk1x5nlwr7oa88x" },
