@@ -1,18 +1,251 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
+}
+
+.nav-text-white {
+    color: white !important;
+    font-size: 161%;
+    margin-top: 19px;
+}
+
+.nav-text-black {
+    color: #9f9f9f !important;
+    font-size: 161%;
+    margin-top: 19px;
+}
+
+.navbar-shadow {
+    padding-top: 0;
+    padding-left: 0;
+    padding-right: 0;
+    box-shadow: inset 0px 49px 21px rgba(0, 0, 0, 0.7) !important;
+    z-index: 1;
+}
+
+.nav-element {
+    font-size: 185% !important;
+    margin-top: 4px !important;
+    margin-left: 5px !important;
+}
+
+.nav-Section-element {
+    color: black !important;
+    font-size: 100% !important;
+    margin-top: 4px !important;
+    margin-left: 5px !important;
+    text-decoration: unset !important;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+}
+
+    body.background-image {
+        position: relative;
+        background-image: url('/HomeTemplate.png');
+        background-size: cover;
+    }
+
+        body.background-image::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: -1;
+        }
+
+img.logo {
+    width: 100%;
+}
+
+.section-user {
+    width: 30%;
+    float: left;
+    box-sizing: border-box;
+}
+
+.section-body {
+    background-color: #d6d6d6;
+    width: 70%;
+    float: left;
+    box-sizing: border-box;
+}
+
+.home-slogan {
+    color: white;
+    display: flex;
+    justify-content: center;
+    font-size: 80px;
+    font-family: ui-serif;
+    cursor: default;
+}
+
+
+button.btn-login {
+    width: 122px;
+    background-color: white !important;
+}
+
+button.btn-section {
+    width: 84px;
+    background-color: white !important;
+}
+
+button.btn-register {
+    width: 235px;
+    background-color: #ff4458 !important;
+    border-style: unset;
+    height: 55px;
+}
+
+.login-btn {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 0;
+    font-size: 20px;
+    height: 32px;
+}
+
+.register-btn {
+    padding: 0 !important;
+    font-size: 20px !important;
+    height: 32px !important;
+}
+
+.container-custom {
+    display: flex !important;
+    width: 400px !important;
+    height: 200px !important;
+}
+
+.center-container {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.list-inline {
+    list-style: none;
+    padding: 0;
+}
+
+    .list-inline li {
+        margin-right: 10px;
+        padding-top: 3px;
+    }
+
+
+.menu {
+    position: relative;
+    list-style: none;
+}
+
+
+#section1 {
+    left: calc(4.95% + 12px);
+}
+
+#section2 {
+    left: calc(5% + 120px + 12px);
+}
+
+.menu-item {
+    position: relative;
+    display: inline-block;
+    padding: 0;
+    cursor: pointer;
+    border-radius: 4px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+
+.menu-section {
+    display: none;
+    position: absolute;
+    top: 82%;
+    left: 0;
+    display: none;
+    background-color: #404345;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    border-top-left-radius: 0;
+    border: none;
+    z-index: 20;
+}
+
+    .menu-item:hover,
+    .menu-section:hover {
+        background-color: #404345;
+    }
+
+.menu-item.active {
+    background-color: #404345;
+}
+
+.menu-item:hover + .menu-section,
+.menu-section:hover {
+    display: block;
+}
+
+.ul-head {
+    color: #9f9f9f;
+    position: relative;
+    top: 10px;
+    left: 5%;
+}
+
+.menu-li-popular {
+    color: #d6d6d6;
+    margin-left: 5%;
+    text-decoration: none;
+}
+
+    .menu-li-popular :hover {
+        color: #d6d6d6;
+        margin-left: 5%;
+        text-decoration: none;
+        padding: 1%;
+        padding-left: 7px;
+        width: 230px;
+    }
+
+.menu-li-genres {
+    color: #d6d6d6;
+    margin-left: 5%;
+    text-decoration: none;
+}
+
+    .menu-li-genres :hover {
+        color: #d6d6d6;
+        margin-left: 5%;
+        text-decoration: none;
+        padding: 1%;
+        padding-left: 7px;
+        width: 130px;
+    }
+
+.image-container {
+    text-decoration: unset;
+    width: 5%;
+}
+
+.movie-title {
+    font-size: 14px;
+    padding-top: 10px;
 }

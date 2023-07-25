@@ -1,8 +1,20 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    Layout = "_Layout";
+    ViewBag.Slogan = "Stop searching.Start finding.";
+    ViewBag.Title = $"Film Idea - {ViewBag.Slogan}";
+    var commaIndex = ViewBag.Slogan.IndexOf('.');
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<body class="background-image">
+<div class="center-container">
+    <h1 class="text-center" style="margin-top: 120px;">
+        <strong class="home-slogan">@ViewBag.Slogan.Substring(0, commaIndex)</strong>
+        <strong class="home-slogan">@ViewBag.Slogan.Substring(commaIndex + 1, ViewBag.Slogan.Length - commaIndex - 2)</strong>
+    </h1>
 </div>
+<div class="center-container">
+    <button class="btn-register rounded-pill">
+        <a class="nav-link text-white register-btn" asp-area="Identity" asp-page="/Account/Register"><strong style="font-size: 22px;">Create a profile</strong></a>
+    </button>
+</div>
+</body>

@@ -1,0 +1,104 @@
+﻿
+
+<div class="menu-section" id="section1">
+    <div class="container-custom">
+        <ul class="list-inline" style="width: 275px;">
+            <li class="ul-head">
+                <p><strong>Popular</strong></p>
+            </li>
+            <li>
+                <a class="menu-li-popular" asp-area="" asp-controller="Home" asp-action="Index"><strong>Movie Roulette</strong></a>
+            </li>
+            <li>
+                <a class="menu-li-popular" asp-area="" asp-controller="Home" asp-action="Index"><strong>New Movies</strong></a>
+            </li>
+            <li>
+                <a class="menu-li-popular" asp-area="" asp-controller="Home" asp-action="Index"><strong>Top 250 Movies</strong></a>
+            </li>
+            <li>
+                <a class="menu-li-popular" asp-area="" asp-controller="Home" asp-action="Index"><strong>Browse Movies by Genre</strong></a>
+            </li>
+        </ul>
+        <div style="position: relative; height: 136px; width: 2px; top: 43px; left: -27px; background-color: #d6d6d6;"></div>
+        <ul class="list-inline">
+            <li class="ul-head">
+                <p><strong>Top Genres</strong></p>
+            </li>
+            <li>
+                <a class="menu-li-genres" asp-area="" asp-controller="Home" asp-action="Index"><strong>Comedy </strong></a>
+            </li>
+            <li>
+                <a class="menu-li-genres" asp-area="" asp-controller="Home" asp-action="Index"><strong>Action</strong></a>
+            </li>
+            <li>
+                <a class="menu-li-genres" asp-area="" asp-controller="Home" asp-action="Index"><strong>Romance</strong></a>
+            </li>
+            <li>
+                <a class="menu-li-genres" asp-area="" asp-controller="Home" asp-action="Index"><strong>Fantasy </strong></a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    const menuItems = document.querySelectorAll('.menu-item');
+    const menuSections = document.querySelectorAll('.menu-section');
+
+    menuItems.forEach(item => {
+        const sectionId = item.getAttribute('id').replace('menu', 'section');
+        const section = document.getElementById(sectionId);
+
+        item.addEventListener('mouseenter', () => {
+            showMenuSection(section);
+        });
+
+        item.addEventListener('mouseleave', () => {
+            hideMenuSection(section);
+        });
+
+        section.addEventListener('mouseenter', () => {
+            showMenuSection(section);
+            item.classList.add('active');
+        });
+
+        section.addEventListener('mouseleave', () => {
+            hideMenuSection(section);
+            item.classList.remove('active');
+        });
+    });
+
+    document.addEventListener('mouseover', (event) => {
+        let isOverMenuItem = false;
+        let isOverMenuSection = false;
+
+        menuItems.forEach(item => {
+            if (item.contains(event.target)) {
+                isOverMenuItem = true;
+            }
+        });
+
+        menuSections.forEach(section => {
+            if (section.contains(event.target)) {
+                isOverMenuSection = true;
+            }
+        });
+
+        if (!isOverMenuItem && !isOverMenuSection) {
+            menuSections.forEach(section => {
+                hideMenuSection(section);
+            });
+        }
+    });
+
+    function showMenuSection(section) {
+        menuSections.forEach(section => {
+            section.style.display = 'none';
+        });
+        section.style.display = 'block';
+    }
+
+    function hideMenuSection(section) {
+        section.style.display = 'none';
+    }
+
+</script>

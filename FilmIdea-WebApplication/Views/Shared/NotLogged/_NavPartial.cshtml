@@ -1,0 +1,23 @@
+﻿@*NotLogged*@
+
+
+<nav class="navbar navbar-expand-sm navbar-light" style="background-color: gray;">
+    <div class="container-fluid">
+        <a asp-area="" asp-controller="Home" asp-action="Index" class="image-container">
+            <img class="logo" src="~/Logo/WhiteLogoBig.png" />
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item menu-item" id="menu1">
+                    <a class="nav-link nav-text-white nav-element" asp-area="" asp-controller="Movie" asp-action="All"><strong>Movies</strong></a>
+                </li>
+            </ul>
+        </div>
+        <partial name="_LoginPartial" />
+        <partial name="_MenuPartial" />
+    </div>
+</nav>
