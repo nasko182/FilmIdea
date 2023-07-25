@@ -88,52 +88,41 @@
     <partial name="_ValidationScriptsPartial"/>
     <script>
         $(document).ready(function () {
-            // Handle click event on the Rate button
             $('.rate-button').on('click', function (e) {
                 e.preventDefault();
                 var movieId = $(this).data('movie');
                 var ratingButton = $(this);
 
-                // Open the rating modal
                 $('#rateModal').modal('show');
 
-                // Store the movie ID in a hidden input field within the rating modal
                 $('#movieId').val(movieId);
             });
 
-            // Handle click event on watchlist button
             $('.watchlist-button').on('click', function (e) {
                 e.preventDefault();
                 var movieId = $(this).data('movie');
-                // Implement logic to add the movie to the watchlist
                 alert("Added movie with ID " + movieId + " to your watchlist!");
             });
 
-            // Handle click event on submit button in the rating modal
             $('#submitRating').on('click', function (e) {
                 e.preventDefault();
                 var ratingValue = $('#ratingValue').val();
                 var movieId = $('#movieId').val();
 
-                // Send the rating data to the server using AJAX
                 $.post('@Url.Action("AddRating", "Movie")', {
                     movieId: movieId,
                     ratingValue: ratingValue,
                 })
                     .done(function (data) {
-                        // Update the "Rate" button text with the user's rating
                         var ratingButton = $('.rate-button[data-movie="' + movieId + '"]');
                         ratingButton.html('<span>★ ' + ratingValue + '/10</span>');
-                        // Hide the modal
                         $('#rateModal').modal('hide');
                     })
                     .fail(function (error) {
-                        // Handle the error response, if needed.
                         alert(error.message);
                     });
             });
 
-            // Handle click event on the modal close button (X)
             $('#closeModal').on('click', function (e) {
                 
                 $('#rateModal').modal('hide');
