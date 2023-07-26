@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dropbox.Api" Version="6.37.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\FilmIdea.Data.Models\FilmIdea.Data.Models.csproj" />
     <ProjectReference Include="..\FilmIdea.Data\FilmIdea.Data.csproj" />
     <ProjectReference Include="..\FilmIdea.Web.ViewModels\FilmIdea.Web.ViewModels.csproj" />

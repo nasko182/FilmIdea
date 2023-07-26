@@ -10,16 +10,16 @@ public class BaseController : Controller
 {
     public string GetUserName()
     {
-        return User.FindFirst(ClaimTypes.Name).Value;
+        return this.User.FindFirstValue(ClaimTypes.Name);
     }
 
     public string GetUserId()
     {
-        return User.FindFirst(ClaimTypes.NameIdentifier).Value;
+        return this.User.FindFirstValue(ClaimTypes.NameIdentifier);
     }
 
     public bool IsAuthenticated()
     {
-        return User.Identity?.IsAuthenticated ?? false;
+        return this.User.Identity?.IsAuthenticated ?? false;
     }
 }

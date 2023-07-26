@@ -7,12 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FilmIdea.Common\FilmIdea.Common.csproj" />
-    <ProjectReference Include="..\FilmIdea.Data.Models\FilmIdea.Data.Models.csproj" />
+    <ProjectReference Include="..\FilmIdea.Services\FilmIdea.Services.Data.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,9 +1,9 @@
 namespace FilmIdea.Web;
 
-using FilmIdea.Data;
-using FilmIdea.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using Services.Data;
+
+using Data;
+using Data.Models;
 using Services.Data.Interfaces;
 
 public class Program
@@ -40,7 +40,7 @@ public class Program
             })
             .AddEntityFrameworkStores<FilmIdeaDbContext>();
 
-        builder.Services.AddScoped<IFilmIdeaService, FilmIdeaService>();
+        builder.Services.AddApplicationServices(typeof(IFilmIdeaService));
 
         builder.Services.AddControllersWithViews();
 

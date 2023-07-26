@@ -61,6 +61,7 @@ public static class EntityValidationConstants
 
         public const int ProfileImageUrlMaxLength = 2048;
 
+        public const string DateOfBirthMinValue = "1900 - 01 - 01";
     }
 
     public static class GenreValidations

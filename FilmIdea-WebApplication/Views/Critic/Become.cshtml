@@ -1,5 +1,43 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model BecomeCriticViewModel
 @{
+    ViewBag.Title = "Become Critic";
+}
+<h2 class="text-center">@ViewBag.Name</h2>
+<hr />
+@if (!ViewData.ModelState.IsValid && ViewData.ModelState["Error"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewData.ModelState["Error"].Errors.First().ErrorMessage
+    </div>
+}
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <div class="mb-3">
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" class="form-control" placeholder="First and last name">
+                    <span asp-validation-for="@Model.Name" class="small textdanger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Bio"></label>
+                    <textarea asp-for="Bio" class="form-control" aria-required="true" rows="5" placeholder="Write your biography here..."></textarea>
+                    <span asp-validation-for="Bio" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="DateOfBirth"></label>
+                    <input asp-for="DateOfBirth" class="form-control" aria-required="true" type="date" value="@DateTime.UtcNow.Date.ToString("yyyy-MM-dd")" />
+                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="ProfileImage"></label>
+                    <input asp-for="ProfileImage" class="form-control" type="file" name="ProfileImage" accept="image/*" />
+                </div>
+            </div>
+            <input class="btn btn-primary mt-3" type="submit" value="Become Critic" />
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }
