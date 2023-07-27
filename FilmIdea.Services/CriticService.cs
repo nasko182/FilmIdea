@@ -20,7 +20,7 @@ public class CriticService : ICriticService
     {
         this._dbContext = dbContext;
 
-        this._dropboxClient = new DropboxClient("sl.Bi9TLGoYmDBdSHW04IgkcVtDLzxVNSByDkl5AG_-O2rKalMVcBAWk0CRDVRwTHmZKxCwRfu0J06F0eJpZ6oZg6__V4MGMeamTx2_gkQpanPFSJYf3MD0s6OjJVWkvbtP3j946m2RRag0wuI");
+        this._dropboxClient = new DropboxClient("sl.Bi-TRNmAfLQStYqDFmO79g6VCRRtMmI5-j1XVP8s27QddBXQcUe6BZTZW9Vf46ce5so4Bh4fgiA7ilWx0l17azIcAB8dg3i6-IAlKzU6-E3IACPmG0CVeN4TyKoN-yCmn9BwpaFcCC1TgIQ");
     }
     public async Task<bool> CriticExistByUserIdAsync(string userId)
     {

@@ -8,6 +8,8 @@ using ViewModels.Movie;
 
 public class MovieController : BaseController
 {
+    //TODO: Make Filter by genre in all,new,roulette and genre views
+
     private readonly IFilmIdeaService _filmIdeaService;
 
     public MovieController(IFilmIdeaService filmIdeaService)
@@ -47,6 +49,14 @@ public class MovieController : BaseController
         TempData["LastController"] = ControllerContext.ActionDescriptor.ControllerName;
 
         return View(movies);
+    }
+
+    [AllowAnonymous]
+    public async Task<IActionResult> BrowseGenre()
+    {
+        var genres = await this._filmIdeaService.GetGenresAsync();
+
+        return View(genres);
     }
 
     [AllowAnonymous]

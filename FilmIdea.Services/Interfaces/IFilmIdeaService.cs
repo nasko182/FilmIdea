@@ -16,6 +16,8 @@ public interface IFilmIdeaService
 
     Task<MovieViewModel> GetRouletteMovieAsync(string? userId);
 
+    Task<List<GenreViewModel>> GetGenresAsync();
+
     Task AddRatingAsync(int movieId, int ratingValue, string userId);
 
     Task AddToUserWatchlist(string userId, int movieId);

@@ -185,6 +185,16 @@ public class FilmIdeaService : IFilmIdeaService
         }
     }
 
+    public async Task<List<GenreViewModel>> GetGenresAsync()
+    {
+        return await this._dbContext.Genres.Select(g => new GenreViewModel()
+        {
+            Id = g.Id,
+            Name = g.Name
+        })
+            .ToListAsync();
+    }
+
     public async Task AddRatingAsync(int movieId, int ratingValue, string userId)
     {
         var movie = await this._dbContext.Movies

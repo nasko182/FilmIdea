@@ -13,6 +13,11 @@ html {
     min-height: 100%;
 }
 
+#toast-container {
+    top: 75px; 
+    right: 15px;
+}
+
 .nav-text-white {
     color: white !important;
     font-size: 161%;

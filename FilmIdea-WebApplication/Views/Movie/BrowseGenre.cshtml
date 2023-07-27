@@ -1,0 +1,149 @@
+﻿@model List<GenreViewModel>
+@{
+    ViewBag.Title = "Browse Movie Genre";
+}
+
+<h2>Browse Movies by Genre</h2>
+
+<div class="genre-grid">
+    @foreach (var genre in Model)
+    {
+        <div class="genre-card">
+            <a href="@Url.Action("ByGenre", "Movie", new { genreId = genre.Id, genreName = genre.Name })" class="genre-link">
+                <div class="genre-icon">
+                        @if (genre.Name == "Action")
+                        {
+                            <i class="fas fa-fist-raised"></i>
+                        }
+                        else if (genre.Name == "Adventure")
+                        {
+                            <i class="fas fa-hiking"></i>
+                        }
+                        else if (genre.Name == "Animation")
+                        {
+                            <i class="fas fa-film"></i>
+                        }
+                        else if (genre.Name == "Biographical")
+                        {
+                            <i class="fas fa-user-tie"></i>
+                        }
+                        else if (genre.Name == "Comedy")
+                        {
+                            <i class="fas fa-laugh"></i>
+                        }
+                        else if (genre.Name == "Crime")
+                        {
+                            <i class="fas fa-briefcase"></i>
+                        }
+                        else if (genre.Name == "Documentary")
+                        {
+                            <i class="fas fa-file-alt"></i>
+                        }
+                        else if (genre.Name == "Drama")
+                        {
+                            <i class="fas fa-theater-masks"></i>
+                        }
+                        else if (genre.Name == "Family")
+                        {
+                            <i class="fas fa-users"></i>
+                        }
+                        else if (genre.Name == "Fantasy")
+                        {
+                            <i class="fas fa-hat-wizard"></i>
+                        }
+                        else if (genre.Name == "History")
+                        {
+                            <i class="fas fa-landmark"></i>
+                        }
+                        else if (genre.Name == "Horror")
+                        {
+                            <i class="fas fa-skull"></i>
+                        }
+                        else if (genre.Name == "Musical")
+                        {
+                            <i class="fas fa-music"></i>
+                        }
+                        else if (genre.Name == "Mystery")
+                        {
+                            <i class="fas fa-search"></i>
+                        }
+                        else if (genre.Name == "Romance")
+                        {
+                            <i class="fas fa-heart"></i>
+                        }
+                        else if (genre.Name == "Sci-Fi")
+                        {
+                            <i class="fas fa-rocket"></i>
+                        }
+                        else if (genre.Name == "Sport")
+                        {
+                            <i class="fas fa-running"></i>
+                        }
+                        else if (genre.Name == "Superhero")
+                        {
+                            <i class="fas fa-mask"></i>
+                        }
+                        else if (genre.Name == "Short")
+                        {
+                            <i class="fas fa-video"></i>
+                        }
+                        else if (genre.Name == "Thriller")
+                        {
+                            <i class="fas fa-binoculars"></i>
+                        }
+                        else if (genre.Name == "War")
+                        {
+                            <i class="fas fa-bomb"></i>
+                        }
+                        else if (genre.Name == "Western")
+                        {
+                            <i class="fas fa-horse"></i>
+                        }
+                        else
+                        {
+                            <i class="fas fa-film"></i>
+                        }
+                </div>
+                <div class="genre-name">
+                    @genre.Name
+                </div>
+            </a>
+        </div>
+    }
+</div>
+
+<style>
+    .genre-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    .genre-card {
+        background-color: #f2f2f2;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+    }
+
+    .genre-card:hover {
+        transform: scale(1.05);
+    }
+
+    .genre-icon {
+        font-size: 40px;
+        margin-bottom: 10px;
+    }
+
+    .genre-name {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .genre-link {
+        text-decoration: none;
+        color: #333;
+    }
+</style>
