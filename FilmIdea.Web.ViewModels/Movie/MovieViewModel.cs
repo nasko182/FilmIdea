@@ -27,6 +27,8 @@ public class MovieViewModel
 
     public decimal Rating { get; set; }
 
+    public bool HasMovieInWatchlist { get; set; }
+
     public ICollection<ActorNameAndIdViewModel> Actors { get; set; }
 
     public IEnumerable<TopSectionMovieViewModel> Movies { get; set; }

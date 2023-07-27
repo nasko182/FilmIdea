@@ -30,9 +30,18 @@ else
                 </a>
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <button class="btn btn-secondary btn-sm watchlist-button position-absolute top-0 start-0 mt-0 ms-0" data-movie="@Model.Id">
-                        <i class="fas fa-plus"></i>➕
-                    </button>
+                    @if (Model.HasMovieInWatchlist)
+                    {
+                        <button class="btn btn-secondary btn-sm added-button position-absolute top-0 start-0 mt-0 ms-0" data-movie="@Model.Id">
+                            <i class="fas fa-plus"></i>✔
+                        </button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-secondary btn-sm watchlist-button position-absolute top-0 start-0 mt-0 ms-0" data-movie="@Model.Id">
+                            <i class="fas fa-plus"></i>➕
+                        </button>
+                    }
                     <button class="btn btn-primary btn-sm position-absolute top-0 start-0 mt-5 ms-0 rate-button" data-toggle="modal" data-target="#rateModal" data-movie="@Model.Id">
                         @if (Model.UserRating > 0)
                         {
@@ -114,47 +123,10 @@ else
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script>
-        $(document).ready(function () {
-            $('.rate-button').on('click', function (e) {
-                e.preventDefault();
-                var movieId = $(this).data('movie');
-                var ratingButton = $(this);
-
-                $('#rateModal').modal('show');
-
-                $('#movieId').val(movieId);
-            });
-
-            $('.watchlist-button').on('click', function (e) {
-                e.preventDefault();
-                var movieId = $(this).data('movie');
-                alert("Added movie with ID " + movieId + " to your watchlist!");
-            });
-
-            $('#submitRating').on('click', function (e) {
-                e.preventDefault();
-                var ratingValue = $('#ratingValue').val();
-                var movieId = $('#movieId').val();
-
-                $.post('@Url.Action("AddRating", "Movie")', {
-                    movieId: movieId,
-                    ratingValue: ratingValue,
-                })
-                    .done(function (data) {
-                        var ratingButton = $('.rate-button[data-movie="' + movieId + '"]');
-                        ratingButton.html('<span>★ ' + ratingValue + '/10</span>');
-                        $('#rateModal').modal('hide');
-                    })
-                    .fail(function (error) {
-                        alert(error.message);
-                    });
-            });
-
-            $('#closeModal').on('click', function (e) {
-
-                $('#rateModal').modal('hide');
-            });
-        });
-    </script>
 }
+<script>
+    var addToUserWatchlistUrl = '@Url.Action("AddToUserWatchlist", "Movie")';
+    var removeFromUserWatchlistUrl = '@Url.Action("RemoveFromUserWatchlist", "Movie")';
+    var addRatingUrl = '@Url.Action("AddRating", "Movie")';
+</script>
+<script src="~/js/site.js"></script>

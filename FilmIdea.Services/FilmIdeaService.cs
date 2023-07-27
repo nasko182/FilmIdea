@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Interfaces;
 using FilmIdea.Data;
 using FilmIdea.Data.Models;
+using FilmIdea.Data.Models.Join_Tables;
 using Web.ViewModels.Actor;
 using Web.ViewModels.Director;
 using Web.ViewModels.Movie;
@@ -25,28 +26,37 @@ public class FilmIdeaService : IFilmIdeaService
     {
         var n = await this.GetMoviesForTopSectionAsync();
         return new AllMoviesViewModel()
-            {
-                TopMovies = await this.GetMoviesForTopSectionAsync(),
-                Movies = await this.GetMoviesForAllAsync(userId)
-            };
-        
+        {
+            TopMovies = await this.GetMoviesForTopSectionAsync(),
+            Movies = await this.GetMoviesForAllAsync(userId)
+        };
+
     }
 
-    public async Task<NewMoviesViewModel> GetNewMoviesAsync(string userId)
+    public async Task<MoviesAndTopViewModel> GetNewMoviesAsync(string userId)
     {
-        return new NewMoviesViewModel()
+        return new MoviesAndTopViewModel()
         {
             TopMovies = await this.GetMoviesForTopSectionAsync(),
             Movies = await this.GetMoviesForNewAsync(userId)
         };
     }
 
-    public async Task<GenreMoviesViewModel> GetMoviesByGenreAsync(string userId,int genreId)
+    public async Task<MoviesAndTopViewModel> GetTop250MoviesAsync(string userId)
     {
-        return new GenreMoviesViewModel()
+        return new MoviesAndTopViewModel()
         {
             TopMovies = await this.GetMoviesForTopSectionAsync(),
-            Movies = await this.GetMoviesForGenreAsync(userId,genreId)
+            Movies = await this.GetMoviesForTop250Async(userId)
+        };
+    }
+
+    public async Task<MoviesAndTopViewModel> GetMoviesByGenreAsync(string userId, int genreId)
+    {
+        return new MoviesAndTopViewModel()
+        {
+            TopMovies = await this.GetMoviesForTopSectionAsync(),
+            Movies = await this.GetMoviesForGenreAsync(userId, genreId)
         };
     }
 
@@ -104,10 +114,14 @@ public class FilmIdeaService : IFilmIdeaService
         {
             var moviesCount = this._dbContext.Movies.Count();
             var movieIndex = this._random.Next(0, moviesCount);
-            var userRating = await this._dbContext.UserRatings
+            var userRatings = await this._dbContext.UserRatings
                 .Where(r => r.UserId.ToString() == userId)
-                .Select(r => r.Rating)
-                .FirstOrDefaultAsync();
+                .Select(r => new UserRating()
+                {
+                    Rating = r.Rating,
+                    MovieId = r.MovieId
+                })
+                .ToListAsync();
 
             var movie = await this._dbContext
                 .Movies
@@ -131,7 +145,7 @@ public class FilmIdeaService : IFilmIdeaService
                         Id = a.ActorId,
                         Name = a.Actor.Name
                     }).ToList(),
-                    UserRating = userRating
+                    UserRating = GetRating(userRatings, m.Id)
                 })
                 .FirstAsync();
 
@@ -206,6 +220,65 @@ public class FilmIdeaService : IFilmIdeaService
         }
     }
 
+    public async Task AddToUserWatchlist(string userId, int movieId)
+    {
+        var movie = await this._dbContext.Movies
+            .Include(m => m.UsersWatchlists)
+            .FirstOrDefaultAsync(m => m.Id == movieId);
+
+        if (movie != null)
+        {
+
+            if (!HasMovieInUserWatchlist(userId, movie))
+            {
+                movie.UsersWatchlists.Add(new UserMovie()
+                {
+                    UserId = Guid.Parse(userId),
+                    MovieId = movieId
+                });
+
+                try
+                {
+                    await this._dbContext.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+
+        }
+    }
+
+    public async Task RemoveFromUserWatchlist(string userId, int movieId)
+    {
+        var movie = await this._dbContext.Movies
+            .Include(m => m.UsersWatchlists)
+            .FirstOrDefaultAsync(m => m.Id == movieId);
+
+        if (movie != null)
+        {
+
+            if (HasMovieInUserWatchlist(userId, movie))
+            {
+                var userMovie = movie.UsersWatchlists.First(m => m.UserId == Guid.Parse(userId) && m.MovieId == movieId);
+
+                movie.UsersWatchlists.Remove(userMovie);
+
+                try
+                {
+                    await this._dbContext.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+
+        }
+    }
+
+
 
 
 
@@ -241,14 +314,19 @@ public class FilmIdeaService : IFilmIdeaService
         }
         else
         {
-            var userRating = await this._dbContext.UserRatings
+            var userRatings = await this._dbContext.UserRatings
                 .Where(r => r.UserId.ToString() == userId)
-                .Select(r => r.Rating)
-                .FirstOrDefaultAsync();
+                .Select(r => new UserRating()
+                {
+                    Rating = r.Rating,
+                    MovieId = r.MovieId
+                })
+                .ToListAsync();
 
             var movies = await this._dbContext
                 .Movies
                 .Include(m => m.Ratings)
+                .Include(m => m.UsersWatchlists)
                 .Select(m => new MovieViewModel()
                 {
                     Title = m.Title,
@@ -257,6 +335,7 @@ public class FilmIdeaService : IFilmIdeaService
                     Id = m.Id,
                     Rating = m.CalculateUserRating(),
                     ReleaseYear = m.ReleaseDate.Year,
+                    HasMovieInWatchlist = HasMovieInUserWatchlist(userId!, m),
                     Director = new DirectorNameAndIdViewModel()
                     {
                         Id = m.Director.Id,
@@ -267,7 +346,7 @@ public class FilmIdeaService : IFilmIdeaService
                         Id = a.ActorId,
                         Name = a.Actor.Name
                     }).ToList(),
-                    UserRating = userRating
+                    UserRating = GetRating(userRatings, m.Id)
                 })
                 .ToListAsync();
 
@@ -280,40 +359,6 @@ public class FilmIdeaService : IFilmIdeaService
     {
         if (userId == null)
         {
-            var movies = await this._dbContext
-                .Movies
-                .Where(m=>m.ReleaseDate.Year==DateTime.UtcNow.Year)
-                .Include(m => m.Ratings)
-                .Select(m => new MovieViewModel()
-                {
-                    Title = m.Title,
-                    CoverPhotoUrl = m.CoverImageUrl,
-                    Duration = m.Duration,
-                    Id = m.Id,
-                    Rating = m.CalculateUserRating(),
-                    ReleaseYear = m.ReleaseDate.Year,
-                    Director = new DirectorNameAndIdViewModel()
-                    {
-                        Id = m.Director.Id,
-                        Name = m.Director.Name
-                    },
-                    Actors = m.Actors.Select(a => new ActorNameAndIdViewModel()
-                    {
-                        Id = a.ActorId,
-                        Name = a.Actor.Name
-                    }).ToList(),
-                })
-                .ToListAsync();
-
-            return movies;
-        }
-        else
-        {
-            var userRating = await this._dbContext.UserRatings
-                .Where(r => r.UserId.ToString() == userId)
-                .Select(r => r.Rating)
-                .FirstOrDefaultAsync();
-
             var movies = await this._dbContext
                 .Movies
                 .Where(m => m.ReleaseDate.Year == DateTime.UtcNow.Year)
@@ -336,7 +381,47 @@ public class FilmIdeaService : IFilmIdeaService
                         Id = a.ActorId,
                         Name = a.Actor.Name
                     }).ToList(),
-                    UserRating = userRating
+                })
+                .ToListAsync();
+
+            return movies;
+        }
+        else
+        {
+            var userRatings = await this._dbContext.UserRatings
+                .Where(r => r.UserId.ToString() == userId)
+                .Select(r => new UserRating()
+                {
+                    Rating = r.Rating,
+                    MovieId = r.MovieId
+                })
+                .ToListAsync();
+
+            var movies = await this._dbContext
+                .Movies
+                .Where(m => m.ReleaseDate.Year == DateTime.UtcNow.Year)
+                .Include(m => m.Ratings)
+                .Include(m => m.UsersWatchlists)
+                .Select(m => new MovieViewModel()
+                {
+                    Title = m.Title,
+                    CoverPhotoUrl = m.CoverImageUrl,
+                    Duration = m.Duration,
+                    Id = m.Id,
+                    Rating = m.CalculateUserRating(),
+                    ReleaseYear = m.ReleaseDate.Year,
+                    HasMovieInWatchlist = HasMovieInUserWatchlist(userId!, m),
+                    Director = new DirectorNameAndIdViewModel()
+                    {
+                        Id = m.Director.Id,
+                        Name = m.Director.Name
+                    },
+                    Actors = m.Actors.Select(a => new ActorNameAndIdViewModel()
+                    {
+                        Id = a.ActorId,
+                        Name = a.Actor.Name
+                    }).ToList(),
+                    UserRating = GetRating(userRatings, m.Id)
                 })
                 .ToListAsync();
 
@@ -344,13 +429,90 @@ public class FilmIdeaService : IFilmIdeaService
         }
     }
 
-    private async Task<List<MovieViewModel>> GetMoviesForGenreAsync(string? userId,int genreId)
+    private async Task<List<MovieViewModel>> GetMoviesForTop250Async(string? userId)
     {
         if (userId == null)
         {
             var movies = await this._dbContext
                 .Movies
-                .Where(m => m.Genres.Any(g=>g.GenreId==genreId))
+                .Include(m => m.Ratings)
+                .OrderByDescending(m => m.Ratings.Average(mr => mr.Rating))
+                .Take(250)
+                .Select(m => new MovieViewModel()
+                {
+                    Title = m.Title,
+                    CoverPhotoUrl = m.CoverImageUrl,
+                    Duration = m.Duration,
+                    Id = m.Id,
+                    Rating = m.CalculateUserRating(),
+                    ReleaseYear = m.ReleaseDate.Year,
+                    HasMovieInWatchlist = HasMovieInUserWatchlist(userId!, m),
+                    Director = new DirectorNameAndIdViewModel()
+                    {
+                        Id = m.Director.Id,
+                        Name = m.Director.Name
+                    },
+                    Actors = m.Actors.Select(a => new ActorNameAndIdViewModel()
+                    {
+                        Id = a.ActorId,
+                        Name = a.Actor.Name
+                    }).ToList(),
+                })
+                .ToListAsync();
+
+            return movies;
+        }
+        else
+        {
+            var userRatings = await this._dbContext.UserRatings
+                .Where(r => r.UserId.ToString() == userId)
+                .Select(r => new UserRating()
+                {
+                    Rating = r.Rating,
+                    MovieId = r.MovieId
+                })
+                .ToListAsync();
+
+            var movies = await this._dbContext
+                .Movies
+                .Include(m => m.Ratings)
+                .Include(m => m.UsersWatchlists)
+                .OrderByDescending(m => m.Ratings.Average(mr => mr.Rating))
+                .Take(250)
+                .Select(m => new MovieViewModel()
+                {
+                    Title = m.Title,
+                    CoverPhotoUrl = m.CoverImageUrl,
+                    Duration = m.Duration,
+                    Id = m.Id,
+                    Rating = m.CalculateUserRating(),
+                    ReleaseYear = m.ReleaseDate.Year,
+                    HasMovieInWatchlist = HasMovieInUserWatchlist(userId!, m),
+                    Director = new DirectorNameAndIdViewModel()
+                    {
+                        Id = m.Director.Id,
+                        Name = m.Director.Name
+                    },
+                    Actors = m.Actors.Select(a => new ActorNameAndIdViewModel()
+                    {
+                        Id = a.ActorId,
+                        Name = a.Actor.Name
+                    }).ToList(),
+                    UserRating = GetRating(userRatings, m.Id)
+                })
+                .ToListAsync();
+
+            return movies;
+        }
+    }
+
+    private async Task<List<MovieViewModel>> GetMoviesForGenreAsync(string? userId, int genreId)
+    {
+        if (userId == null)
+        {
+            var movies = await this._dbContext
+                .Movies
+                .Where(m => m.Genres.Any(g => g.GenreId == genreId))
                 .Include(m => m.Ratings)
                 .Select(m => new MovieViewModel()
                 {
@@ -377,15 +539,20 @@ public class FilmIdeaService : IFilmIdeaService
         }
         else
         {
-            var userRating = await this._dbContext.UserRatings
+            var userRatings = await this._dbContext.UserRatings
                 .Where(r => r.UserId.ToString() == userId)
-                .Select(r => r.Rating)
-                .FirstOrDefaultAsync();
+                .Select(r => new UserRating()
+                {
+                    Rating = r.Rating,
+                    MovieId = r.MovieId
+                })
+                .ToListAsync();
 
             var movies = await this._dbContext
                 .Movies
                 .Where(m => m.Genres.Any(g => g.GenreId == genreId))
                 .Include(m => m.Ratings)
+                .Include(m => m.UsersWatchlists)
                 .Select(m => new MovieViewModel()
                 {
                     Title = m.Title,
@@ -394,6 +561,7 @@ public class FilmIdeaService : IFilmIdeaService
                     Id = m.Id,
                     Rating = m.CalculateUserRating(),
                     ReleaseYear = m.ReleaseDate.Year,
+                    HasMovieInWatchlist = HasMovieInUserWatchlist(userId!, m),
                     Director = new DirectorNameAndIdViewModel()
                     {
                         Id = m.Director.Id,
@@ -404,7 +572,7 @@ public class FilmIdeaService : IFilmIdeaService
                         Id = a.ActorId,
                         Name = a.Actor.Name
                     }).ToList(),
-                    UserRating = userRating
+                    UserRating = GetRating(userRatings, m.Id)
                 })
                 .ToListAsync();
 
@@ -425,5 +593,24 @@ public class FilmIdeaService : IFilmIdeaService
                 PictureUrl = m.CoverImageUrl
             })
             .ToListAsync();
+    }
+
+    private static int GetRating(ICollection<UserRating> userRating, int movieId)
+    {
+        if (userRating.Any())
+        {
+            var movieRating = userRating.FirstOrDefault(ur => ur.MovieId == movieId);
+            if (movieRating != null)
+            {
+                return movieRating.Rating;
+            }
+        }
+        return 0;
+
+    }
+
+    private static bool HasMovieInUserWatchlist(string userId, Movie movie)
+    {
+        return movie.UsersWatchlists.Any(um => um.MovieId == movie.Id && um.UserId == Guid.Parse(userId));
     }
 }
