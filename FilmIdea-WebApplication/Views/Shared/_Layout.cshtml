@@ -18,14 +18,7 @@
 <header>
     @if (this.User.Identity.IsAuthenticated)
     {
-        if (currentPage is "/" or "/home/index")
-        {
-            <partial name="Logged/_HomeNavPartial"/>
-        }
-        else
-        {
             <partial name="Logged/_NavPartial"/>
-        }
     }
     else
     {

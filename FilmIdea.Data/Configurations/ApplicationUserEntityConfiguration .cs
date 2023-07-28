@@ -32,6 +32,11 @@ public class ApplicationUserEntityConfiguration : IEntityTypeConfiguration<Appli
             .HasForeignKey(um => um.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.HasMany(u => u.PassedMovies)
+            .WithOne(um => um.User)
+            .HasForeignKey(um => um.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasMany(u=>u.Messages)
             .WithOne(m=>m.Sender)
             .HasForeignKey(m=>m.SenderId)

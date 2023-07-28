@@ -55,6 +55,8 @@ public class FilmIdeaDbContext : IdentityDbContext<ApplicationUser, IdentityRole
 
     public DbSet<UserMovie> UsersMovies { get; set; } = null!;
 
+    public DbSet<PassedMovie> PassedMovies { get; set; } = null!;
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         var configurationAssembly = Assembly.GetAssembly(typeof(FilmIdeaDbContext)) ??

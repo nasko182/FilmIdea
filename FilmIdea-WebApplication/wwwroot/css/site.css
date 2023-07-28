@@ -312,6 +312,37 @@ button.btn-register {
     margin-left: 10px;
 }
 
+/*Resset Button*/
+
+.reset-button {
+    background-color: #ff5a5f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    position: relative;
+    transition: background-color 0.3s;
+}
+
+.reset-button:hover {
+    background-color: #ff7f84;
+}
+
+.button-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    font-size: 20px;
+}
+
+.button-text {
+    margin-right: 30px;
+}
+
+
 /*Genre*/
 
 .genre-grid {
@@ -347,3 +378,58 @@ button.btn-register {
     text-decoration: none;
     color: #333;
 }
+
+
+.tinder-card.no-movies {
+    background-color: #f9f9f9;
+    width: 670px !important;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 30px;
+    text-align: center;
+}
+
+.tinder-card.no-movies h3 {
+    font-size: 36px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.tinder-card.no-movies p {
+    font-size: 24px;
+}
+
+/* CSS Styles for the reset button */
+.reset-container {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.reset-button {
+    background-color: #ff5a5f;
+    color: white;
+    border: none;
+    padding: 20px 40px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 24px;
+    position: relative;
+    transition: background-color 0.3s;
+}
+
+.reset-button:hover {
+    background-color: #ff7f84;
+}
+
+.reset-button .button-icon {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    font-size: 30px;
+}
+
+    .reset-button .button-text {
+        margin-right: 10px;
+        font-family: monospace;
+    }

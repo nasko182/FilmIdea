@@ -125,7 +125,7 @@ public class MovieController : BaseController
     {
         await _filmIdeaService.RemoveFromUserWatchlist(GetUserId(), movieId);
 
-        return RedirectToAction(TempData["LastAction"].ToString(), TempData["LastController"].ToString());
+        return RedirectToAction(TempData["LastAction"]!.ToString(), TempData["LastController"]!.ToString());
     }
 
 }

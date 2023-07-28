@@ -16,19 +16,26 @@ public class SwipeController : BaseController
     }
     public async Task<IActionResult> Swipe()
     {
-        var movies = await this._swipeService.GetMoviesAsync();
+        var movies = await this._swipeService.GetMoviesAsync(this.GetUserId());
 
         TempData["LastAction"] = ControllerContext.ActionDescriptor.ActionName;
         TempData["LastController"] = ControllerContext.ActionDescriptor.ControllerName;
 
         return View(movies);
     }
-    
-    
-    //public async Task PassMovie(int movieId)
-    //{
-    //    await this._swipeService.AddMovieToUserPassedList(GetUserId(), movieId);
 
-    //    return RedirectToAction(TempData["LastAction"].ToString(), TempData["LastController"].ToString());
-    //}
+    public async Task<IActionResult> Reset()
+    {
+        await this._swipeService.ResetPassedList(this.GetUserId());
+
+        return this.RedirectToAction("Swipe");
+    }
+
+
+    public async Task<IActionResult> PassMovie(int movieId)
+    {
+        await this._swipeService.AddMovieToUserPassedList(GetUserId(), movieId);
+
+        return RedirectToAction(TempData["LastAction"]!.ToString(), TempData["LastController"]!.ToString());
+    }
 }

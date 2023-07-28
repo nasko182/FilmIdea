@@ -12,7 +12,7 @@ public interface IFilmIdeaService
 
     Task<MoviesAndTopViewModel> GetTop250MoviesAsync(string userId);
 
-    Task<MovieDetailsViewModel> GetMovieAsync(int movieId, string userId);
+    Task<MovieDetailsViewModel?> GetMovieAsync(int movieId, string userId);
 
     Task<MovieViewModel> GetRouletteMovieAsync(string? userId);
 

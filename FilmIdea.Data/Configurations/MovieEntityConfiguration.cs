@@ -44,6 +44,11 @@ public class MovieEntityConfiguration : IEntityTypeConfiguration<Movie>
             .HasForeignKey(um => um.MovieId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.HasMany(m => m.PassedUsers)
+            .WithOne(um => um.Movie)
+            .HasForeignKey(um => um.MovieId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasMany(m => m.Photos)
             .WithOne(p => p.Movie)
             .HasForeignKey(p => p.MovieId)

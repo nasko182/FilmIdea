@@ -60,7 +60,7 @@ public class FilmIdeaService : IFilmIdeaService
         };
     }
 
-    public async Task<MovieDetailsViewModel> GetMovieAsync(int movieId, string userId)
+    public async Task<MovieDetailsViewModel?> GetMovieAsync(int movieId, string userId)
     {
         var userRating = await this._dbContext.UserRatings
             .Where(r => r.UserId.ToString() == userId)

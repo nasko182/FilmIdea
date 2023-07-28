@@ -1,5 +1,6 @@
 ﻿@model List<SwipeMovieViewModel>
 @{
+    ViewBag.Title = "Swipe";
     var jsonMovies = Json.Serialize(Model);
 }
 <div id="movieData" data-movies='@Html.Raw(jsonMovies)'></div>
@@ -20,19 +21,32 @@
         </div>
 
         <div class="tinder-buttons">
-            <button class="tinder-btn tinder-btn-dislike" id="left">Dislike</button>
-            <button class="tinder-btn tinder-btn-like" id="right">Like</button>
+            <button class="tinder-btn tinder-btn-dislike" id="dislike"><i class="fas fa-thumbs-down"></i></button>
+            <button class="tinder-btn tinder-btn-like" id="like"><i class="fas fa-thumbs-up"></i></button>
         </div>
     }
     else
     {
-        <p>No movies available to swipe.</p>
+        <div class="center-container">
+            <div class="tinder-card no-movies">
+                <h3>No more movies available to swipe.</h3>
+                <h3>Do you want to start from the beginning?</h3>
+            </div>
+        </div>
+        <div class="reset-container">
+            <button class="reset-button" onclick="location.href='@Url.Action("Reset", "Swipe")'">
+                <span class="button-text"><strong>Reset</strong></span>
+                <span class="button-icon">↻</span>
+            </button>
+        </div>
     }
 </div>
 
 @section scripts {
     <script>
+        var addToUserWatchlistUrl = '@Url.Action("AddToUserWatchlist", "Movie")';
         var addToUserPassedList = '@Url.Action("PassMovie", "Swipe")';
+        var resetUserPassedLisr = '@Url.Action("Reset", "Swipe")';
     </script>
     <script src="~/js/Swipe.js" asp-append-version="true"></script>
 }

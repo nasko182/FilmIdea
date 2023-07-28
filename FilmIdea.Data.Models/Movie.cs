@@ -16,6 +16,7 @@ public class Movie
         this.Ratings = new HashSet<UserRating>();
         this.GroupsWatchlists = new HashSet<GroupMovie>();
         this.UsersWatchlists = new HashSet<UserMovie>();
+        this.PassedUsers = new HashSet<PassedMovie>();
         this.Photos = new HashSet<Photo>();
         this.Videos = new HashSet<Video>();
     }
@@ -59,6 +60,8 @@ public class Movie
     public ICollection<GroupMovie> GroupsWatchlists { get; set; }
 
     public ICollection<UserMovie> UsersWatchlists { get; set; }
+
+    public ICollection<PassedMovie> PassedUsers { get; set; }
 
     public ICollection<Photo> Photos { get; set; }
 
