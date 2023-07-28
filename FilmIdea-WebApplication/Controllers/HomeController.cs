@@ -1,7 +1,7 @@
 ﻿namespace FilmIdea.Web.Controllers;
 
 using System.Diagnostics;
-using FilmIdea.Web.ViewModels.Home;
+using ViewModels.Home;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,7 +12,7 @@ public class HomeController : BaseController
     {
         if (this.User?.Identity?.IsAuthenticated ?? false)
         {
-            return this.RedirectToAction("All","Movie");
+            return this.RedirectToAction("Swipe","Swipe");
         }
         return this.View();
     }

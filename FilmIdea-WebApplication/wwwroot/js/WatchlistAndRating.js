@@ -1,8 +1,17 @@
 ﻿$(document).ready(function () {
+    $('#rateModal').on('show.bs.modal', function () {
+        $('#ratingValue').val('');
+        $('#submitRating').prop('disabled', true);
+    });
+
+    $('#ratingValue').on('change', function () {
+        var rating = $(this).val();
+        $('#submitRating').prop('disabled', rating === '');
+    });
+
     $('.rate-button').on('click', function (e) {
         e.preventDefault();
         var movieId = $(this).data('movie');
-        var ratingButton = $(this);
 
         $('#rateModal').modal('show');
 
@@ -39,10 +48,11 @@
 
     $('#submitRating').on('click', function (e) {
         e.preventDefault();
-        var ratingValue = $('#ratingValue').val();
-        var movieId = $('#movieId').val();
+        e.stopImmediatePropagation();
+        var ratingValue = parseInt($('#ratingValue').val());
+        var movieId = parseInt($('#movieId').val());
 
-        $.post('@Url.Action("AddRating", "Movie")', {
+        $.post(addRatingUrl, {
             movieId: movieId,
             ratingValue: ratingValue,
         })

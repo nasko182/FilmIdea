@@ -12,6 +12,7 @@ public class ApplicationUser: IdentityUser<Guid>
         this.Groups = new HashSet<GroupUser>();
         this.Watchlist = new HashSet<UserMovie>();
         this.Messages = new HashSet<Message>();
+        //this.PassedMoviesIds = new HashSet<UserMovie>();
     }
     public Guid? CriticId { get; set; }
 
@@ -26,4 +27,8 @@ public class ApplicationUser: IdentityUser<Guid>
     public ICollection<UserMovie> Watchlist { get; set; }
 
     public ICollection<Message> Messages { get; set; }
+
+    //public ICollection<UserPassedMovie> PassedMoviesIds { get; set; }
+
+    //TODO: How to store User passed Movies maybe new model? maybe chatGTP? It cant be UserMovies because will be mixed with movies inside watchlist
 }

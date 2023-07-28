@@ -117,7 +117,7 @@ public class MovieController : BaseController
     {
         await _filmIdeaService.AddToUserWatchlist(GetUserId(),movieId);
 
-        return RedirectToAction(TempData["LastAction"].ToString(), TempData["LastController"].ToString());
+        return RedirectToAction(TempData["LastAction"]!.ToString(), TempData["LastController"]!.ToString());
     }
 
     [HttpPost]

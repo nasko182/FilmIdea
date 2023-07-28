@@ -203,7 +203,7 @@ public class FilmIdeaService : IFilmIdeaService
 
         if (movie != null)
         {
-            var userRating = movie.Ratings.FirstOrDefault(ur => ur.UserId.ToString() == userId);
+            var userRating = movie.Ratings.FirstOrDefault(ur => ur.UserId.ToString() == userId && ur.MovieId==movieId);
 
             if (userRating != null)
             {
@@ -211,7 +211,7 @@ public class FilmIdeaService : IFilmIdeaService
             }
             else
             {
-                movie.Ratings.Add(new UserRating()
+                this._dbContext.UserRatings.Add(new UserRating()
                 {
                     MovieId = movieId,
                     UserId = Guid.Parse(userId),

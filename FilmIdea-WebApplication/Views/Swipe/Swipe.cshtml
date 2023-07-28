@@ -1,5 +1,38 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<SwipeMovieViewModel>
 @{
+    var jsonMovies = Json.Serialize(Model);
+}
+<div id="movieData" data-movies='@Html.Raw(jsonMovies)'></div>
+
+<div class="center-container">
+    <h2>Swipe Movies</h2>
+</div>
+
+<div class="tinder-container">
+    @if (Model.Any())
+    {
+        <div class="tinder-card-stack">
+            <div class="tinder-card">
+                <img src="@Model[0].CoverImageUrl" alt="@Model[0].Title" class="tinder-card-image" />
+                <h3>@Model[0].Title</h3>
+                <p>@Model[0].Description</p>
+            </div>
+        </div>
+
+        <div class="tinder-buttons">
+            <button class="tinder-btn tinder-btn-dislike" id="left">Dislike</button>
+            <button class="tinder-btn tinder-btn-like" id="right">Like</button>
+        </div>
+    }
+    else
+    {
+        <p>No movies available to swipe.</p>
+    }
+</div>
+
+@section scripts {
+    <script>
+        var addToUserPassedList = '@Url.Action("PassMovie", "Swipe")';
+    </script>
+    <script src="~/js/Swipe.js" asp-append-version="true"></script>
 }

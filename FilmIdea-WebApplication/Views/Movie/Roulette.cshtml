@@ -36,13 +36,13 @@ else
                     @if (Model.HasMovieInWatchlist)
                     {
                         <button class="btn btn-secondary btn-sm added-button position-absolute top-0 start-0 mt-0 ms-0" data-movie="@Model.Id">
-                            <i class="fas fa-plus"></i>✔
+                            ✔
                         </button>
                     }
                     else
                     {
                         <button class="btn btn-secondary btn-sm watchlist-button position-absolute top-0 start-0 mt-0 ms-0" data-movie="@Model.Id">
-                            <i class="fas fa-plus"></i>➕
+                            ➕
                         </button>
                     }
                     <button class="btn btn-primary btn-sm position-absolute top-0 start-0 mt-5 ms-0 rate-button" data-toggle="modal" data-target="#rateModal" data-movie="@Model.Id">
@@ -115,9 +115,18 @@ else
 <div class="center-container">
     @if (User.Identity.IsAuthenticated)
     {
-        <a href="#" class="btn btn-secondary btn-sm " data-movie="@Model.Id">
-            <i class="fas fa-plus"></i> + Watchlist
-        </a>
+        @if (Model.HasMovieInWatchlist)
+        {
+            <a href="#" class="btn btn-secondary btn-sm added-button" data-movie="@Model.Id">
+                ✔ In Watchlist
+            </a>
+        }
+        else
+        {
+            <a href="#" class="btn btn-secondary btn-sm watchlist-button" data-movie="@Model.Id">
+                ➕ Watchlist
+            </a>
+        }
     }
     <a asp-controller="Movie" asp-action="Roulette" class="btn btn-secondary btn-sm m-3 " data-movie="@Model.Id">
         <i class="fas fa-plus"></i> Spin Again
@@ -132,4 +141,5 @@ else
     var removeFromUserWatchlistUrl = '@Url.Action("RemoveFromUserWatchlist", "Movie")';
     var addRatingUrl = '@Url.Action("AddRating", "Movie")';
 </script>
-<script src="~/js/site.js"></script>
+<script src="~/js/WatchlistAndRating.js"></script>
+
