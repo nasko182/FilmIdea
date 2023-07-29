@@ -1,0 +1,46 @@
+﻿@model CreateGroupViewModel
+@{
+    ViewBag.Title = "Create Group";
+}
+
+<h2>Create New Group</h2>
+
+<form id="createGroupForm" asp-action="Create" asp-controller="Group" method="post">
+    <div class="form-group">
+        <label for="Name">Group Name</label>
+        <input type="text" class="form-control" id="Name" name="Name" required>
+    </div>
+
+    <div class="form-group">
+        <label for="Icon">Select Icon</label>
+        <select class="form-control iconSelector" id="Icon" name="Icon">
+            @foreach (var icon in Model.Icons)
+            {
+                <option value="@icon.IconText">@icon.IconText @icon.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="Users">Select Users</label>
+        <input type="text" class="form-control" id="UserSearch" placeholder="Enter a username">
+        <div id="usersSection" style="display: none;">
+            <select multiple class="form-control" id="Users" name="UsersIds">
+
+                @foreach (var user in Model.AllUsers)
+                {
+                    <option value="@user.Id" data-id="@user.Id">@user.Username</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" id="createGroupButton" disabled>Create Group</button>
+</form>
+
+<input type="hidden" id="UserList" name="GroupData.UsersIds" data-users="@Html.Raw(Json.Serialize(Model.GroupData.UsersIds))">
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/createGroup.js"></script>
+}

@@ -1,5 +1,80 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<AllGroupViewModel>
+
 @{
+    ViewBag.Title = "Groups";
+    bool hasGroups = Model.Any();
 }
+
+<style>
+    .group-list {
+        list-style: none;
+        padding: 0;
+    }
+
+        .group-list li {
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+        }
+
+            .group-list li:hover {
+                background-color: #e0e0e0;
+            }
+
+    .group-icon {
+        font-size: 24px;
+        margin-right: 10px;
+    }
+
+    .create-group {
+        font-size: 24px;
+        font-weight: bold;
+        color: #007bff;
+        text-decoration: none;
+    }
+
+        .create-group:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+    .title {
+        font-size: 32px;
+        font-weight: bold;
+        color: black;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+</style>
+
+<div class="center-container">
+    <div class="row">
+        <div class="title">Groups</div>
+        <div class="center-container">
+            <div class="col-md-6" style="width: 243px; text-align: center;">
+
+                @if (!hasGroups)
+                {
+                    <p><p>You don't have any groups yet.</p>
+                        <br/>
+                    <a asp-action="Create" asp-controller="Group" class="create-group">Create a new group</a>.</p>
+                }
+                else
+                {
+                    <ul class="group-list">
+                        @foreach (var group in Model)
+                        {
+                            <li><i class="@group.Icon group-icon"></i><a asp-action="Details" asp-controller="Group" asp-route-genreId="@group.Id">@group.Name</a></li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+        <div class="col-md-6">
+        </div>
+    </div>
+</div>

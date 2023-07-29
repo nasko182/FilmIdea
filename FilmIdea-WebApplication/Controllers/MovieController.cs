@@ -10,11 +10,11 @@ public class MovieController : BaseController
 {
     //TODO: Make Filter by genre in all,new,roulette and genre views
 
-    private readonly IFilmIdeaService _filmIdeaService;
+    private readonly IMovieService _movieService;
 
-    public MovieController(IFilmIdeaService filmIdeaService)
+    public MovieController(IMovieService movieService)
     {
-        this._filmIdeaService = filmIdeaService;
+        this._movieService = movieService;
     }
 
     [AllowAnonymous]
@@ -23,11 +23,11 @@ public class MovieController : BaseController
         AllMoviesViewModel movies;
         if (this.IsAuthenticated())
         {
-            movies = await _filmIdeaService.GetAllMoviesAsync(this.GetUserId());
+            movies = await this._movieService.GetAllMoviesAsync(this.GetUserId());
         }
         else
         {
-            movies = await _filmIdeaService.GetAllMoviesAsync(null);
+            movies = await this._movieService.GetAllMoviesAsync(null);
         }
         return View(movies);
     }
@@ -35,7 +35,7 @@ public class MovieController : BaseController
     [AllowAnonymous]
     public async Task<IActionResult> New()
     {
-        var movies = await _filmIdeaService.GetNewMoviesAsync(GetUserId());
+        var movies = await this._movieService.GetNewMoviesAsync(GetUserId());
 
         return View(movies);
     }
@@ -43,7 +43,7 @@ public class MovieController : BaseController
     [AllowAnonymous]
     public async Task<IActionResult> Top250()
     {
-        var movies = await _filmIdeaService.GetTop250MoviesAsync(GetUserId());
+        var movies = await this._movieService.GetTop250MoviesAsync(GetUserId());
 
         TempData["LastAction"] = ControllerContext.ActionDescriptor.ActionName;
         TempData["LastController"] = ControllerContext.ActionDescriptor.ControllerName;
@@ -52,17 +52,9 @@ public class MovieController : BaseController
     }
 
     [AllowAnonymous]
-    public async Task<IActionResult> BrowseGenre()
-    {
-        var genres = await this._filmIdeaService.GetGenresAsync();
-
-        return View(genres);
-    }
-
-    [AllowAnonymous]
     public async Task<IActionResult> ByGenre(int genreId,string genreName)
     {
-        var movies = await _filmIdeaService.GetMoviesByGenreAsync(GetUserId(),genreId);
+        var movies = await this._movieService.GetMoviesByGenreAsync(GetUserId(),genreId);
 
         TempData["LastAction"] = ControllerContext.ActionDescriptor.ActionName;
         TempData["LastController"] = ControllerContext.ActionDescriptor.ControllerName;
@@ -78,11 +70,11 @@ public class MovieController : BaseController
         MovieViewModel movie;
         if (this.IsAuthenticated())
         {
-            movie = await _filmIdeaService.GetRouletteMovieAsync(GetUserId());
+            movie = await this._movieService.GetRouletteMovieAsync(GetUserId());
         }
         else
         {
-            movie = await _filmIdeaService.GetRouletteMovieAsync(null);
+            movie = await this._movieService.GetRouletteMovieAsync(null);
         }
 
         TempData["LastAction"] = ControllerContext.ActionDescriptor.ActionName;
@@ -94,7 +86,7 @@ public class MovieController : BaseController
     [AllowAnonymous]
     public async Task<IActionResult> Details(int movieId)
     {
-        var movie = await _filmIdeaService.GetMovieAsync(movieId, GetUserId());
+        var movie = await this._movieService.GetMovieAsync(movieId, GetUserId());
 
         if (movie == null)
         {
@@ -107,7 +99,7 @@ public class MovieController : BaseController
     [HttpPost]
     public async Task<IActionResult> AddRating(int movieId, int ratingValue)
     {
-        await _filmIdeaService.AddRatingAsync(movieId, ratingValue, GetUserId());
+        await this._movieService.AddRatingAsync(movieId, ratingValue, GetUserId());
 
         return RedirectToAction("Details", new { id = movieId });
     }
@@ -115,7 +107,7 @@ public class MovieController : BaseController
     [HttpPost]
     public async Task<IActionResult> AddToUserWatchlist(int movieId)
     {
-        await _filmIdeaService.AddToUserWatchlist(GetUserId(),movieId);
+        await this._movieService.AddToUserWatchlist(GetUserId(),movieId);
 
         return RedirectToAction(TempData["LastAction"]!.ToString(), TempData["LastController"]!.ToString());
     }
@@ -123,7 +115,7 @@ public class MovieController : BaseController
     [HttpPost]
     public async Task<IActionResult> RemoveFromUserWatchlist(int movieId)
     {
-        await _filmIdeaService.RemoveFromUserWatchlist(GetUserId(), movieId);
+        await this._movieService.RemoveFromUserWatchlist(GetUserId(), movieId);
 
         return RedirectToAction(TempData["LastAction"]!.ToString(), TempData["LastController"]!.ToString());
     }

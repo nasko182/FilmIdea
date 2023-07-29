@@ -40,7 +40,7 @@ public class Program
             })
             .AddEntityFrameworkStores<FilmIdeaDbContext>();
 
-        builder.Services.AddApplicationServices(typeof(IFilmIdeaService));
+        builder.Services.AddApplicationServices(typeof(IMovieService));
 
         builder.Services.AddControllersWithViews();
 
@@ -71,5 +71,7 @@ public class Program
         app.MapRazorPages();
 
         app.Run();
+
+        //TODO: Remove review and comment seed after review logic is implemented
     }
 }

@@ -51,11 +51,11 @@ public class CriticController : BaseController
             return this.RedirectToAction("Become");
         }
         string mimeType;
-        new FileExtensionContentTypeProvider().TryGetContentType(model.ProfileImage.FileName, out mimeType);
+        new FileExtensionContentTypeProvider().TryGetContentType(model.ProfileImage.FileName, out mimeType!);
 
         List<string> allowedMimeTypes = new List<string> { "image/jpeg", "image/png", "image/jp" };
 
-        if (!allowedMimeTypes.Contains(mimeType))
+        if (!allowedMimeTypes.Contains(mimeType!))
         {
             TempData[ErrorMessage] = "Inserted file is not an image";
 

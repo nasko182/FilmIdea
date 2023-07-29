@@ -16,7 +16,7 @@
 </head>
 <body>
 <header>
-    @if (this.User.Identity.IsAuthenticated)
+    @if (this.User.Identity!.IsAuthenticated)
     {
             <partial name="Logged/_NavPartial"/>
     }

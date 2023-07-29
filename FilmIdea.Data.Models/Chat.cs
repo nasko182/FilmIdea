@@ -5,6 +5,7 @@ public class Chat
     public Chat()
     {
         this.Id = Guid.NewGuid();
+        this.CreatedAt = DateTime.UtcNow;
 
         this.Messages = new HashSet<Message>();
     }

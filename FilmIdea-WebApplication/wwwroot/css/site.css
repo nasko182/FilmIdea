@@ -433,3 +433,8 @@ button.btn-register {
         margin-right: 10px;
         font-family: monospace;
     }
+
+.selected {
+    background-color: #007bff;
+    color: #fff;
+}

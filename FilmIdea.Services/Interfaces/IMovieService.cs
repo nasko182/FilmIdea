@@ -2,7 +2,7 @@
 
 using Web.ViewModels.Movie;
 
-public interface IFilmIdeaService
+public interface IMovieService
 {
     Task<AllMoviesViewModel> GetAllMoviesAsync(string? userId);
 

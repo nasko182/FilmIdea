@@ -1,6 +1,5 @@
 ﻿namespace FilmIdea.Services.Data;
 
-//using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 using Interfaces;
@@ -11,12 +10,12 @@ using Web.ViewModels.Actor;
 using Web.ViewModels.Director;
 using Web.ViewModels.Movie;
 
-public class FilmIdeaService : IFilmIdeaService
+public class MovieService : IMovieService
 {
     private readonly FilmIdeaDbContext _dbContext;
     private readonly Random _random;
 
-    public FilmIdeaService(FilmIdeaDbContext dbContext)
+    public MovieService(FilmIdeaDbContext dbContext)
     {
         this._dbContext = dbContext;
         this._random = new Random();

@@ -24,6 +24,9 @@ public class Group
     [MaxLength(NameMaxLength)]
     public string Name { get; set; } = null!;
 
+    [Required]
+    public string Icon { get; set; } = null!;
+
     public Guid ChatId { get; set; }
 
     public Chat Chat { get; set; }

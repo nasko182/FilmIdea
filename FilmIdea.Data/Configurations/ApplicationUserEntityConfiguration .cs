@@ -4,10 +4,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using Models;
+using Seed;
 
 
 public class ApplicationUserEntityConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {
+    private readonly ApplicationUserSeeder _seeder;
+
+    public ApplicationUserEntityConfiguration()
+    {
+        this._seeder = new ApplicationUserSeeder();
+    }
     public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
         builder.HasKey(u => u.Id);
@@ -46,5 +53,7 @@ public class ApplicationUserEntityConfiguration : IEntityTypeConfiguration<Appli
             .WithOne(c=>c.User)
             .HasForeignKey<ApplicationUser>(u=>u.CriticId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasData(this._seeder.GenerateUsers());
     }
 }
