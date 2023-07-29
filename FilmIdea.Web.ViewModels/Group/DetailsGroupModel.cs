@@ -15,7 +15,7 @@ public class DetailsGroupModel
 
     public string Icon { get; set; } = null!;
 
-    public string ChatId { get; set; } = null!;
+    public ChatViewModel  Chat { get; set; } = null!;
 
     public ICollection<UserViewModel> Users { get; set; }
 

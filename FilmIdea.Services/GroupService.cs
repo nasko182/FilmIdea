@@ -74,6 +74,34 @@ public class GroupService : IGroupService
         };
     }
 
+    public async Task<DetailsGroupModel> GetGroupDetailsAsync(string groupId)
+    {
+        var group = await this._dbContext.Groups.FirstAsync(g => g.Id == Guid.Parse(groupId));
+
+        var chat = await GetChatViewModel(groupId);
+
+        return await this._dbContext.Groups
+            .Where(g => g.Id == Guid.Parse(groupId))
+            .Select(g => new DetailsGroupModel()
+            {
+                Icon = g.Icon,
+                Name = g.Name,
+                Chat = chat,
+                Users = g.GroupUsers.Select(u=>new UserViewModel()
+                {
+                    Id = u.UserId.ToString(),
+                    Username = u.User.Email.Substring(0, u.User.Email.IndexOf("@"))
+                }).ToList(),
+                Watchlist = g.Watchlist.Select(wm=>new GroupMovieViewModel()
+                {
+                    MovieId = wm.MovieId,
+                    Title = wm.Movie.Title
+                }).ToList()
+            })
+            .FirstAsync();
+    }
+
+
 
 
     private async Task<List<UserViewModel>> GetAllUsersAsync(string userId)
@@ -142,6 +170,22 @@ public class GroupService : IGroupService
                 IconText = "😱",
                 Name = "Scary"
             }
+        };
+    }
+
+    private async Task<ChatViewModel> GetChatViewModel(string groupId)
+    {
+        var group = await this._dbContext.Groups.FirstAsync(g => g.Id == Guid.Parse(groupId));
+
+        return new ChatViewModel()
+        {
+            CreatedAt = group.Chat.CreatedAt,
+            Messages = group.Chat.Messages.Select(m => new MessageViewModel()
+            {
+                Content = m.Content,
+                SendAt = m.SentAt,
+                Sender = m.Sender.Email.Substring(0, m.Sender.Email.IndexOf("@")),
+            }).ToList()
         };
     }
 

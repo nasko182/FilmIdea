@@ -10,8 +10,8 @@
         }
 
         $("#Users option").each(function () {
-            var username = $(this).data("username").toLowerCase();
             var userOption = $(this);
+            var username = userOption[0].innerText.toLowerCase();
 
             if (username.includes(searchText)) {
                 userOption.show();

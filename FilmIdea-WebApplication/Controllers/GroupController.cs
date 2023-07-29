@@ -23,7 +23,9 @@ public class GroupController : BaseController
 
     public async Task<IActionResult> Details(string groupId)
     {
-        return View();
+        var group = await this._groupService.GetGroupDetailsAsync(groupId);
+
+        return View(group);
     }
 
     public async Task<IActionResult> Create()

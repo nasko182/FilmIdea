@@ -1,1 +1,105 @@
-﻿
+﻿@model DetailsGroupModel
+@{
+    ViewBag.Title = $"{Model.Name} Details";
+}
+
+<style>
+    /* Add your CSS styles here */
+    .left-section {
+        width: 35%;
+        padding: 20px;
+        box-sizing: border-box;
+        border-right: 1px solid #ccc;
+    }
+
+    .right-section {
+        flex: 1;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .chat-box {
+        height: 400px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        overflow-y: auto;
+    }
+
+    .message {
+        padding: 5px 10px;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .message.sender {
+        background-color: #f1f1f1;
+    }
+
+    .message.receiver {
+        background-color: #d9f7ff;
+    }
+
+    .movie-card {
+        background-color: #f8f8f8;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .user-list {
+        list-style: none;
+        padding: 0;
+        margin: 10px 0;
+    }
+
+    .user-list li {
+        margin-bottom: 5px;
+    }
+</style>
+
+<div style="display: flex; justify-content: space-between;">
+    <div class="left-section">
+        <h2>Chat</h2>
+        <div class="chat-box">
+            @foreach (var message in Model.Chat.Messages)
+            {
+                <p>@message.SendAt</p>
+                <div class="message">
+                    <p>@message.Sender</p>
+                    <div class="content">
+                        @message.Content
+                    </div>
+                </div>
+            }
+        </div>
+        <input type="text" id="messageInput" />
+        <button id="sendMessageButton">Send</button>
+    </div>
+
+    <div class="right-section">
+        <h2>Group Watchlist</h2>
+        @foreach (var movie in Model.Watchlist)
+        {
+            <div class="movie-card">
+                <h3>@movie.Title</h3>
+                <p>@movie.Description</p>
+                <!-- Add more movie details here -->
+            </div>
+        }
+
+        <h2>All Users</h2>
+        <ul class="user-list">
+            @foreach (var user in Model.Users)
+            {
+                <li>@user.Username</li>
+            }
+        </ul>
+
+        <button id="leaveGroupButton">Leave Group</button>
+        <button id="addUserButton">Add Users to Group</button>
+    </div>
+</div>
+
+<script>
+    // Add your JavaScript code here for sending messages, leaving the group, and adding users.
+</script>
