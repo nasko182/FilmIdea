@@ -29,6 +29,10 @@ public class MovieController : BaseController
         {
             movies = await this._movieService.GetAllMoviesAsync(null);
         }
+
+        TempData["LastAction"] = ControllerContext.ActionDescriptor.ActionName;
+        TempData["LastController"] = ControllerContext.ActionDescriptor.ControllerName;
+
         return View(movies);
     }
 
@@ -36,6 +40,9 @@ public class MovieController : BaseController
     public async Task<IActionResult> New()
     {
         var movies = await this._movieService.GetNewMoviesAsync(GetUserId());
+
+        TempData["LastAction"] = ControllerContext.ActionDescriptor.ActionName;
+        TempData["LastController"] = ControllerContext.ActionDescriptor.ControllerName;
 
         return View(movies);
     }
@@ -49,6 +56,14 @@ public class MovieController : BaseController
         TempData["LastController"] = ControllerContext.ActionDescriptor.ControllerName;
 
         return View(movies);
+    }
+
+    [AllowAnonymous]
+    public async Task<IActionResult> BrowseGenre()
+    {
+        var genres = await this._movieService.GetGenresAsync();
+
+        return this.View(genres);
     }
 
     [AllowAnonymous]
@@ -94,6 +109,16 @@ public class MovieController : BaseController
         }
 
         return View(movie);
+    }
+
+    public async Task<IActionResult> Watchlist()
+    {
+        var movies = await this._movieService.GetWatchlistMoviesAsync(GetUserId());
+
+        TempData["LastAction"] = ControllerContext.ActionDescriptor.ActionName;
+        TempData["LastController"] = ControllerContext.ActionDescriptor.ControllerName;
+
+        return View(movies);
     }
 
     [HttpPost]

@@ -23,4 +23,6 @@ public interface IMovieService
     Task AddToUserWatchlist(string userId, int movieId);
 
     Task RemoveFromUserWatchlist(string userId, int movieId);
+
+    Task<List<WatchlistMovieViewModel>> GetWatchlistMoviesAsync(string userId);
 }

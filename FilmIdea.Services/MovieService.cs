@@ -287,6 +287,37 @@ public class MovieService : IMovieService
         }
     }
 
+    public async Task<List<WatchlistMovieViewModel>> GetWatchlistMoviesAsync(string userId)
+    {
+        return await this._dbContext.UsersMovies
+            .Include(um => um.Movie)
+            .ThenInclude(m=>m.UsersWatchlists)
+            .Include(um => um.User)
+            .ThenInclude(u=>u.Ratings)
+            .Where(um => um.UserId == Guid.Parse(userId))
+            .Select(um => new WatchlistMovieViewModel()
+            {
+                Id = um.Movie.Id,
+                Rating = um.Movie.CalculateUserRating(),
+                CoverPhotoUrl = um.Movie.CoverImageUrl,
+                Duration = um.Movie.Duration,
+                ReleaseYear = um.Movie.ReleaseDate.Year,
+                Title = um.Movie.Title,
+                UserRating = GetRating(um.User.Ratings,um.MovieId),
+                HasMovieInWatchlist = HasMovieInUserWatchlist(userId,um.Movie),
+                Director = new DirectorNameAndIdViewModel()
+                {
+                    Id = um.Movie.Director.Id,
+                    Name = um.Movie.Director.Name
+                },
+                Actors = um.Movie.Actors.Select(a => new ActorNameAndIdViewModel()
+                {
+                    Id = a.ActorId,
+                    Name = a.Actor.Name
+                }).ToList()
+            })
+            .ToListAsync();
+    }
 
 
 
