@@ -1,11 +1,15 @@
 ﻿namespace FilmIdea.Services.Data;
 
+using Microsoft.EntityFrameworkCore;
+
 using FilmIdea.Data;
 using FilmIdea.Data.Models;
 using FilmIdea.Data.Models.Join_Tables;
 using Interfaces;
-using Microsoft.EntityFrameworkCore;
+using Web.ViewModels.Chat;
 using Web.ViewModels.Group;
+using Web.ViewModels.Message;
+using Web.ViewModels.Movie;
 using Web.ViewModels.User;
 
 public class GroupService : FilmIdeaService, IGroupService
@@ -74,11 +78,20 @@ public class GroupService : FilmIdeaService, IGroupService
         };
     }
 
-    public async Task<DetailsGroupModel> GetGroupDetailsAsync(string groupId)
+    public async Task<DetailsGroupModel> GetGroupDetailsAsync(string groupId,string userId)
     {
         var group = await this._dbContext.Groups.FirstAsync(g => g.Id == Guid.Parse(groupId));
 
         var chat = await GetChatViewModel(groupId);
+
+        var userRatings = await this._dbContext.UserRatings
+            .Where(r => r.UserId.ToString() == userId)
+            .Select(r => new UserRating()
+            {
+                Rating = r.Rating,
+                MovieId = r.MovieId
+            })
+            .ToListAsync();
 
         return await this._dbContext.Groups
             .Where(g => g.Id == Guid.Parse(groupId))
@@ -92,10 +105,16 @@ public class GroupService : FilmIdeaService, IGroupService
                     Id = u.UserId.ToString(),
                     Username = u.User.Email.Substring(0, u.User.Email.IndexOf("@"))
                 }).ToList(),
-                Watchlist = g.Watchlist.Select(wm=>new GroupMovieViewModel()
-                {
-                    MovieId = wm.MovieId,
-                    Title = wm.Movie.Title
+                Watchlist = g.Watchlist.Select(wm=>new MovieViewModel()
+                { 
+                    Id = wm.MovieId,
+                    Title = wm.Movie.Title,
+                    Rating = wm.Movie.CalculateUserRating(),
+                    CoverPhotoUrl = wm.Movie.CoverImageUrl,
+                    Duration = wm.Movie.Duration,
+                    ReleaseYear = wm.Movie.ReleaseDate.Year,
+                    HasMovieInWatchlist = HasMovieInUserWatchlist(userId, wm.Movie),
+                    UserRating = GetRating(userRatings, wm.MovieId)
                 }).ToList()
             })
             .FirstAsync();
@@ -184,7 +203,8 @@ public class GroupService : FilmIdeaService, IGroupService
             {
                 Content = m.Content,
                 SendAt = m.SentAt,
-                Sender = m.Sender.Email.Substring(0, m.Sender.Email.IndexOf("@")),
+                SenderId = m.SenderId.ToString(),
+                SenderName = m.Sender.Email.Substring(0, m.Sender.Email.IndexOf("@"))
             }).ToList()
         };
     }

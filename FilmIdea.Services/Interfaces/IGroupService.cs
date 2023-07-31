@@ -11,5 +11,5 @@ public interface IGroupService
 
     Task<CreateGroupViewModel> CreateGroupModelAsync(string userId);
 
-    Task<DetailsGroupModel> GetGroupDetailsAsync(string groupId);
+    Task<DetailsGroupModel> GetGroupDetailsAsync(string groupId,string userId);
 }

@@ -1,4 +1,5 @@
-﻿@model DetailsGroupModel
+﻿@using System.Security.Claims
+@model DetailsGroupModel
 @{
     ViewBag.Title = $"{Model.Name} Details";
 }
@@ -30,13 +31,13 @@
         border-bottom: 1px solid #ccc;
     }
 
-    .message.sender {
-        background-color: #f1f1f1;
-    }
+        .message.sender {
+            background-color: #f1f1f1;
+        }
 
-    .message.receiver {
-        background-color: #d9f7ff;
-    }
+        .message.receiver {
+            background-color: #d9f7ff;
+        }
 
     .movie-card {
         background-color: #f8f8f8;
@@ -52,51 +53,75 @@
         margin: 10px 0;
     }
 
-    .user-list li {
-        margin-bottom: 5px;
-    }
-</style>
-
-<div style="display: flex; justify-content: space-between;">
-    <div class="left-section">
-        <h2>Chat</h2>
-        <div class="chat-box">
-            @foreach (var message in Model.Chat.Messages)
-            {
-                <p>@message.SendAt</p>
-                <div class="message">
-                    <p>@message.Sender</p>
-                    <div class="content">
-                        @message.Content
-                    </div>
-                </div>
-            }
-        </div>
-        <input type="text" id="messageInput" />
-        <button id="sendMessageButton">Send</button>
-    </div>
-
-    <div class="right-section">
-        <h2>Group Watchlist</h2>
-        @foreach (var movie in Model.Watchlist)
-        {
-            <div class="movie-card">
-                <h3>@movie.Title</h3>
-                <p>@movie.Description</p>
-                <!-- Add more movie details here -->
-            </div>
+        .user-list li {
+            margin-bottom: 5px;
         }
 
-        <h2>All Users</h2>
-        <ul class="user-list">
-            @foreach (var user in Model.Users)
-            {
-                <li>@user.Username</li>
-            }
-        </ul>
+    .hr {
+        height: 1px;
+        margin-left: -52px;
+        margin-right: -6.5%;
 
-        <button id="leaveGroupButton">Leave Group</button>
-        <button id="addUserButton">Add Users to Group</button>
+    }
+    /*.input{
+        margin-top: 10px;
+        margin-bottom: 10px
+        }*/
+</style>
+
+<div style="margin-left: -7%">
+    <div style="display: flex; justify-content: space-between;">
+        <div class="left-section" style="width: 25%">
+            <div class="row m-0">
+                <div class="col-md-6 m-0">
+                    <button id="addUserButton">Add Users</button>
+                </div>
+                <div class="col-md-6 m-0">
+                    <button id="leaveGroupButton">Leave Group</button>
+                </div>
+            </div>
+            <hr class="hr"/>
+            <div class="row">
+                <h2>Chat</h2>
+                <div class="chat-box">
+                    @foreach (var message in Model.Chat.Messages)
+                    {
+                        if (User.FindFirstValue(ClaimTypes.NameIdentifier) == message.SenderId)
+                        {
+                            <p>@message.SendAt</p>
+                            <div class="message">
+                                <p>@message.SenderName</p>
+                                <div class="content">
+                                    @message.Content
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <p>@message.SendAt</p>
+                            <div class="message">
+                                <p>@message.SenderName</p>
+                                <div class="content">
+                                    @message.Content
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+                <input type="text" id="messageInput" class="mt-2 mb-2" placeholder="Enter message..."/>
+                <button id="sendMessageButton">Send</button>
+            </div>
+        </div>
+
+        <div class="right-section">
+            <h2>Group Watchlist</h2>
+            
+                <partial name="_MoviesPartial" model="Model.Watchlist"/>
+            
+
+            <button id="leaveGroupButton">Leave Group</button>
+            <button id="addUserButton">Add Users to Group</button>
+        </div>
     </div>
 </div>
 

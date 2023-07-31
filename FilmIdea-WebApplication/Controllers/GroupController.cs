@@ -23,7 +23,7 @@ public class GroupController : BaseController
 
     public async Task<IActionResult> Details(string groupId)
     {
-        var group = await this._groupService.GetGroupDetailsAsync(groupId);
+        var group = await this._groupService.GetGroupDetailsAsync(groupId,this.GetUserId());
 
         return View(group);
     }
