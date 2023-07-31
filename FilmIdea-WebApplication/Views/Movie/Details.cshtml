@@ -50,7 +50,7 @@
             <ul class="list-unstyled">
                 @foreach (var genre in Model.Genres)
                 {
-                    <li><a class="" asp-area="" asp-controller="Genre" asp-action="Details" asp-route-genreId="@genre.Id">@genre.Name</a></li>
+                    <li><a class="" asp-area="" asp-controller="Movie" asp-action="ByGenre" asp-route-genreId="@genre.Id">@genre.Name</a></li>
                 }
             </ul>
         </div>
@@ -64,7 +64,7 @@
                 {
                     <div class="card">
                         <div class="card-body">
-                            <p class="card-text">@review.Content</p>
+                            <p class="card-font">@review.Content</p>
                         </div>
                     </div>
                 }
@@ -81,7 +81,7 @@
                 @foreach (var photo in Model.Photos)
                 {
                     <div class="col-md-3 mb-4">
-                        <img src="@photo.Url" alt="@Model.Title" class="img-thumbnail">
+                        <img src="@photo" alt="@Model.Title" class="img-thumbnail">
                     </div>
                 }
             </div>
@@ -96,7 +96,7 @@
                 {
                     <div class="col-md-4 mb-4">
                         <div class="embed-responsive embed-responsive-16by9">
-                            <iframe class="embed-responsive-item" src="@video.Url" frameborder="0" allowfullscreen></iframe>
+                            <iframe class="embed-responsive-item" src="@video" frameborder="0" allowfullscreen></iframe>
                         </div>
                     </div>
                 }

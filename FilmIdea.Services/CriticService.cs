@@ -10,7 +10,7 @@ using Dropbox.Api.Files;
 using Dropbox.Api;
 using FilmIdea.Data.Models;
 
-public class CriticService : ICriticService
+public class CriticService : FilmIdeaService, ICriticService
 {
     private readonly FilmIdeaDbContext _dbContext;
 

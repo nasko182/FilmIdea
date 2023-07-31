@@ -399,7 +399,6 @@ button.btn-register {
     font-size: 24px;
 }
 
-/* CSS Styles for the reset button */
 .reset-container {
     text-align: center;
     margin-top: 40px;
@@ -541,4 +540,123 @@ button.btn-register {
 .title {
     font-size: 35px;
     font-weight: 600;
+}
+
+
+/*MoviesPartial*/
+
+.card-font {
+    font-size: 1rem;
+}
+
+h3.title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.show-more-btn {
+    padding: 0;
+    margin-bottom: 0.3%;
+    text-decoration: unset;
+    color: #666;
+}
+
+.actor-details {
+    margin-top: 30px;
+}
+
+.actor-profile {
+    width: 100%;
+    height: 93%;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.content-button {
+    width: 100%;
+    height: 46.1%;
+    margin-bottom: 4px;
+    background-color: #d6d6d6e8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+    .content-button i {
+        margin-top: 33.3%;
+        margin-bottom: 5px;
+        font-size: 30px;
+    }
+
+.actor-image {
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.actor-name {
+    font-size: 36px;
+    margin-top: 20px;
+    color: #007bff;
+}
+
+.actor-birthdate {
+    font-size: 18px;
+    color: #666;
+    margin-top: -10px;
+}
+
+.actor-links {
+    margin-top: 20px;
+}
+
+    .actor-links .btn {
+        margin-bottom: 10px;
+    }
+
+.actor-bio {
+    margin-top: -15px;
+}
+
+    .actor-bio p {
+        font-size: 18px;
+        line-height: 1.5;
+        color: #666;
+        margin-bottom: 10px;
+    }
+
+.empty {
+    width: 100%;
+    height: 93%;
+    background-color: #d6d6d6e8;
+    justify-content: center;
+    display: flex;
+    justify-content: center;
+}
+
+.no-content-msg {
+    font-size: 20px;
+    color: #999;
+    margin-bottom: 4px;
+}
+
+.movie-list {
+    list-style: none;
+    padding: 0;
+}
+
+    .movie-list li {
+        padding: 10px;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+    }
+
+.movie-title {
+    font-weight: bold;
+    color: #007bff;
 }

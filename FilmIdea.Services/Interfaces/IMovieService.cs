@@ -2,7 +2,7 @@
 
 using Web.ViewModels.Movie;
 
-public interface IMovieService
+public interface IMovieService 
 {
     Task<AllMoviesViewModel> GetAllMoviesAsync(string? userId);
 
@@ -24,5 +24,5 @@ public interface IMovieService
 
     Task RemoveFromUserWatchlist(string userId, int movieId);
 
-    Task<List<WatchlistMovieViewModel>> GetWatchlistMoviesAsync(string userId);
+    Task<List<MovieViewModel>> GetWatchlistMoviesAsync(string userId);
 }

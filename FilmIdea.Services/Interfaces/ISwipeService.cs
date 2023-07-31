@@ -2,7 +2,7 @@
 
 using Web.ViewModels.Swipe;
 
-public interface ISwipeService
+public interface ISwipeService 
 {
     Task<List<SwipeMovieViewModel>> GetMoviesAsync(string userId);
 

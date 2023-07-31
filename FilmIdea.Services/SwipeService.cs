@@ -9,7 +9,7 @@ using Web.ViewModels.Swipe;
 using FilmIdea.Data.Models.Join_Tables;
 using FilmIdea.Data.Models;
 
-public class SwipeService : ISwipeService
+public class SwipeService : FilmIdeaService, ISwipeService
 {
     private readonly FilmIdeaDbContext _dbContext;
 

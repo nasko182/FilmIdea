@@ -1,13 +1,9 @@
 ﻿namespace FilmIdea.Web.ViewModels.Movie;
 
-using Actor;
-using Director;
-
 public class MovieViewModel
 {
     public MovieViewModel()
     {
-        this.Actors = new HashSet<ActorNameAndIdViewModel>();
         this.Movies = new HashSet<TopSectionMovieViewModel>();
     }
 
@@ -23,13 +19,9 @@ public class MovieViewModel
 
     public int Duration { get; set; }
 
-    public DirectorNameAndIdViewModel Director { get; set; } = null!;
-
     public decimal Rating { get; set; }
 
     public bool HasMovieInWatchlist { get; set; }
-
-    public ICollection<ActorNameAndIdViewModel> Actors { get; set; }
 
     public IEnumerable<TopSectionMovieViewModel> Movies { get; set; }
 }

@@ -7,10 +7,12 @@ using FilmIdea.Data;
 using FilmIdea.Data.Models;
 using FilmIdea.Data.Models.Join_Tables;
 using Web.ViewModels.Actor;
+using Web.ViewModels.Comment;
 using Web.ViewModels.Director;
 using Web.ViewModels.Movie;
+using Web.ViewModels.Review;
 
-public class MovieService : IMovieService
+public class MovieService : FilmIdeaService, IMovieService
 {
     private readonly FilmIdeaDbContext _dbContext;
     private readonly Random _random;
@@ -79,8 +81,6 @@ public class MovieService : IMovieService
                 Duration = m.Duration,
                 Rating = m.CalculateUserRating(),
                 TrailerUrl = m.TrailerUrl,
-
-                // Populate other related data properties
                 Director = new DirectorNameAndIdViewModel()
                 {
                     Id = m.Director.Id,
@@ -91,10 +91,32 @@ public class MovieService : IMovieService
                     Id = a.ActorId,
                     Name = a.Actor.Name
                 }).ToList(),
-                Genres = m.Genres.Select(mg => mg.Genre).ToList(),
-                Reviews = m.Reviews,
-                Photos = m.Photos,
-                Videos = m.Videos,
+                Genres = m.Genres.Select(mg=> new GenreViewModel()
+                {
+                    Id = mg.GenreId,
+                    Name = mg.Genre.Name
+                }).ToList(),
+                Reviews = m.Reviews.Select(r=>new ReviewViewModel()
+                {
+                    MovieId = r.MovieId,
+                    Id = r.Id.ToString(),
+                    Content = r.Content,
+                    CriticId = r.CriticId.ToString(),
+                    CriticName = r.Critic.Name,
+                    Rating = r.Rating,
+                    ReviewDate = r.ReviewDate.ToString("yyyy-MM-dd"),
+                    Comments = r.Comments.Select(c=>new CommentViewModel()
+                    {
+                        Content = c.Content,
+                        CommentDate = c.CommentDate.ToString("yyyy MM dd HH-mm"),
+                        Id = c.Id.ToString(),
+                        ReviewId = c.ReviewId.ToString(),
+                        WriterId = c.WriterId.ToString(),
+                        WriterName = c.Writer.Email.Substring(0, c.Writer.Email.IndexOf("@"))
+                    }).ToList()
+                }).ToList(),
+                Photos = m.Photos.Select(p=>p.Url).ToList(),
+                Videos = m.Videos.Select(v=>v.Url).ToList(),
                 UserRating = userRating
             })
             .FirstOrDefaultAsync();
@@ -134,16 +156,6 @@ public class MovieService : IMovieService
                     Id = m.Id,
                     Rating = m.CalculateUserRating(),
                     ReleaseYear = m.ReleaseDate.Year,
-                    Director = new DirectorNameAndIdViewModel()
-                    {
-                        Id = m.Director.Id,
-                        Name = m.Director.Name
-                    },
-                    Actors = m.Actors.Select(a => new ActorNameAndIdViewModel()
-                    {
-                        Id = a.ActorId,
-                        Name = a.Actor.Name
-                    }).ToList(),
                     UserRating = GetRating(userRatings, m.Id)
                 })
                 .FirstAsync();
@@ -167,16 +179,6 @@ public class MovieService : IMovieService
                     Id = m.Id,
                     Rating = m.CalculateUserRating(),
                     ReleaseYear = m.ReleaseDate.Year,
-                    Director = new DirectorNameAndIdViewModel()
-                    {
-                        Id = m.Director.Id,
-                        Name = m.Director.Name
-                    },
-                    Actors = m.Actors.Select(a => new ActorNameAndIdViewModel()
-                    {
-                        Id = a.ActorId,
-                        Name = a.Actor.Name
-                    }).ToList(),
                 })
                 .FirstAsync();
 
@@ -287,7 +289,7 @@ public class MovieService : IMovieService
         }
     }
 
-    public async Task<List<WatchlistMovieViewModel>> GetWatchlistMoviesAsync(string userId)
+    public async Task<List<MovieViewModel>> GetWatchlistMoviesAsync(string userId)
     {
         return await this._dbContext.UsersMovies
             .Include(um => um.Movie)
@@ -295,7 +297,7 @@ public class MovieService : IMovieService
             .Include(um => um.User)
             .ThenInclude(u=>u.Ratings)
             .Where(um => um.UserId == Guid.Parse(userId))
-            .Select(um => new WatchlistMovieViewModel()
+            .Select(um => new MovieViewModel()
             {
                 Id = um.Movie.Id,
                 Rating = um.Movie.CalculateUserRating(),
@@ -305,16 +307,6 @@ public class MovieService : IMovieService
                 Title = um.Movie.Title,
                 UserRating = GetRating(um.User.Ratings,um.MovieId),
                 HasMovieInWatchlist = HasMovieInUserWatchlist(userId,um.Movie),
-                Director = new DirectorNameAndIdViewModel()
-                {
-                    Id = um.Movie.Director.Id,
-                    Name = um.Movie.Director.Name
-                },
-                Actors = um.Movie.Actors.Select(a => new ActorNameAndIdViewModel()
-                {
-                    Id = a.ActorId,
-                    Name = a.Actor.Name
-                }).ToList()
             })
             .ToListAsync();
     }
@@ -337,16 +329,6 @@ public class MovieService : IMovieService
                     Id = m.Id,
                     Rating = m.CalculateUserRating(),
                     ReleaseYear = m.ReleaseDate.Year,
-                    Director = new DirectorNameAndIdViewModel()
-                    {
-                        Id = m.Director.Id,
-                        Name = m.Director.Name
-                    },
-                    Actors = m.Actors.Select(a => new ActorNameAndIdViewModel()
-                    {
-                        Id = a.ActorId,
-                        Name = a.Actor.Name
-                    }).ToList(),
                 })
                 .ToListAsync();
 
@@ -376,16 +358,6 @@ public class MovieService : IMovieService
                     Rating = m.CalculateUserRating(),
                     ReleaseYear = m.ReleaseDate.Year,
                     HasMovieInWatchlist = HasMovieInUserWatchlist(userId!, m),
-                    Director = new DirectorNameAndIdViewModel()
-                    {
-                        Id = m.Director.Id,
-                        Name = m.Director.Name
-                    },
-                    Actors = m.Actors.Select(a => new ActorNameAndIdViewModel()
-                    {
-                        Id = a.ActorId,
-                        Name = a.Actor.Name
-                    }).ToList(),
                     UserRating = GetRating(userRatings, m.Id)
                 })
                 .ToListAsync();
@@ -410,17 +382,7 @@ public class MovieService : IMovieService
                     Duration = m.Duration,
                     Id = m.Id,
                     Rating = m.CalculateUserRating(),
-                    ReleaseYear = m.ReleaseDate.Year,
-                    Director = new DirectorNameAndIdViewModel()
-                    {
-                        Id = m.Director.Id,
-                        Name = m.Director.Name
-                    },
-                    Actors = m.Actors.Select(a => new ActorNameAndIdViewModel()
-                    {
-                        Id = a.ActorId,
-                        Name = a.Actor.Name
-                    }).ToList(),
+                    ReleaseYear = m.ReleaseDate.Year
                 })
                 .ToListAsync();
 
@@ -451,16 +413,6 @@ public class MovieService : IMovieService
                     Rating = m.CalculateUserRating(),
                     ReleaseYear = m.ReleaseDate.Year,
                     HasMovieInWatchlist = HasMovieInUserWatchlist(userId!, m),
-                    Director = new DirectorNameAndIdViewModel()
-                    {
-                        Id = m.Director.Id,
-                        Name = m.Director.Name
-                    },
-                    Actors = m.Actors.Select(a => new ActorNameAndIdViewModel()
-                    {
-                        Id = a.ActorId,
-                        Name = a.Actor.Name
-                    }).ToList(),
                     UserRating = GetRating(userRatings, m.Id)
                 })
                 .ToListAsync();
@@ -487,16 +439,6 @@ public class MovieService : IMovieService
                     Rating = m.CalculateUserRating(),
                     ReleaseYear = m.ReleaseDate.Year,
                     HasMovieInWatchlist = HasMovieInUserWatchlist(userId!, m),
-                    Director = new DirectorNameAndIdViewModel()
-                    {
-                        Id = m.Director.Id,
-                        Name = m.Director.Name
-                    },
-                    Actors = m.Actors.Select(a => new ActorNameAndIdViewModel()
-                    {
-                        Id = a.ActorId,
-                        Name = a.Actor.Name
-                    }).ToList(),
                 })
                 .ToListAsync();
 
@@ -528,16 +470,6 @@ public class MovieService : IMovieService
                     Rating = m.CalculateUserRating(),
                     ReleaseYear = m.ReleaseDate.Year,
                     HasMovieInWatchlist = HasMovieInUserWatchlist(userId!, m),
-                    Director = new DirectorNameAndIdViewModel()
-                    {
-                        Id = m.Director.Id,
-                        Name = m.Director.Name
-                    },
-                    Actors = m.Actors.Select(a => new ActorNameAndIdViewModel()
-                    {
-                        Id = a.ActorId,
-                        Name = a.Actor.Name
-                    }).ToList(),
                     UserRating = GetRating(userRatings, m.Id)
                 })
                 .ToListAsync();
@@ -562,16 +494,6 @@ public class MovieService : IMovieService
                     Id = m.Id,
                     Rating = m.CalculateUserRating(),
                     ReleaseYear = m.ReleaseDate.Year,
-                    Director = new DirectorNameAndIdViewModel()
-                    {
-                        Id = m.Director.Id,
-                        Name = m.Director.Name
-                    },
-                    Actors = m.Actors.Select(a => new ActorNameAndIdViewModel()
-                    {
-                        Id = a.ActorId,
-                        Name = a.Actor.Name
-                    }).ToList(),
                 })
                 .ToListAsync();
 
@@ -602,16 +524,6 @@ public class MovieService : IMovieService
                     Rating = m.CalculateUserRating(),
                     ReleaseYear = m.ReleaseDate.Year,
                     HasMovieInWatchlist = HasMovieInUserWatchlist(userId!, m),
-                    Director = new DirectorNameAndIdViewModel()
-                    {
-                        Id = m.Director.Id,
-                        Name = m.Director.Name
-                    },
-                    Actors = m.Actors.Select(a => new ActorNameAndIdViewModel()
-                    {
-                        Id = a.ActorId,
-                        Name = a.Actor.Name
-                    }).ToList(),
                     UserRating = GetRating(userRatings, m.Id)
                 })
                 .ToListAsync();
@@ -633,24 +545,5 @@ public class MovieService : IMovieService
                 PictureUrl = m.CoverImageUrl
             })
             .ToListAsync();
-    }
-
-    private static int GetRating(ICollection<UserRating> userRating, int movieId)
-    {
-        if (userRating.Any())
-        {
-            var movieRating = userRating.FirstOrDefault(ur => ur.MovieId == movieId);
-            if (movieRating != null)
-            {
-                return movieRating.Rating;
-            }
-        }
-        return 0;
-
-    }
-
-    private static bool HasMovieInUserWatchlist(string userId, Movie movie)
-    {
-        return movie.UsersWatchlists.Any(um => um.MovieId == movie.Id && um.UserId == Guid.Parse(userId));
     }
 }

@@ -1,18 +1,18 @@
 ﻿namespace FilmIdea.Web.ViewModels.Movie;
 
 using Actor;
-using Data.Models;
 using Director;
+using Review;
 
 public class MovieDetailsViewModel
 {
     public MovieDetailsViewModel()
     {
         this.Actors = new HashSet<ActorNameAndIdViewModel>();
-        this.Genres = new HashSet<Genre>();
-        this.Reviews = new HashSet<Review>();
-        this.Photos = new HashSet<Photo>();
-        this.Videos = new HashSet<Video>();
+        this.Genres = new HashSet<GenreViewModel>();
+        this.Reviews = new HashSet<ReviewViewModel>();
+        this.Photos = new HashSet<string>();
+        this.Videos = new HashSet<string>();
     }
     public int  Id { get; set; }
 
@@ -36,11 +36,11 @@ public class MovieDetailsViewModel
 
     public ICollection<ActorNameAndIdViewModel> Actors { get; set; }
 
-    public ICollection<Genre> Genres { get; set; }
+    public ICollection<GenreViewModel> Genres { get; set; }
 
-    public ICollection<Review> Reviews { get; set; }
+    public ICollection<ReviewViewModel> Reviews { get; set; }
 
-    public ICollection<Photo> Photos { get; set; }
+    public ICollection<string> Photos { get; set; }
 
-    public ICollection<Video> Videos { get; set; }
+    public ICollection<string> Videos { get; set; }
 }

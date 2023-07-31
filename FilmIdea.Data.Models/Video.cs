@@ -15,7 +15,7 @@ public class Video
 
     [Required]
     [MaxLength(UrlMaxLength)]
-    public string Url { get; set; }
+    public string Url { get; set; } = null!;
 
     public int? ActorId { get; set; }
 

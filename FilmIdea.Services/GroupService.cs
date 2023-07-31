@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Web.ViewModels.Group;
 using Web.ViewModels.User;
 
-public class GroupService : IGroupService
+public class GroupService : FilmIdeaService, IGroupService
 {
     private readonly FilmIdeaDbContext _dbContext;
     public GroupService(FilmIdeaDbContext dbContext)

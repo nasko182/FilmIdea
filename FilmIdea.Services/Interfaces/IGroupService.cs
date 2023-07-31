@@ -3,7 +3,7 @@
 using Web.ViewModels.Group;
 using static Dropbox.Api.Team.GroupSelector;
 
-public interface IGroupService
+public interface IGroupService 
 {
     Task<List<AllGroupViewModel>> GetAllGroupsAsync();
 

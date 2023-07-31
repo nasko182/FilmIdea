@@ -1,5 +1,126 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model DirectorDetailsViewModel
 @{
+    ViewBag.Title = $"{@Model.Name} - FilmIdea";
 }
+
+<div class="container actor-details">
+    <h2 class="actor-name">@Model.Name</h2>
+    <p class="actor-birthdate">Born @Model.DateOfBirth</p>
+
+    <div class="row">
+        <div class="col-md-3" style="padding-right: 4px;">
+            <div class="actor-profile">
+                <img src="@Model.ProfileImageUrl" alt="@Model.Name" class="actor-image" />
+            </div>
+        </div>
+        <div class="col-md-6" style="padding: 0; width: 54%;">
+            @if (Model.Videos.Any())
+            {
+                <div class="embed-responsive embed-responsive-16by9" style="height: 93%;">
+                    <iframe class="embed-responsive-item" style="width: 100%;height: 100%;" src="@Model.Videos.First()" frameborder="0" allowfullscreen></iframe>
+                </div>
+            }
+            else
+            {
+                <div class="empty">
+                    <p class="no-content-msg" style="margin-top: 29%;">No videos found for this actor.</p>
+                </div>
+            }
+        </div>
+        <div class="col-md-2" style="padding-left: 4px; width: 21%;">
+            <div class="content-button">
+                @if (Model.Photos.Count == 0)
+                {
+                    <i class="fa-solid fa-film-slash"></i>
+                    <p>0 Photos</p>
+                }
+                else
+                {
+                    <i class="fa-regular fa-images"></i>
+                    @if (Model.Photos.Count == 1)
+                    {
+                        <p>1 Photo</p>
+                    }
+                    else if (Model.Photos.Count <= 99)
+                    {
+                        <p>@Model.Photos.Count Photos</p>
+
+                    }
+                    else
+                    {
+                        <p>99+ Photos</p>
+                    }
+                }
+            </div>
+            <div class="content-button">
+                @if (Model.Videos.Count == 0)
+                {
+                    <i class="fa-solid fa-film-slash"></i>
+                    <p>0 Videos</p>
+                }
+                else
+                {
+                    <i class="fa-solid fa-film"></i>
+                    @if (Model.Videos.Count == 1)
+                    {
+                        <p>1 Video</p>
+                    }
+                    else if (Model.Videos.Count <= 99)
+                    {
+                        <p>@Model.Videos.Count Videos</p>
+
+                    }
+                    else
+                    {
+                        <p>99+ Videos</p>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="actor-bio">
+            <h3 class="title">Biography</h3>
+            <p>
+                @if (@Model.Bio.Length<600)
+                {
+                    @Model.Bio
+                }
+                else
+                {
+                    @Model.Bio.Substring(0, 500)
+                    <button id="showMore" class="btn btn-link show-more-btn">...Show More</button>
+                    <span id="bioMore" style="display: none;">@Model.Bio.Substring(500)</span>
+                }
+            </p>
+            <button id="showLess" class="btn btn-link" style="display: none;">Show Less</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="actor-movies">
+            <h3 class="title">Movies</h3>
+            @if (Model.Movies.Any())
+            {
+                <partial name="_MoviesPartial" model="Model.Movies" />
+            }
+            else
+            {
+                <p class="no-content-msg">No movies found for this actor.</p>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("showMore").addEventListener("click", function () {
+        document.getElementById("bioMore").style.display = "inline";
+        document.getElementById("showMore").style.display = "none";
+        document.getElementById("showLess").style.display = "inline";
+    });
+
+    document.getElementById("showLess").addEventListener("click", function () {
+        document.getElementById("bioMore").style.display = "none";
+        document.getElementById("showMore").style.display = "inline";
+        document.getElementById("showLess").style.display = "none";
+    });
+</script>

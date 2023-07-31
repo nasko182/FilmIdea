@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Http;
 using Web.ViewModels.Critic;
 
-public interface ICriticService
+public interface ICriticService 
 {
     Task<bool> CriticExistByUserIdAsync(string userId);
 
