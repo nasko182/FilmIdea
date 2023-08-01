@@ -39,7 +39,7 @@
                         DateTime localTime = TimeZoneInfo.ConvertTimeFromUtc(message.SendAt, localTimeZone);
                         <div class="message @(User.FindFirstValue(ClaimTypes.NameIdentifier) == message.SenderId ? "sender" : "receiver")">
                             <p><strong style="color: #4caf50; font-size: 20px">@message.SenderName</strong> @localTime.ToString("dd.MM.yyyy HH:mm")</p>
-                            <div class="message-content">
+                            <div class="message-content-@(User.FindFirstValue(ClaimTypes.NameIdentifier) == message.SenderId ? "sender" : "receiver")">
                                 <div>
                                     <div class="content">@message.Content</div>
                                 </div>

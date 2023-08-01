@@ -66,8 +66,8 @@ public static class EntityValidationConstants
 
     public static class ReviewValidations
     {
-        public const int RatingMaxValue = 10;
-        public const int RatingMinValue = 0;
+        public const string RatingMaxValue = "10";
+        public const string RatingMinValue = "0";
 
         public const int ContentMaxLength = 1000;
         public const int ContentMinLength = 1;

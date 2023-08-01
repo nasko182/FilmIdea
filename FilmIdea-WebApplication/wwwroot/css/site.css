@@ -14,7 +14,7 @@ html {
 }
 
 #toast-container {
-    top: 75px; 
+    top: 75px;
     right: 15px;
 }
 
@@ -326,9 +326,9 @@ button.btn-register {
     transition: background-color 0.3s;
 }
 
-.reset-button:hover {
-    background-color: #ff7f84;
-}
+    .reset-button:hover {
+        background-color: #ff7f84;
+    }
 
 .button-icon {
     position: absolute;
@@ -360,9 +360,9 @@ button.btn-register {
     transition: transform 0.3s;
 }
 
-.genre-card:hover {
-    transform: scale(1.05);
-}
+    .genre-card:hover {
+        transform: scale(1.05);
+    }
 
 .genre-icon {
     font-size: 40px;
@@ -389,15 +389,15 @@ button.btn-register {
     text-align: center;
 }
 
-.tinder-card.no-movies h3 {
-    font-size: 36px;
-    font-weight: 600;
-    margin-bottom: 10px;
-}
+    .tinder-card.no-movies h3 {
+        font-size: 36px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
 
-.tinder-card.no-movies p {
-    font-size: 24px;
-}
+    .tinder-card.no-movies p {
+        font-size: 24px;
+    }
 
 .reset-container {
     text-align: center;
@@ -416,17 +416,17 @@ button.btn-register {
     transition: background-color 0.3s;
 }
 
-.reset-button:hover {
-    background-color: #ff7f84;
-}
+    .reset-button:hover {
+        background-color: #ff7f84;
+    }
 
-.reset-button .button-icon {
-    position: absolute;
-    top: 50%;
-    right: 15px;
-    transform: translateY(-50%);
-    font-size: 30px;
-}
+    .reset-button .button-icon {
+        position: absolute;
+        top: 50%;
+        right: 15px;
+        transform: translateY(-50%);
+        font-size: 30px;
+    }
 
     .reset-button .button-text {
         margin-right: 10px;
@@ -471,7 +471,7 @@ button.btn-register {
     text-decoration: unset !important;
 }
 
-.group-card:hover {
+    .group-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
@@ -696,13 +696,11 @@ h3.title {
 }
 
     .message.sender {
-        background-color: #f1f1f1;
         flex-direction: column;
         align-items: flex-end;
     }
 
     .message.receiver {
-        background-color: #d9f7ff;
         flex-direction: column;
         align-items: flex-start;
     }
@@ -712,12 +710,19 @@ h3.title {
         font-size: 12px;
     }
 
-    .message .content {
-        background-color: #4CAF50;
-        color: white;
-        padding: 5px 10px;
-        border-radius: 5px;
-    }
+.message-content-reciver {
+    background-color: blue;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.message-content-sender {
+    background-color: #4CAF50;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
 
 
 #messageInput {

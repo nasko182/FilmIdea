@@ -121,6 +121,8 @@ public class MovieController : BaseController
             return RedirectToAction("All");
         }
 
+        ViewBag.CriticId = await this._criticService.GetCriticIdAsync(this.GetUserId());
+
         return View(movie);
     }
 

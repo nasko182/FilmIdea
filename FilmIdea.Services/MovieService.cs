@@ -91,12 +91,12 @@ public class MovieService : FilmIdeaService, IMovieService
                     Id = a.ActorId,
                     Name = a.Actor.Name
                 }).ToList(),
-                Genres = m.Genres.Select(mg=> new GenreViewModel()
+                Genres = m.Genres.Select(mg => new GenreViewModel()
                 {
                     Id = mg.GenreId,
                     Name = mg.Genre.Name
                 }).ToList(),
-                Reviews = m.Reviews.Select(r=>new ReviewViewModel()
+                Reviews = m.Reviews.Select(r => new ReviewViewModel()
                 {
                     MovieId = r.MovieId,
                     Id = r.Id.ToString(),
@@ -105,7 +105,7 @@ public class MovieService : FilmIdeaService, IMovieService
                     CriticName = r.Critic.Name,
                     Rating = r.Rating,
                     ReviewDate = r.ReviewDate.ToString("yyyy-MM-dd"),
-                    Comments = r.Comments.Select(c=>new CommentViewModel()
+                    Comments = r.Comments.Select(c => new CommentViewModel()
                     {
                         Content = c.Content,
                         CommentDate = c.CommentDate.ToString("yyyy MM dd HH-mm"),
@@ -115,8 +115,8 @@ public class MovieService : FilmIdeaService, IMovieService
                         WriterName = c.Writer.Email.Substring(0, c.Writer.Email.IndexOf("@"))
                     }).ToList()
                 }).ToList(),
-                Photos = m.Photos.Select(p=>p.Url).ToList(),
-                Videos = m.Videos.Select(v=>v.Url).ToList(),
+                Photos = m.Photos.Select(p => p.Url).ToList(),
+                Videos = m.Videos.Select(v => v.Url).ToList(),
                 UserRating = userRating
             })
             .FirstOrDefaultAsync();
@@ -200,9 +200,9 @@ public class MovieService : FilmIdeaService, IMovieService
     {
         return await this._dbContext.UsersMovies
             .Include(um => um.Movie)
-            .ThenInclude(m=>m.UsersWatchlists)
+            .ThenInclude(m => m.UsersWatchlists)
             .Include(um => um.User)
-            .ThenInclude(u=>u.Ratings)
+            .ThenInclude(u => u.Ratings)
             .Where(um => um.UserId == Guid.Parse(userId))
             .Select(um => new MovieViewModel()
             {
@@ -212,8 +212,8 @@ public class MovieService : FilmIdeaService, IMovieService
                 Duration = um.Movie.Duration,
                 ReleaseYear = um.Movie.ReleaseDate.Year,
                 Title = um.Movie.Title,
-                UserRating = GetRating(um.User.Ratings,um.MovieId),
-                HasMovieInWatchlist = HasMovieInUserWatchlist(userId,um.Movie),
+                UserRating = GetRating(um.User.Ratings, um.MovieId),
+                HasMovieInWatchlist = HasMovieInUserWatchlist(userId, um.Movie),
             })
             .ToListAsync();
     }
@@ -226,7 +226,7 @@ public class MovieService : FilmIdeaService, IMovieService
 
         if (movie != null)
         {
-            var userRating = movie.Ratings.FirstOrDefault(ur => ur.UserId.ToString() == userId && ur.MovieId==movieId);
+            var userRating = movie.Ratings.FirstOrDefault(ur => ur.UserId.ToString() == userId && ur.MovieId == movieId);
 
             if (userRating != null)
             {
@@ -257,23 +257,18 @@ public class MovieService : FilmIdeaService, IMovieService
     {
         var movie = await this._dbContext.Movies
             .Include(m => m.Reviews)
-            .ThenInclude(r=>r.Critic)
+            .ThenInclude(r => r.Critic)
             .FirstOrDefaultAsync(m => m.Id == movieId);
 
         if (movie != null)
         {
-            var userReview = movie.Reviews.FirstOrDefault(ur => ur.CriticId.ToString() == criticId && ur.MovieId == movieId);
-
-            if (userReview == null)
+            this._dbContext.Reviews.Add(new Review()
             {
-                this._dbContext.Reviews.Add(new Review()
-                {
-                    MovieId = movieId,
-                    Rating = model.Rating,
-                    CriticId = Guid.Parse(criticId),
-                    Content = model.Content,
-                });
-            }
+                MovieId = movieId,
+                Rating = model.Rating,
+                CriticId = Guid.Parse(criticId),
+                Content = model.Content,
+            });
 
             try
             {
