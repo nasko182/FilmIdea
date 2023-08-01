@@ -1,6 +1,7 @@
 ﻿namespace FilmIdea.Services.Data.Interfaces;
 
 using Web.ViewModels.Movie;
+using Web.ViewModels.Review;
 
 public interface IMovieService 
 {
@@ -18,11 +19,14 @@ public interface IMovieService
 
     Task<List<GenreViewModel>> GetGenresAsync();
 
+    Task<List<MovieViewModel>> GetWatchlistMoviesAsync(string userId);
+
     Task AddRatingAsync(int movieId, int ratingValue, string userId);
+
+    Task AddReviewAsync(AddReviewViewModel model, int movieId,string userId);
 
     Task AddToUserWatchlist(string userId, int movieId);
 
     Task RemoveFromUserWatchlist(string userId, int movieId);
 
-    Task<List<MovieViewModel>> GetWatchlistMoviesAsync(string userId);
 }

@@ -8,19 +8,6 @@ public static class EntityValidationConstants
         public const int TitleMinLength = 3;
 
         public const int DescriptionMaxLength = 1000;
-        public const int DescriptionMinLength = 50;
-
-        public const int RatingMaxValue = 10;
-        public const int RatingMinValue = 0;
-
-        public const int UserRatingMaxValue = 10;
-        public const int UserRatingMinValue = 0;
-
-        public const int DurationMaxValue = 51480;
-        public const int DurationMinValue = 1;
-
-        public const int ReleaseYearMaxValue = 2023;
-        public const int ReleaseYearMinValue = 1888;
 
         public const int CoverImageUrlMaxLength = 2048;
 
@@ -30,10 +17,8 @@ public static class EntityValidationConstants
     public static class ActorValidations
     {
         public const int NameMaxLength = 105;
-        public const int NameMinLength = 3;
 
         public const int BioMaxLength = 10000;
-        public const int BioMinLength = 3;
 
         public const int ProfileImageUrlMaxLength = 2048;
 
@@ -42,10 +27,8 @@ public static class EntityValidationConstants
     public static class DirectorValidations
     {
         public const int NameMaxLength = 105;
-        public const int NameMinLength = 3;
 
         public const int BioMaxLength = 10000;
-        public const int BioMinLength = 3;
 
         public const int ProfileImageUrlMaxLength = 2048;
 
@@ -60,14 +43,11 @@ public static class EntityValidationConstants
         public const int BioMinLength = 3;
 
         public const int ProfileImageUrlMaxLength = 2048;
-
-        public const string DateOfBirthMinValue = "1900 - 01 - 01";
     }
 
     public static class GenreValidations
     {
         public const int NameMaxLength = 30;
-        public const int NameMinLength = 3;
     }
 
     public static class GroupValidations
@@ -81,12 +61,18 @@ public static class EntityValidationConstants
         public const int ContentMaxLength = 255;
         public const int ContentMinLength = 1;
 
-        public const int SenderNameMaxLength = 105;
-        public const int SenderNameMinLength = 3;
-
-        public const int SenderIdLength = 36;
-
         public const int GroupIdLength = 36;
+    }
+
+    public static class ReviewValidations
+    {
+        public const int RatingMaxValue = 10;
+        public const int RatingMinValue = 0;
+
+        public const int ContentMaxLength = 1000;
+        public const int ContentMinLength = 1;
+
+
     }
 
     public static class CommentValidations

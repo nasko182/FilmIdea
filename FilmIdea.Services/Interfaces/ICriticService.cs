@@ -7,6 +7,8 @@ public interface ICriticService
 {
     Task<bool> CriticExistByUserIdAsync(string userId);
 
+    Task<string> GetCriticIdAsync(string userid);
+
     Task<string> UploadPhotoAsync(IFormFile imageFile, string userName);
 
     Task CreateCriticAsync(string userId, BecomeCriticViewModel model,string photoUrl);

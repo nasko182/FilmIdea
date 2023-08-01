@@ -29,6 +29,15 @@ public class CriticService : FilmIdeaService, ICriticService
             .AnyAsync(c => c.UserId.ToString() == userId);
     }
 
+    public async Task<string> GetCriticIdAsync(string userid)
+    {
+        Critic critic = await this._dbContext.Critics
+            .Where(c => c.UserId.ToString() == userid)
+            .FirstAsync();
+
+        return critic.Id.ToString();
+    }
+
     public async Task<string> UploadPhotoAsync(IFormFile imageFile,string userName)
     {
         var fileName = userName + "_ProfileImage";
