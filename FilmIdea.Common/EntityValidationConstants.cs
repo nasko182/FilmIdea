@@ -72,7 +72,8 @@ public static class EntityValidationConstants
         public const int ContentMaxLength = 1000;
         public const int ContentMinLength = 1;
 
-
+        public const int TitleMaxLength = 255;
+        public const int TitleMinLength = 3;
     }
 
     public static class CommentValidations

@@ -2,6 +2,8 @@
 
 using System.ComponentModel.DataAnnotations;
 
+using static Common.EntityValidationConstants.ReviewValidations;
+
 public class Review
 {
     public Review()
@@ -19,9 +21,14 @@ public class Review
     public int Rating { get; set; }
 
     [Required]
+    [MaxLength(TitleMaxLength)]
+    public string Title { get; set; } = null!;
+
+    [Required]
     public DateTime ReviewDate { get; set; }
 
     [Required]
+    [MaxLength(ContentMaxLength)]
     public string Content { get; set; } = null!;
 
     public int MovieId { get; set; }

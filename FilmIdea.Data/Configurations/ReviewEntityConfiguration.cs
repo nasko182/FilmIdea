@@ -23,6 +23,6 @@ public class ReviewEntityConfiguration : IEntityTypeConfiguration<Review>
             .HasForeignKey(c => c.ReviewId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        //builder.HasData(this._seeder.GenerateReviews());
+        builder.HasData(this._seeder.GenerateReviews());
     }
 }

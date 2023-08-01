@@ -10,6 +10,7 @@ public class ReviewSeeder
         {
             new Review()
             {
+                Title = "About the movie",
                 MovieId = 2,
                 Content = "I like the movie",
                 CriticId = Guid.Parse("BCC5C503-128B-4BA6-A736-6EFBEDA1EE34"),
