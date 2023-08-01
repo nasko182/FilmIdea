@@ -11,6 +11,7 @@ using Web.ViewModels.Group;
 using Web.ViewModels.Message;
 using Web.ViewModels.Movie;
 using Web.ViewModels.User;
+using static Dropbox.Api.Files.SearchMatchType;
 
 public class GroupService : FilmIdeaService, IGroupService
 {
@@ -83,54 +84,50 @@ public class GroupService : FilmIdeaService, IGroupService
 
     public async Task EditGroupAsync(EditGroupViewModel model, string userId, string groupId)
     {
-        var oldGroup = await this._dbContext.Groups
-            .Where(g => g.Id.ToString() == groupId)
-            .Include(g=>g.Chat)
-            .ThenInclude(c=>c.Messages)
-            .ThenInclude(m=>m.Sender)
-            .FirstOrDefaultAsync();
+        var group = await _dbContext.Groups
+            .Include(e => e.GroupUsers) 
+            .SingleOrDefaultAsync(e => e.Id.ToString() == groupId);
 
-        if (oldGroup == null)
+
+        if (group == null)
         {
-            throw new InvalidOperationException("Invalid group");
+            // Handle the case where the entity is not found
+            return;
         }
-        _dbContext.Groups.Remove(oldGroup);
 
-        var newGroup = new Group()
+        group.Name = model.Name;
+        group.Icon = model.Icon;
+
+        var usersToRemove = group.GroupUsers
+            .Where(u => !model.UsersIds.Contains(u.UserId.ToString()))
+            .ToList();
+
+        var existingUserIds = group.GroupUsers.Select(u => u.UserId.ToString()).ToList();
+        var newUserIdsToAdd = model.UsersIds
+            .Where(id=>id.Length==36)
+            .Except(existingUserIds).ToList();
+
+        foreach (var id in newUserIdsToAdd)
         {
-            Icon = model.Icon,
-            Name = model.Name,
-            Chat = oldGroup.Chat,
-            ChatId = oldGroup.Chat.Id
-        };
-
-        await this._dbContext.Groups.AddAsync(newGroup);
-
-        if (model.UsersIds.Any())
-        {
-            model.UsersIds.Add(userId);
-            foreach (var user in model.UsersIds)
+            var newUser = new GroupUser()
             {
-                if (user != null)
-                {
-
-                    if (this._dbContext.Users.Any(u => u.Id == Guid.Parse(user)))
-                    {
-                        this._dbContext.GroupsUsers.Add(new GroupUser()
-                        {
-                            GroupId = oldGroup.Id,
-                            UserId = Guid.Parse(user)
-                        });
-                    }
-                    else
-                    {
-                        throw new ArgumentException("Invalid user");
-                    }
-                }
-            }
+                UserId = Guid.Parse(id),
+                GroupId = Guid.Parse(groupId)
+            };
+            group.GroupUsers.Add(newUser);
         }
 
-        await this._dbContext.SaveChangesAsync();
+        _dbContext.GroupsUsers.RemoveRange(usersToRemove);
+
+
+        try
+        {
+            await this._dbContext.SaveChangesAsync();
+        }
+        catch(Exception e)
+        {
+            Console.WriteLine(e.ToString());
+        }
     }
 
     public async Task<CreateEditGroupViewModel> CreateEditGroupModelAsync(string userId, EditGroupViewModel model, string groupId)
@@ -214,9 +211,13 @@ public class GroupService : FilmIdeaService, IGroupService
             .Where(g => g.Id.ToString() == groupId)
             .Include(g => g.GroupUsers)
             .FirstOrDefaultAsync();
+        if (group == null)
+        {
+            throw new InvalidOperationException("Invalid group");
+        }
         var groupUser = group.GroupUsers
             .FirstOrDefault(gu => gu.UserId.ToString() == userId && gu.GroupId.ToString() == groupId);
-        if (group == null || groupUser == null)
+        if (groupUser == null)
         {
             throw new InvalidOperationException("Invalid group");
         }

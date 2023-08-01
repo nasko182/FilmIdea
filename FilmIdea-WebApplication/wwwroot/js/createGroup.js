@@ -1,44 +1,60 @@
-﻿$(document).ready(function () {
-    $("#UserSearch").on("input", function () {
-        var searchText = $(this).val().toLowerCase();
-        var usersSection = $("#usersSection");
+﻿    $(document).ready(function () {
+        const userList = document.getElementById("usersSection");
+    const checkboxes = userList.querySelectorAll("input[type='checkbox']");
+    const createGroupButton = document.getElementById("createGroupButton");
+    const userSearch = $("#UserSearch");
+    const usersSection = $("#usersSection");
 
-        if (searchText.trim().length > 0) {
-            usersSection.show();
-        } else {
-            usersSection.hide();
+    const selectedUserIds = [];
+
+    function updateSelectedUsers() {
+        selectedUserIds.length = 0;
+    checkboxes.forEach(function (checkbox) {
+                if (checkbox.checked) {
+        selectedUserIds.push(parseInt(checkbox.value));
+                }
+            });
+
+    createGroupButton.disabled = selectedUserIds.length === 0;
         }
 
-        $("#Users option").each(function () {
-            var userOption = $(this);
-            var username = userOption[0].innerText.toLowerCase();
-
-            if (username.includes(searchText)) {
-                userOption.show();
-            } else {
-                userOption.hide();
-            }
+    checkboxes.forEach(function (checkbox) {
+        checkbox.addEventListener("change", function () {
+            updateSelectedUsers();
+        });
         });
 
-        updateCreateButtonState();
-    });
+    createGroupButton.addEventListener("click", function () {
+            const userListInput = $("#UserList");
+    userListInput.val(JSON.stringify(selectedUserIds));
+    $("#createGroupForm").submit();
+        });
 
-    $("#Users").on("change", function () {
-        var selectedIds = $(this).val();
-        var userListInput = $("#UserList");
-        userListInput.val(JSON.stringify(selectedIds));
+    function filterUsers() {
+            var searchText = userSearch.val().toLowerCase();
 
-        updateCreateButtonState();
-    });
+            if (searchText.trim().length > 0) {
+        usersSection.show();
+            } else {
+        usersSection.hide();
+            }
 
-    function updateCreateButtonState() {
-        var selectedUsersCount = $("#Users").val()?.length ?? 0;
-        var createButton = $("#createGroupButton");
+    checkboxes.forEach(function (checkbox) {
+                var username = checkbox.parentElement.innerText.toLowerCase();
 
-        if (selectedUsersCount > 0) {
-            createButton.prop("disabled", false);
-        } else {
-            createButton.prop("disabled", true);
+    if (username.includes(searchText)) {
+        checkbox.parentElement.style.display = "block";
+                } else {
+        checkbox.parentElement.style.display = "none";
+                }
+            });
+
+    updateSelectedUsers();
         }
-    }
-});
+
+    userSearch.on("input", function () {
+        filterUsers();
+        });
+
+    filterUsers();
+    });

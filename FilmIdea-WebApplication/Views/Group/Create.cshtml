@@ -5,7 +5,7 @@
 
 <h2>Create New Group</h2>
 
-<form id="editGroupForm" asp-action="Create" asp-controller="Group" method="post">
+<form id="createGroupForm" asp-action="Create" asp-controller="Group" method="post">
     <div class="form-group">
         <label for="Name">Group Name</label>
         <input type="text" class="form-control" id="Name" name="Name" required>
@@ -24,14 +24,15 @@
     <div class="form-group">
         <label for="Users">Select Users</label>
         <input type="text" class="form-control" id="UserSearch" placeholder="Enter a username">
-        <div id="usersSection" style="display: none;">
-            <select multiple class="form-control" id="Users" name="UsersIds">
-
-                @foreach (var user in Model.AllUsers)
-                {
-                    <option value="@user.Id" data-id="@user.Id">@user.Username</option>
-                }
-            </select>
+        <div id="usersSection" style="display: none">
+            @foreach (var user in Model.AllUsers)
+            {
+                <label>
+                    <input type="checkbox" name="UsersIds" value="@user.Id" data-id="@user.Id">
+                    @user.Username
+                </label>
+                <br />
+            }
         </div>
     </div>
 
@@ -44,3 +45,4 @@
     <partial name="_ValidationScriptsPartial" />
     <script src="~/js/createGroup.js"></script>
 }
+

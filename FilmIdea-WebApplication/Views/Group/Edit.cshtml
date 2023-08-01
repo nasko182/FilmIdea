@@ -5,7 +5,7 @@
 
 <h2>Edit Group: @Model.GroupData.Name</h2>
 
-<form id="createGroupForm" asp-action="Edit" asp-controller="Group" method="post">
+<form id="editGroupForm" asp-action="Edit" asp-controller="Group" method="post">
     <div class="form-group">
         <label for="Name">Group Name</label>
         <input type="text" class="form-control" id="Name" name="Name" value="@Model.GroupData.Name" required>
@@ -13,6 +13,7 @@
 
     <div class="form-group">
         <label for="Icon">Select Icon</label>
+        <input type="hidden" id="currentIcon" value="@Model.GroupData.Icon">
         <select class="form-control iconSelector" id="Icon" name="Icon" value="@Model.GroupData.Icon">
             @foreach (var icon in Model.Icons)
             {
@@ -24,24 +25,28 @@
     <div class="form-group">
         <label for="Users">Select Users</label>
         <input type="text" class="form-control" id="UserSearch" placeholder="Enter a username">
-        <div id="usersSection" style="display: none;">
-            <select multiple class="form-control" id="Users" name="UsersIds" value="@Model.GroupData.UsersIds">
-                @foreach (var user in Model.AllUsers)
-                {
-                    <option value="@user.Id" data-id="@user.Id">@user.Username</option>
-                }
-            </select>
+        <div id="usersSection" style="display: none">
+            @foreach (var user in Model.AllUsers)
+            {
+                var isSelected = Model.GroupData.UsersIds.Contains(user.Id);
+                <label>
+                    <input type="checkbox" name="UsersIds" value="@user.Id" data-id="@user.Id" @(isSelected ? "checked" : "")>
+                    @user.Username
+                </label>
+                <br />
+            }
         </div>
     </div>
 
     <button type="submit" class="btn btn-primary" id="editGroupButton" disabled>Edit Group</button>
+
+    <input type="hidden" id="groupId" name="groupId" value="@Model.Id">
+
+    <input type="hidden" id="UserList" name="UsersIds" data-users="@Html.Raw(Json.Serialize(Model.GroupData.UsersIds))">
 </form>
 
-<input type="hidden" id="groupId" name="Id" data-id="@Model.Id">
-
-<input type="hidden" id="UserList" name="GroupData.UsersIds" data-users="@Html.Raw(Json.Serialize(Model.GroupData.UsersIds))">
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script src="~/js/editGroup.js"></script>
+    <script src="~/js/EditGroup.js"></script>
 }

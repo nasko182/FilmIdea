@@ -3,7 +3,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Services.Data.Interfaces;
 using ViewModels.Group;
-using ViewModels.Message;
 using static Common.NotificationMessageConstants;
 
 public class GroupController : BaseController

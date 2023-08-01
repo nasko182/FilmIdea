@@ -660,3 +660,130 @@ h3.title {
     font-weight: bold;
     color: #007bff;
 }
+
+/*Group Details*/
+
+.left-section {
+    width: 22%;
+    box-sizing: border-box;
+    border-right: 1px solid #ccc;
+    margin-left: 2%;
+    padding: 1% 2% 2% 0%;
+}
+
+.right-section {
+    flex: 1;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.chat-box {
+    height: 415px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    overflow-y: auto;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.message {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+    .message.sender {
+        background-color: #f1f1f1;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .message.receiver {
+        background-color: #d9f7ff;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .message p {
+        margin: 0;
+        font-size: 12px;
+    }
+
+    .message .content {
+        background-color: #4CAF50;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+
+
+#messageInput {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+#sendMessageButton {
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+    #sendMessageButton:disabled {
+        background-color: #ccc;
+        cursor: auto;
+    }
+
+
+.line {
+    height: 1px;
+    background-color: #ccc;
+    width: 120%;
+    margin-left: -10%;
+}
+
+.button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+    .button:hover {
+        background-color: #45a049;
+    }
+
+.add-user-button {
+    background-color: #2196F3;
+}
+
+    .add-user-button:hover {
+        background-color: #0c7cd5;
+    }
+
+.leave-group-button {
+    background-color: #FF5722;
+}
+
+    .leave-group-button:hover {
+        background-color: #d8461d;
+    }

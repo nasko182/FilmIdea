@@ -1,7 +1,41 @@
 ﻿$(document).ready(function () {
-    $("#UserSearch").on("input", function () {
-        var searchText = $(this).val().toLowerCase();
-        var usersSection = $("#usersSection");
+    var currentIcon = $("#currentIcon").val();
+
+    $("#Icon option[value='" + currentIcon + "']").prop("selected", true);
+
+    const userList = document.getElementById("usersSection");
+    const checkboxes = userList.querySelectorAll("input[type='checkbox']");
+    const editGroupButton = document.getElementById("editGroupButton");
+    const userSearch = $("#UserSearch");
+    const usersSection = $("#usersSection");
+
+    const selectedUserIds = [];
+
+    function updateSelectedUsers() {
+        selectedUserIds.length = 0;
+        checkboxes.forEach(function (checkbox) {
+            if (checkbox.checked) {
+                selectedUserIds.push(parseInt(checkbox.value));
+            }
+        });
+
+        editGroupButton.disabled = selectedUserIds.length === 0;
+    }
+
+    checkboxes.forEach(function (checkbox) {
+        checkbox.addEventListener("change", function () {
+            updateSelectedUsers();
+        });
+    });
+
+    editGroupButton.addEventListener("click", function () {
+        const userListInput = $("#UserList");
+        userListInput.val(JSON.stringify(selectedUserIds));
+        $("#editGroupForm").submit();
+    });
+
+    function filterUsers() {
+        var searchText = userSearch.val().toLowerCase();
 
         if (searchText.trim().length > 0) {
             usersSection.show();
@@ -9,36 +43,22 @@
             usersSection.hide();
         }
 
-        $("#Users option").each(function () {
-            var userOption = $(this);
-            var username = userOption[0].innerText.toLowerCase();
+        checkboxes.forEach(function (checkbox) {
+            var username = checkbox.parentElement.innerText.toLowerCase();
 
             if (username.includes(searchText)) {
-                userOption.show();
+                checkbox.parentElement.style.display = "block";
             } else {
-                userOption.hide();
+                checkbox.parentElement.style.display = "none";
             }
         });
 
-        updateCreateButtonState();
-    });
-
-    $("#Users").on("change", function () {
-        var selectedIds = $(this).val();
-        var userListInput = $("#UserList");
-        userListInput.val(JSON.stringify(selectedIds));
-
-        updateCreateButtonState();
-    });
-
-    function updateCreateButtonState() {
-        var selectedUsersCount = $("#Users").val()?.length ?? 0;
-        var createButton = $("#editGroupButton");
-
-        if (selectedUsersCount > 0) {
-            createButton.prop("disabled", false);
-        } else {
-            createButton.prop("disabled", true);
-        }
+        updateSelectedUsers();
     }
+
+    userSearch.on("input", function () {
+        filterUsers();
+    });
+
+    filterUsers();
 });
