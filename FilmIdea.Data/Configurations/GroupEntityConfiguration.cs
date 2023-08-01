@@ -15,10 +15,5 @@ public class GroupEntityConfiguration : IEntityTypeConfiguration<Group>
             .WithOne(ug => ug.Group)
             .HasForeignKey(ug => ug.GroupId)
             .OnDelete(DeleteBehavior.Restrict);
-
-        builder.HasMany(g => g.Watchlist)
-            .WithOne(gm => gm.Group)
-            .HasForeignKey(gm => gm.GroupId)
-            .OnDelete(DeleteBehavior.Restrict);
     }
 }

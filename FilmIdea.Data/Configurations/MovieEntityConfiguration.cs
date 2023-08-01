@@ -34,11 +34,6 @@ public class MovieEntityConfiguration : IEntityTypeConfiguration<Movie>
             .HasForeignKey(mg => mg.MovieId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasMany(m => m.GroupsWatchlists)
-            .WithOne(gw => gw.Movie)
-            .HasForeignKey(gw => gw.MovieId)
-            .OnDelete(DeleteBehavior.Restrict);
-
         builder.HasMany(m => m.UsersWatchlists)
             .WithOne(um => um.Movie)
             .HasForeignKey(um => um.MovieId)

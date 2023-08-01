@@ -14,7 +14,6 @@ public class Group
         this.Chat = new Chat();
 
         this.GroupUsers = new HashSet<GroupUser>();
-        this.Watchlist = new HashSet<GroupMovie>();
     }
 
     [Key]
@@ -32,6 +31,5 @@ public class Group
     public Chat Chat { get; set; }
 
     public ICollection<GroupUser> GroupUsers { get; set; }
-
-    public ICollection<GroupMovie> Watchlist { get; set; }
+    
 }

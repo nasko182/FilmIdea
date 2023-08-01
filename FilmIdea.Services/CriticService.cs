@@ -20,7 +20,7 @@ public class CriticService : FilmIdeaService, ICriticService
     {
         this._dbContext = dbContext;
 
-        this._dropboxClient = new DropboxClient("sl.Bi-TRNmAfLQStYqDFmO79g6VCRRtMmI5-j1XVP8s27QddBXQcUe6BZTZW9Vf46ce5so4Bh4fgiA7ilWx0l17azIcAB8dg3i6-IAlKzU6-E3IACPmG0CVeN4TyKoN-yCmn9BwpaFcCC1TgIQ");
+        this._dropboxClient = new DropboxClient("Paste Dropbox token here");
     }
     public async Task<bool> CriticExistByUserIdAsync(string userId)
     {

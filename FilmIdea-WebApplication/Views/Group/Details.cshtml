@@ -2,15 +2,24 @@
 @model DetailsGroupModel
 @{
     ViewBag.Title = $"{Model.Name} Details";
+    Layout = "_GroupDetailsLayout";
+
+    var viewModel = new EditGroupViewModel()
+    {
+        Icon = @Model.Icon,
+        Name = @Model.Name,
+        UsersIds = @Model.Users.Select(u => u.Id).ToList(),
+    };
 }
 
 <style>
-    /* Add your CSS styles here */
+
     .left-section {
-        width: 35%;
-        padding: 20px;
+        width: 22%;
         box-sizing: border-box;
         border-right: 1px solid #ccc;
+        margin-left: 2%;
+        padding: 1% 2% 2% 0%;
     }
 
     .right-section {
@@ -20,111 +29,170 @@
     }
 
     .chat-box {
-        height: 400px;
+        height: 415px;
         border: 1px solid #ccc;
         padding: 10px;
         overflow-y: auto;
+        background-color: #f2f2f2;
+        border-radius: 5px;
+        margin-bottom: 10px;
     }
 
     .message {
-        padding: 5px 10px;
-        border-bottom: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        display: flex;
+        justify-content: space-between;
     }
 
         .message.sender {
             background-color: #f1f1f1;
+            flex-direction: column;
+            align-items: flex-end;
         }
 
         .message.receiver {
             background-color: #d9f7ff;
+            flex-direction: column;
+            align-items: flex-start;
         }
 
-    .movie-card {
-        background-color: #f8f8f8;
+        .message p {
+            margin: 0;
+            font-size: 12px;
+        }
+
+        .message .content {
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+
+    #messageInput {
+        border: 1px solid #ccc;
         border-radius: 5px;
         padding: 10px;
-        margin-bottom: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        margin-bottom: 5px;
     }
 
-    .user-list {
-        list-style: none;
-        padding: 0;
-        margin: 10px 0;
+    #sendMessageButton {
+        border: none;
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
     }
 
-        .user-list li {
-            margin-bottom: 5px;
+        #sendMessageButton:disabled {
+            background-color: #ccc;
+            cursor: auto;
         }
 
-    .hr {
-        height: 1px;
-        margin-left: -52px;
-        margin-right: -6.5%;
 
+    .line {
+        height: 1px;
+        background-color: #ccc;
+        width: 120%;
+        margin-left: -10%;
     }
-    /*.input{
-        margin-top: 10px;
-        margin-bottom: 10px
-        }*/
+
+    .button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+    .add-user-button {
+        background-color: #2196F3;
+    }
+
+        .add-user-button:hover {
+            background-color: #0c7cd5;
+        }
+
+    .leave-group-button {
+        background-color: #FF5722;
+    }
+
+        .leave-group-button:hover {
+            background-color: #d8461d;
+        }
 </style>
 
-<div style="margin-left: -7%">
-    <div style="display: flex; justify-content: space-between;">
-        <div class="left-section" style="width: 25%">
-            <div class="row m-0">
+<div>
+    <div style="display: flex; justify-content: inherit;">
+        <div class="left-section">
+            <div class="row mb-2">
                 <div class="col-md-6 m-0">
-                    <button id="addUserButton">Add Users</button>
+                    <a asp-action="Edit" asp-controller="Group"
+                       asp-route-icon="@viewModel.Icon" asp-route-name="@viewModel.Name"
+                       asp-route-userIds="@string.Join(",", viewModel.UsersIds)">
+                        <button id="editGroupButton" class="button add-user-button">Edit Group</button>
+                    </a>
                 </div>
                 <div class="col-md-6 m-0">
-                    <button id="leaveGroupButton">Leave Group</button>
+                    <button id="leaveGroupButton" class="button leave-group-button">Leave</button>
                 </div>
             </div>
-            <hr class="hr"/>
-            <div class="row">
-                <h2>Chat</h2>
-                <div class="chat-box">
+            <div class="line"></div>
+
+            <div class="row mt-2">
+                <div class="chat-box" id="chatBox">
                     @foreach (var message in Model.Chat.Messages)
                     {
-                        if (User.FindFirstValue(ClaimTypes.NameIdentifier) == message.SenderId)
-                        {
-                            <p>@message.SendAt</p>
-                            <div class="message">
-                                <p>@message.SenderName</p>
-                                <div class="content">
-                                    @message.Content
+                        TimeZoneInfo localTimeZone = TimeZoneInfo.Local;
+                        DateTime localTime = TimeZoneInfo.ConvertTimeFromUtc(message.SendAt, localTimeZone);
+                        <div class="message @(User.FindFirstValue(ClaimTypes.NameIdentifier) == message.SenderId ? "sender" : "receiver")">
+                            <p><strong style="color: #4caf50; font-size: 20px">@message.SenderName</strong> @localTime.ToString("dd.MM.yyyy HH:mm")</p>
+                            <div class="message-content">
+                                <div>
+                                    <div class="content">@message.Content</div>
                                 </div>
                             </div>
-                        }
-                        else
-                        {
-                            <p>@message.SendAt</p>
-                            <div class="message">
-                                <p>@message.SenderName</p>
-                                <div class="content">
-                                    @message.Content
-                                </div>
-                            </div>
-                        }
+                        </div>
                     }
                 </div>
-                <input type="text" id="messageInput" class="mt-2 mb-2" placeholder="Enter message..."/>
-                <button id="sendMessageButton">Send</button>
+                <input type="text" id="messageInput" class="mt-2 mb-2" placeholder="Enter message..." />
+                <button id="sendMessageButton" disabled>Send</button>
             </div>
         </div>
 
         <div class="right-section">
-            <h2>Group Watchlist</h2>
-            
-                <partial name="_MoviesPartial" model="Model.Watchlist"/>
-            
-
-            <button id="leaveGroupButton">Leave Group</button>
-            <button id="addUserButton">Add Users to Group</button>
+            <div class="center-container">
+                <h2>Group Watchlist</h2>
+            </div>
+            <partial name="_MoviesPartial" model="Model.Watchlist" />
         </div>
     </div>
 </div>
+<input type="hidden" id="groupId" value="@Model.Id" />
 
-<script>
-    // Add your JavaScript code here for sending messages, leaving the group, and adding users.
-</script>
+@section scripts {
+    <script>
+        var sendMessageUrl = '@Url.Action("SendMessage", "Group")';
+        var leaveGroupUrl = '@Url.Action("LeaveGroup", "Group")';
+        var EditGroupUrl = '@Url.Action("Edit", "Group")';
+    </script>
+    <script src="~/js/chat.js"></script>
+}

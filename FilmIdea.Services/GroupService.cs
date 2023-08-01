@@ -31,19 +31,22 @@ public class GroupService : FilmIdeaService, IGroupService
             .ToListAsync();
     }
 
-    public async Task CreateGroupAsync(AddGroupViewModel model)
+    public async Task CreateGroupAsync(AddGroupViewModel model, string userId)
     {
+        var chat = new Chat();
         var group = new Group()
         {
             Icon = model.Icon,
             Name = model.Name,
-            Chat = new Chat()
+            Chat = chat,
+            ChatId = chat.Id
         };
 
         await this._dbContext.Groups.AddAsync(group);
 
         if (model.UsersIds.Any())
         {
+            model.UsersIds.Add(userId);
             foreach (var user in model.UsersIds)
             {
                 if (user != null)
@@ -74,14 +77,75 @@ public class GroupService : FilmIdeaService, IGroupService
         {
             AllUsers = await this.GetAllUsersAsync(userId),
             Icons = this.GenerateIcons(),
-            GroupData = new AddGroupViewModel()
+            AddGroupData = new AddGroupViewModel()
         };
     }
 
-    public async Task<DetailsGroupModel> GetGroupDetailsAsync(string groupId,string userId)
+    public async Task EditGroupAsync(EditGroupViewModel model, string userId, string groupId)
     {
-        var group = await this._dbContext.Groups.FirstAsync(g => g.Id == Guid.Parse(groupId));
+        var oldGroup = await this._dbContext.Groups
+            .Where(g => g.Id.ToString() == groupId)
+            .Include(g=>g.Chat)
+            .ThenInclude(c=>c.Messages)
+            .ThenInclude(m=>m.Sender)
+            .FirstOrDefaultAsync();
 
+        if (oldGroup == null)
+        {
+            throw new InvalidOperationException("Invalid group");
+        }
+        _dbContext.Groups.Remove(oldGroup);
+
+        var newGroup = new Group()
+        {
+            Icon = model.Icon,
+            Name = model.Name,
+            Chat = oldGroup.Chat,
+            ChatId = oldGroup.Chat.Id
+        };
+
+        await this._dbContext.Groups.AddAsync(newGroup);
+
+        if (model.UsersIds.Any())
+        {
+            model.UsersIds.Add(userId);
+            foreach (var user in model.UsersIds)
+            {
+                if (user != null)
+                {
+
+                    if (this._dbContext.Users.Any(u => u.Id == Guid.Parse(user)))
+                    {
+                        this._dbContext.GroupsUsers.Add(new GroupUser()
+                        {
+                            GroupId = oldGroup.Id,
+                            UserId = Guid.Parse(user)
+                        });
+                    }
+                    else
+                    {
+                        throw new ArgumentException("Invalid user");
+                    }
+                }
+            }
+        }
+
+        await this._dbContext.SaveChangesAsync();
+    }
+
+    public async Task<CreateEditGroupViewModel> CreateEditGroupModelAsync(string userId, EditGroupViewModel model, string groupId)
+    {
+        return new CreateEditGroupViewModel()
+        {
+            Id = groupId,
+            AllUsers = await this.GetAllUsersAsync(userId),
+            Icons = this.GenerateIcons(),
+            GroupData = model
+        };
+    }
+
+    public async Task<DetailsGroupModel> GetGroupDetailsAsync(string groupId, string userId)
+    {
         var chat = await GetChatViewModel(groupId);
 
         var userRatings = await this._dbContext.UserRatings
@@ -93,34 +157,72 @@ public class GroupService : FilmIdeaService, IGroupService
             })
             .ToListAsync();
 
+        var groupMovies = await GetGroupMoviesAsync(groupId);
+
         return await this._dbContext.Groups
+            .Include(g => g.GroupUsers)
             .Where(g => g.Id == Guid.Parse(groupId))
             .Select(g => new DetailsGroupModel()
             {
+                Id = groupId,
                 Icon = g.Icon,
                 Name = g.Name,
                 Chat = chat,
-                Users = g.GroupUsers.Select(u=>new UserViewModel()
+                Users = g.GroupUsers.Select(u => new UserViewModel()
                 {
                     Id = u.UserId.ToString(),
                     Username = u.User.Email.Substring(0, u.User.Email.IndexOf("@"))
                 }).ToList(),
-                Watchlist = g.Watchlist.Select(wm=>new MovieViewModel()
-                { 
-                    Id = wm.MovieId,
-                    Title = wm.Movie.Title,
-                    Rating = wm.Movie.CalculateUserRating(),
-                    CoverPhotoUrl = wm.Movie.CoverImageUrl,
-                    Duration = wm.Movie.Duration,
-                    ReleaseYear = wm.Movie.ReleaseDate.Year,
-                    HasMovieInWatchlist = HasMovieInUserWatchlist(userId, wm.Movie),
-                    UserRating = GetRating(userRatings, wm.MovieId)
+                Watchlist = groupMovies.Select(m => new MovieViewModel()
+                {
+                    CoverPhotoUrl = m.CoverImageUrl,
+                    Duration = m.Duration,
+                    Id = m.Id,
+                    ReleaseYear = m.ReleaseDate.Year,
+                    Title = m.Title,
+                    Rating = m.CalculateUserRating(),
+                    UserRating = GetRating(userRatings, m.Id),
+                    HasMovieInWatchlist = HasMovieInUserWatchlist(userId, m),
                 }).ToList()
             })
             .FirstAsync();
     }
 
+    public async Task SendMessageAsync(string content, string groupId, string userId)
+    {
+        var chat = await this._dbContext.Chats
+            .Where(c => c.GroupId == Guid.Parse(groupId))
+            .FirstOrDefaultAsync();
+        if (chat == null)
+        {
+            throw new InvalidOperationException("Invalid group");
+        }
 
+        await this._dbContext.Messages.AddAsync(new Message()
+        {
+            Content = content,
+            SenderId = Guid.Parse(userId),
+            Chat = chat
+        });
+
+        await this._dbContext.SaveChangesAsync();
+    }
+
+    public async Task LeaveGroupAsync(string groupId, string userId)
+    {
+        var group = await this._dbContext.Groups
+            .Where(g => g.Id.ToString() == groupId)
+            .Include(g => g.GroupUsers)
+            .FirstOrDefaultAsync();
+        var groupUser = group.GroupUsers
+            .FirstOrDefault(gu => gu.UserId.ToString() == userId && gu.GroupId.ToString() == groupId);
+        if (group == null || groupUser == null)
+        {
+            throw new InvalidOperationException("Invalid group");
+        }
+        group.GroupUsers.Remove(groupUser);
+        await this._dbContext.SaveChangesAsync();
+    }
 
 
     private async Task<List<UserViewModel>> GetAllUsersAsync(string userId)
@@ -194,19 +296,56 @@ public class GroupService : FilmIdeaService, IGroupService
 
     private async Task<ChatViewModel> GetChatViewModel(string groupId)
     {
-        var group = await this._dbContext.Groups.FirstAsync(g => g.Id == Guid.Parse(groupId));
+        var group = await this._dbContext.Groups
+            .Include(g => g.Chat)
+            .ThenInclude(c => c.Messages)
+            .ThenInclude(m => m.Sender)
+            .FirstAsync(g => g.Id == Guid.Parse(groupId));
 
         return new ChatViewModel()
         {
             CreatedAt = group.Chat.CreatedAt,
-            Messages = group.Chat.Messages.Select(m => new MessageViewModel()
-            {
-                Content = m.Content,
-                SendAt = m.SentAt,
-                SenderId = m.SenderId.ToString(),
-                SenderName = m.Sender.Email.Substring(0, m.Sender.Email.IndexOf("@"))
-            }).ToList()
+            Messages = group.Chat.Messages
+                .OrderBy(m => m.SentAt)
+                .Select(m => new MessageViewModel()
+                {
+                    Content = m.Content,
+                    SendAt = m.SentAt,
+                    SenderId = m.SenderId.ToString(),
+                    SenderName = m.Sender.Email.Substring(0, m.Sender.Email.IndexOf("@"))
+                }).ToList()
         };
     }
+
+    private async Task<List<Movie>> GetGroupMoviesAsync(string groupId)
+    {
+        var group = await this._dbContext.Groups
+            .Include(g => g.GroupUsers)
+            .ThenInclude(gm => gm.User)
+            .ThenInclude(u => u.Watchlist)
+            .ThenInclude(um => um.Movie)
+            .ThenInclude(m => m.Ratings)
+            .Where(g => g.Id == Guid.Parse(groupId)).FirstAsync();
+
+        if (group.GroupUsers == null || !group.GroupUsers.Any())
+        {
+            return new List<Movie>();
+
+        }
+
+        var firstUserMovies = group.GroupUsers.First().User.Watchlist.Select(um => um.Movie).ToList();
+        var sharedMovies = firstUserMovies;
+
+        foreach (var userGroup in group.GroupUsers.Skip(1))
+        {
+            var currentUserMovies = userGroup.User.Watchlist
+                .Select(um => um.Movie).ToList();
+            sharedMovies = sharedMovies.Intersect(currentUserMovies).ToList();
+        }
+
+        return sharedMovies;
+    }
+
+
 
 }

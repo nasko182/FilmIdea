@@ -12,7 +12,8 @@ public class DetailsGroupModel
         this.Users = new HashSet<UserViewModel>();
         this.Watchlist = new HashSet<MovieViewModel>();
     }
-    public Guid Id { get; set; }
+
+    public string Id { get; set; } = null!;
 
     public string Name { get; set; } = null!;
 

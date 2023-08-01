@@ -45,8 +45,6 @@ public class FilmIdeaDbContext : IdentityDbContext<ApplicationUser, IdentityRole
 
     // Join Tables
 
-    public DbSet<GroupMovie> GroupsMovies { get; set; } = null!;
-
     public DbSet<GroupUser> GroupsUsers { get; set; } = null!;
 
     public DbSet<MovieActor> MoviesActors { get; set; } = null!;

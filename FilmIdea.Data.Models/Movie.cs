@@ -14,7 +14,6 @@ public class Movie
         this.Genres = new HashSet<MovieGenre>();
         this.Reviews = new HashSet<Review>();
         this.Ratings = new HashSet<UserRating>();
-        this.GroupsWatchlists = new HashSet<GroupMovie>();
         this.UsersWatchlists = new HashSet<UserMovie>();
         this.PassedUsers = new HashSet<PassedMovie>();
         this.Photos = new HashSet<Photo>();
@@ -56,8 +55,6 @@ public class Movie
     public ICollection<Review> Reviews { get; set; }
 
     public ICollection<UserRating> Ratings { get; set; }
-
-    public ICollection<GroupMovie> GroupsWatchlists { get; set; }
 
     public ICollection<UserMovie> UsersWatchlists { get; set; }
 

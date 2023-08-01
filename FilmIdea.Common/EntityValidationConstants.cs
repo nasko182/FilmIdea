@@ -80,6 +80,13 @@ public static class EntityValidationConstants
     {
         public const int ContentMaxLength = 255;
         public const int ContentMinLength = 1;
+
+        public const int SenderNameMaxLength = 105;
+        public const int SenderNameMinLength = 3;
+
+        public const int SenderIdLength = 36;
+
+        public const int GroupIdLength = 36;
     }
 
     public static class CommentValidations

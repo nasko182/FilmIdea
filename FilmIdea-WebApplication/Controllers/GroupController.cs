@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Services.Data.Interfaces;
 using ViewModels.Group;
-
+using ViewModels.Message;
 using static Common.NotificationMessageConstants;
 
 public class GroupController : BaseController
@@ -23,9 +23,13 @@ public class GroupController : BaseController
 
     public async Task<IActionResult> Details(string groupId)
     {
-        var group = await this._groupService.GetGroupDetailsAsync(groupId,this.GetUserId());
+        var group = await this._groupService.GetGroupDetailsAsync(groupId, this.GetUserId());
+
+        TempData["LastGroupId"] = groupId;
 
         return View(group);
+
+        // TODO: Implement receiving messages with singleR
     }
 
     public async Task<IActionResult> Create()
@@ -42,7 +46,7 @@ public class GroupController : BaseController
         {
             try
             {
-                await this._groupService.CreateGroupAsync(viewModel);
+                await this._groupService.CreateGroupAsync(viewModel, this.GetUserId());
             }
             catch (Exception)
             {
@@ -52,6 +56,76 @@ public class GroupController : BaseController
 
         return this.RedirectToAction("All");
 
-        //TODO: Change users selection to be without CTRL ore put message how users are selected
+        //TODO: Change users selection to be without CTRL or put message how users are selected
+    }
+
+    public async Task<IActionResult> Edit(string icon, string name, string userIds,string groupId)
+    {
+        
+        List<string> userIdList = userIds.Split(",").ToList();
+
+        var viewModel = new EditGroupViewModel
+        {
+            Icon = icon,
+            Name = name,
+            UsersIds = userIdList,
+        };
+        var model = await this._groupService.CreateEditGroupModelAsync(this.GetUserId(),viewModel,groupId);
+
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Edit(EditGroupViewModel viewModel,string groupId)
+    {
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                await this._groupService.EditGroupAsync(viewModel, this.GetUserId(), groupId);
+            }
+            catch (Exception)
+            {
+                TempData[ErrorMessage] = "One or more users don't exist.";
+            }
+        }
+
+        return this.RedirectToAction("Details", new { groupId = TempData["LastGroupId"] });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> SendMessage(string content, string groupId)
+    {
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                await this._groupService.SendMessageAsync(content, groupId, this.GetUserId());
+            }
+            catch (Exception)
+            {
+                TempData[ErrorMessage] = "Invalid Message";
+            }
+        }
+
+        return this.RedirectToAction("Details", new { groupId = groupId });
+
+        //TODO: Change users selection to be without CTRL or put message how users are selected
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> LeaveGroup(string groupId)
+    {
+        try
+        {
+            await this._groupService.LeaveGroupAsync(groupId, this.GetUserId());
+        }
+        catch (Exception)
+        {
+            TempData[ErrorMessage] = "Something went wrong.Please try again.";
+        }
+
+        return this.RedirectToAction("All");
+
     }
 }

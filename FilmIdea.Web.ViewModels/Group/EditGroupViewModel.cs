@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 using static Common.EntityValidationConstants.GroupValidations;
 
-public class AddGroupViewModel
+public class EditGroupViewModel
 {
-    public AddGroupViewModel()
+    public EditGroupViewModel()
     {
         this.UsersIds = new HashSet<string>();
     }
@@ -15,7 +15,9 @@ public class AddGroupViewModel
     [StringLength(NameMaxLength, MinimumLength = NameMinLength)]
     public string Name { get; set; } = null!;
 
+    [Required]
     public string Icon { get; set; } = null!;
 
+    [Required]
     public ICollection<string> UsersIds { get; set; }
 }
