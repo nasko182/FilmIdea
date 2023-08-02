@@ -71,6 +71,7 @@ public class MovieService : FilmIdeaService, IMovieService
         var movie = await this._dbContext
             .Movies
             .Where(m => m.Id == movieId)
+            .Include(m=>m.Ratings)
             .Select(m => new MovieDetailsViewModel()
             {
                 Id = m.Id,
@@ -96,7 +97,7 @@ public class MovieService : FilmIdeaService, IMovieService
                     Id = mg.GenreId,
                     Name = mg.Genre.Name
                 }).ToList(),
-                Reviews = m.Reviews.Select(r => new ReviewViewModel()
+                Reviews = m.Reviews.OrderBy(r=>r.ReviewDate).Select(r => new ReviewViewModel()
                 {
                     Title = r.Title,
                     MovieId = r.MovieId,
@@ -105,10 +106,10 @@ public class MovieService : FilmIdeaService, IMovieService
                     CriticId = r.CriticId.ToString(),
                     CriticName = r.Critic.Name,
                     Rating = r.Rating,
-                    Likes = r.Likes,
-                    Dislikes = r.Dislikes,
+                    Likes = r.Likes.Count,
+                    Dislikes = r.Dislikes.Count,
                     ReviewDate = r.ReviewDate.ToString("MMM dd, yyyy"),
-                    Comments = r.Comments.Select(c => new CommentViewModel()
+                    Comments = r.Comments.OrderBy(c=>c.CommentDate).Select(c => new CommentViewModel()
                     {
                         Content = c.Content,
                         CommentDate = c.CommentDate.ToString("yyyy MM dd HH-mm"),
@@ -285,7 +286,7 @@ public class MovieService : FilmIdeaService, IMovieService
         }
     }
 
-    public async Task AddCommentAsync(AddCommentViewModel model, string reviewId,string userId)
+    public async Task AddCommentAsync(AddCommentViewModel model, string reviewId, string userId)
     {
         var review = await this._dbContext.Reviews
             .Where(r => r.Id.ToString() == reviewId)
@@ -370,8 +371,63 @@ public class MovieService : FilmIdeaService, IMovieService
         }
     }
 
+    public async Task AddRemoveLike(string reviewId, string userId)
+    {
+        var like = await this._dbContext.Likes
+            .FirstOrDefaultAsync(l => l.UserId.ToString() == userId && l.ReviewId.ToString() == reviewId);
 
+        if (like != null)
+        {
+            this._dbContext.Likes.Remove(like);
+        }
+        else
+        {
+            await this._dbContext.Likes.AddAsync(new Like()
+            {
+                ReviewId = Guid.Parse(reviewId),
+                UserId = Guid.Parse(userId)
+            });
+        }
 
+        try
+        {
+            await this._dbContext.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    public async Task AddRemoveDislike(string reviewId, string userId)
+    {
+        var dislike = await this._dbContext.Dislikes
+            .FirstOrDefaultAsync(dl => dl.UserId.ToString() == userId && dl.ReviewId.ToString() == reviewId);
+
+        if (dislike != null)
+        {
+            this._dbContext.Dislikes.Remove(dislike);
+        }
+        else
+        {
+            await this._dbContext.Dislikes.AddAsync(new Dislike()
+            {
+                ReviewId = Guid.Parse(reviewId),
+                UserId = Guid.Parse(userId)
+            });
+        }
+
+        try
+        {
+            await this._dbContext.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
 
 
     private async Task<List<MovieViewModel>> GetMoviesForAllAsync(string? userId)
@@ -425,7 +481,6 @@ public class MovieService : FilmIdeaService, IMovieService
             return movies;
         }
     }
-
 
     private async Task<List<MovieViewModel>> GetMoviesForNewAsync(string? userId)
     {

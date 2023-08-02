@@ -32,4 +32,8 @@ public interface IMovieService
 
     Task RemoveFromUserWatchlist(string userId, int movieId);
 
+    Task AddRemoveLike(string reviewId, string userId);
+
+    Task AddRemoveDislike(string reviewId, string userId);
+
 }

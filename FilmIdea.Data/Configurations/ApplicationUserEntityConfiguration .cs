@@ -49,6 +49,16 @@ public class ApplicationUserEntityConfiguration : IEntityTypeConfiguration<Appli
             .HasForeignKey(m=>m.SenderId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.HasMany(u => u.Likes)
+            .WithOne(m => m.User)
+            .HasForeignKey(m => m.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(u => u.DisLikes)
+            .WithOne(m => m.User)
+            .HasForeignKey(m => m.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasOne(u=>u.Critic)
             .WithOne(c=>c.User)
             .HasForeignKey<ApplicationUser>(u=>u.CriticId)

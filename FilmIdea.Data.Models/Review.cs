@@ -10,10 +10,10 @@ public class Review
     {
         this.Id = Guid.NewGuid();
         this.ReviewDate = DateTime.UtcNow;
-        this.Likes = 0;
-        this.Dislikes = 0;
 
         this.Comments = new HashSet<Comment>();
+        this.Likes = new HashSet<Like>();
+        this.Dislikes = new HashSet<Dislike>();
     }
 
     [Key]
@@ -21,12 +21,6 @@ public class Review
 
     [Required]
     public int Rating { get; set; }
-
-    [Required]
-    public int Likes { get; set; }
-
-    [Required]
-    public int Dislikes { get; set; } 
 
     [Required]
     [MaxLength(TitleMaxLength)]
@@ -48,4 +42,8 @@ public class Review
     public Critic Critic { get; set; } = null!;
 
     public ICollection<Comment> Comments { get; set; }
+
+    public ICollection<Like> Likes { get; set; }
+
+    public ICollection<Dislike> Dislikes { get; set; }
 }

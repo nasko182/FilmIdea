@@ -216,4 +216,19 @@ public class MovieController : BaseController
         return RedirectToAction(TempData["LastAction"]!.ToString(), TempData["LastController"]!.ToString());
     }
 
+    [HttpPost]
+    public async Task<IActionResult> AddRemoveLike(string reviewId, int movieId)
+    {
+        await this._movieService.AddRemoveLike(reviewId, this.GetUserId());
+
+        return RedirectToAction("Details", "Movie", new { movieId });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddRemoveDislike(string reviewId, int movieId)
+    {
+        await this._movieService.AddRemoveDislike(reviewId, this.GetUserId());
+
+        return RedirectToAction("Details", "Movie", new { movieId });
+    }
 }

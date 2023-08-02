@@ -13,6 +13,8 @@ public class ApplicationUser: IdentityUser<Guid>
         this.Watchlist = new HashSet<UserMovie>();
         this.Messages = new HashSet<Message>();
         this.PassedMovies = new HashSet<PassedMovie>();
+        this.Likes = new HashSet<Like>();
+        this.DisLikes = new HashSet<Dislike>();
     }
     public Guid? CriticId { get; set; }
 
@@ -29,4 +31,8 @@ public class ApplicationUser: IdentityUser<Guid>
     public ICollection<PassedMovie> PassedMovies { get; set; }
 
     public ICollection<Message> Messages { get; set; }
+
+    public ICollection<Like> Likes { get; set; }
+
+    public ICollection<Dislike> DisLikes { get; set; }
 }

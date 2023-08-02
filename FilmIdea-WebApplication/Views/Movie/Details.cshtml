@@ -6,6 +6,7 @@
 }
 @*TODO:Edit view to look better*@
 @*TODO:Edit Swipe View Add Link to details on movie*@
+@*TODO:Edit comment date to be in current time add the whole view style to be like person view*@
 
 <div class="container mt-5">
     <div class="row">
@@ -59,7 +60,6 @@
     </div>
 
     <div class="container mt-5">
-        <!-- ... existing content ... -->
 
         <div class="row mt-4">
             <div class="col-md-12">
@@ -114,15 +114,16 @@
                                 </div>
                                 <p class="card-font">@review.Content</p>
 
-                                <div class="d-flex" >
-
+                                <div class="d-flex">
 
                                     @if (User.Identity!.IsAuthenticated)
                                     {
-                                        <button class="btn btn-sm btn fs-25" id="addLikeButton" data-review-id="@review.Id">👍</button>
+                                        <div id="movieId" data-movie='@Html.Raw(@Model.MovieDetails.Id)'></div>
+                                        <div id="reviewId" data-review='@Html.Raw(@review.Id)'></div>
+                                        <button id="addLikeButton">👍</button>
                                         <p>@review.Likes</p>
 
-                                        <button class="btn btn-sm btn fs-25 " id="addUnlikeButton" data-review-id="@review.Id">👎</button>
+                                        <button id="addDislikeButton">👎</button>
                                         <p>@review.Dislikes</p>
 
                                         <button class="btn btn-sm btn-success" id="addCommentButton" data-review-id="@review.Id">Add Comment</button>
@@ -165,7 +166,6 @@
                                                 <p class="small mb-0 text-muted">@comment.WriterName - @comment.CommentDate</p>
                                                 <hr />
                                                 <p class="card-text">@comment.Content</p>
-                                                <p class="small mb-0 text-muted">@comment.CommentDate</p>
                                             </div>
                                         </div>
                                     }
@@ -182,5 +182,10 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        var addRemoveLike = '@Url.Action("AddRemoveLike", "Movie")';
+        var addRemoveDislike = '@Url.Action("AddRemoveDislike", "Movie")';
+    </script>
     <script src="~/js/movieDetails.js"></script>
+
 }
