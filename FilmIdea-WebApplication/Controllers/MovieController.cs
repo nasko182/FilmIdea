@@ -123,7 +123,13 @@ public class MovieController : BaseController
 
         ViewBag.CriticId = await this._criticService.GetCriticIdAsync(this.GetUserId());
 
-        return View(movie);
+        var model = new MovieAndReviewViewModel()
+        {
+            AddReview = new AddReviewViewModel(),
+            MovieDetails = movie
+        };
+
+        return View(model);
     }
 
     [HttpGet]
@@ -143,23 +149,27 @@ public class MovieController : BaseController
         bool isCritic = 
             await this._criticService.CriticExistByUserIdAsync(this.GetUserId());
 
-        if (!isCritic)
+        if (ModelState.IsValid)
         {
-            this.TempData[ErrorMessage] = "You must become an critic in order to add new review";
+            if (!isCritic)
+            {
+                this.TempData[ErrorMessage] = "You must become an critic in order to add new review";
 
-            return RedirectToAction("Become", "Critic");
-        }
+                return RedirectToAction("Become", "Critic");
+            }
 
-        var criticId = await this._criticService.GetCriticIdAsync(this.GetUserId());
-        try
-        {
-            await this._movieService.AddReviewAsync(model, movieId, criticId);
-        }
-        catch
-        {
-            this.TempData[ErrorMessage] = "Invalid review";
-        }
+            var criticId = await this._criticService.GetCriticIdAsync(this.GetUserId());
+            try
+            {
+                await this._movieService.AddReviewAsync(model, movieId, criticId);
+            }
+            catch
+            {
+                this.TempData[ErrorMessage] = "Invalid review";
+            }
 
+            return this.RedirectToAction("Details", "Movie", new { movieId });
+        }
         return this.RedirectToAction("Details", "Movie", new { movieId });
     }
 

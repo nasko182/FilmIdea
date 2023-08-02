@@ -6,6 +6,10 @@ using static Common.EntityValidationConstants.ReviewValidations;
 public class AddReviewViewModel
 {
     [Required]
+    [StringLength(TitleMaxLength, MinimumLength = TitleMinLength)]
+    public string Title { get; set; } = null!;
+
+    [Required]
     [Range(typeof(int),RatingMinValue,RatingMaxValue)]
     public int Rating { get; set; }
 

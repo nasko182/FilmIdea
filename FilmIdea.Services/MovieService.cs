@@ -98,6 +98,7 @@ public class MovieService : FilmIdeaService, IMovieService
                 }).ToList(),
                 Reviews = m.Reviews.Select(r => new ReviewViewModel()
                 {
+                    Title = r.Title,
                     MovieId = r.MovieId,
                     Id = r.Id.ToString(),
                     Content = r.Content,
@@ -264,6 +265,7 @@ public class MovieService : FilmIdeaService, IMovieService
         {
             this._dbContext.Reviews.Add(new Review()
             {
+                Title = model.Title,
                 MovieId = movieId,
                 Rating = model.Rating,
                 CriticId = Guid.Parse(criticId),

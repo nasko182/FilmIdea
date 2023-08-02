@@ -1,7 +1,7 @@
-﻿@model MovieDetailsViewModel
+﻿@model MovieAndReviewViewModel
 
 @{
-    ViewBag.Title = Model.Title;
+    ViewBag.Title = Model.MovieDetails.Title;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @*TODO:Edit view to look better*@
@@ -10,15 +10,15 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-3">
-            <img src="@Model.CoverImageUrl" class="img-fluid rounded" alt="@Model.Title">
+            <img src="@Model.MovieDetails.CoverImageUrl" class="img-fluid rounded" alt="@Model.MovieDetails.Title">
         </div>
         <div class="col-md-9">
-            <h2>@Model.Title (@Model.ReleaseYear)</h2>
-            <p class="lead">Duration: @Model.Duration</p>
-            <p class="lead">Rating: @Model.Rating</p>
-            <p class="lead">User Rating: @Model.UserRating</p>
-            <a href="@Model.TrailerUrl" target="_blank" class="btn btn-primary btn-sm">Watch Trailer</a>
-            <button class="btn btn-secondary btn-sm watchlist-button" data-movie="@Model.Id">
+            <h2>@Model.MovieDetails.Title (@Model.MovieDetails.ReleaseYear)</h2>
+            <p class="lead">Duration: @Model.MovieDetails.Duration</p>
+            <p class="lead">Rating: @Model.MovieDetails.Rating</p>
+            <p class="lead">User Rating: @Model.MovieDetails.UserRating</p>
+            <a href="@Model.MovieDetails.TrailerUrl" target="_blank" class="btn btn-primary btn-sm">Watch Trailer</a>
+            <button class="btn btn-secondary btn-sm watchlist-button" data-movie="@Model.MovieDetails.Id">
                 <i class="fas fa-plus"></i> Add to Watchlist
             </button>
         </div>
@@ -29,19 +29,19 @@
     <div class="row mt-4">
         <div class="col-md-12">
             <h3>Description</h3>
-            <p class="lead">@Model.Description</p>
+            <p class="lead">@Model.MovieDetails.Description</p>
         </div>
     </div>
 
     <div class="row mt-4">
         <div class="col-md-4">
             <h3>Directors</h3>
-            <a class="" asp-area="" asp-controller="Director" asp-action="Details" asp-route-directorId="@Model.Director.Id">@Model.Director.Name</a>
+            <a class="" asp-area="" asp-controller="Director" asp-action="Details" asp-route-directorId="@Model.MovieDetails.Director.Id">@Model.MovieDetails.Director.Name</a>
         </div>
         <div class="col-md-4">
             <h3>Actors</h3>
             <ul class="list-unstyled">
-                @foreach (var actor in Model.Actors)
+                @foreach (var actor in Model.MovieDetails.Actors)
                 {
                     <li><a class="" asp-area="" asp-controller="Actor" asp-action="Details" asp-route-actorId="@actor.Id">@actor.Name</a></li>
                 }
@@ -50,7 +50,7 @@
         <div class="col-md-4">
             <h3>Genres</h3>
             <ul class="list-unstyled">
-                @foreach (var genre in Model.Genres)
+                @foreach (var genre in Model.MovieDetails.Genres)
                 {
                     <li><a class="" asp-area="" asp-controller="Movie" asp-action="ByGenre" asp-route-genreId="@genre.Id">@genre.Name</a></li>
                 }
@@ -68,50 +68,60 @@
 
                     <button id="addReviewButton" class="btn btn-primary m-lg-3">Add Review</button>
                 </div>
+                
+                
+
+                @*TODO: Change All forms to asp to add validations(critic,new group.....)*@
 
                 <div id="addReviewForm" style="display: none;">
-                    <form asp-action="AddReview" id="reviewForm">
-                        <div class="form-group">
-                            <label for="Rating">Rating</label>
-                            <input type="number" class="form-control" id="Rating" name="Rating" min="1" max="10" required>
+                    <form asp-action="AddReview" id="reviewForm" method="post">
+                        <div class="mb-3">
+                            <label asp-for="@Model.AddReview.Title" class="form-label-add-edit">Title</label>
+                            <input type="text" asp-for="@Model.AddReview.Title" name="Title" class="form-control" aria-required="true" />
+                            <span asp-validation-for="@Model.AddReview.Title" class="text-danger"></span>
                         </div>
-                        <div class="form-group">
-                            <label for="Content">Content</label>
-                            <textarea class="form-control" id="Content" name="Content" rows="3" required></textarea>
+                        <div class="mb-3">
+                            <label asp-for="@Model.AddReview.Rating" class="form-label-add-edit">Rating</label>
+                            <input type="number" asp-for="@Model.AddReview.Rating" name="Review" class="form-control" aria-required="true" />
+                            <span asp-validation-for="@Model.AddReview.Rating" class="text-danger"></span>
                         </div>
-
-                        <input type="hidden" id="movieId" name="movieId" value="@Model.Id">
+                        <div class="mb-3">
+                            <label asp-for="@Model.AddReview.Content" class="form-label-add-edit">Content</label>
+                            <textarea asp-for="@Model.AddReview.Content" name="Content" class="form-control" aria-required="true" rows="3"></textarea>
+                            <span asp-validation-for="@Model.AddReview.Content" class="text-danger"></span>
+                        </div>
+                        <input type="number" asp-for="@Model.MovieDetails.Id" name="movieId" style="display: none" /> 
 
                         <button type="submit" class="btn btn-primary mt-3 mb-3">Add Review</button>
                     </form>
                 </div>
 
+               
                 <div class="card-columns">
-                    @foreach (var review in Model.Reviews)
+                    @foreach (var review in Model.MovieDetails.Reviews)
                     {
                         <div class="card">
                             <div class="card-body">
                                 <p class="card-font">@review.Content</p>
                                 <p>Rating: @review.Rating</p>
+                                <p>Title: @review.Title</p>
                                 <p>Review Date: @review.ReviewDate</p>
                                 <p>Critic: @review.CriticName</p>
 
-                                <!-- Edit Button -->
                                 @if (User.Identity!.IsAuthenticated && review.CriticId == ViewBag.CriticId )
                                 {
                                     <button class="btn btn-sm btn-primary edit-review-button" data-review-id="@review.Id">Edit</button>
                                 }
 
-                                <!-- Delete Button -->
                                 @if (User.Identity!.IsAuthenticated && review.CriticId == ViewBag.CriticId)
                                 {
                                     <button class="btn btn-sm btn-danger delete-review-button" data-review-id="@review.Id">Delete</button>
                                 }
-
-                                    <button class="btn btn-sm btn-success add-comment-button" data-review-id="@review.Id">Add Comment</button>
+                                <button class="btn btn-sm btn-primary add-like-button" data-review-id="@review.Id">👍</button>
+                                <button class="btn btn-sm btn-danger add-unlike-button" data-review-id="@review.Id">👎</button>
+                                <button class="btn btn-sm btn-success add-comment-button" data-review-id="@review.Id">Add Comment</button>
                                 
 
-                                <!-- Comments -->
                                 <div class="comments mt-3">
                                     @foreach (var comment in review.Comments)
                                     {
