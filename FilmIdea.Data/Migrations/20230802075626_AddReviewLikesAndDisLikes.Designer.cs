@@ -4,6 +4,7 @@ using FilmIdea.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FilmIdea.Data.Migrations
 {
     [DbContext(typeof(FilmIdeaDbContext))]
-    partial class FilmIdeaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230802075626_AddReviewLikesAndDisLikes")]
+    partial class AddReviewLikesAndDisLikes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
