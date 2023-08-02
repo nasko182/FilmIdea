@@ -792,3 +792,15 @@ h3.title {
     .leave-group-button:hover {
         background-color: #d8461d;
     }
+
+
+/*Review*/
+
+.card-title-font {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.fs-25 {
+    font-size: 25px !important;
+}

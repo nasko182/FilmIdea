@@ -105,7 +105,9 @@ public class MovieService : FilmIdeaService, IMovieService
                     CriticId = r.CriticId.ToString(),
                     CriticName = r.Critic.Name,
                     Rating = r.Rating,
-                    ReviewDate = r.ReviewDate.ToString("yyyy-MM-dd"),
+                    Likes = r.Likes,
+                    Dislikes = r.Dislikes,
+                    ReviewDate = r.ReviewDate.ToString("MMM dd, yyyy"),
                     Comments = r.Comments.Select(c => new CommentViewModel()
                     {
                         Content = c.Content,
@@ -263,13 +265,40 @@ public class MovieService : FilmIdeaService, IMovieService
 
         if (movie != null)
         {
-            this._dbContext.Reviews.Add(new Review()
+            await this._dbContext.Reviews.AddAsync(new Review()
             {
                 Title = model.Title,
                 MovieId = movieId,
                 Rating = model.Rating,
                 CriticId = Guid.Parse(criticId),
                 Content = model.Content,
+            });
+
+            try
+            {
+                await this._dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+    }
+
+    public async Task AddCommentAsync(AddCommentViewModel model, string reviewId,string userId)
+    {
+        var review = await this._dbContext.Reviews
+            .Where(r => r.Id.ToString() == reviewId)
+            .Include(r => r.Comments)
+            .FirstOrDefaultAsync();
+
+        if (review != null)
+        {
+            await this._dbContext.Comments.AddAsync(new Comment()
+            {
+                Content = model.Content,
+                ReviewId = Guid.Parse(reviewId),
+                WriterId = Guid.Parse(userId)
             });
 
             try

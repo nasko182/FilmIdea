@@ -1,5 +1,6 @@
 ﻿namespace FilmIdea.Services.Data.Interfaces;
 
+using Web.ViewModels.Comment;
 using Web.ViewModels.Movie;
 using Web.ViewModels.Review;
 
@@ -24,6 +25,8 @@ public interface IMovieService
     Task AddRatingAsync(int movieId, int ratingValue, string userId);
 
     Task AddReviewAsync(AddReviewViewModel model, int movieId,string userId);
+
+    Task AddCommentAsync(AddCommentViewModel model, string reviewId,string userId);
 
     Task AddToUserWatchlist(string userId, int movieId);
 

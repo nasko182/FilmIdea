@@ -11,7 +11,7 @@ public class Review
         this.Id = Guid.NewGuid();
         this.ReviewDate = DateTime.UtcNow;
         this.Likes = 0;
-        this.DisLikes = 0;
+        this.Dislikes = 0;
 
         this.Comments = new HashSet<Comment>();
     }
@@ -26,7 +26,7 @@ public class Review
     public int Likes { get; set; }
 
     [Required]
-    public int DisLikes { get; set; } 
+    public int Dislikes { get; set; } 
 
     [Required]
     [MaxLength(TitleMaxLength)]

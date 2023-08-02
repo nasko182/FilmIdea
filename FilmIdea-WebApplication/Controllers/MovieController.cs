@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
 using Services.Data.Interfaces;
+using ViewModels.Comment;
 using ViewModels.Movie;
 using ViewModels.Review;
 using static Common.NotificationMessageConstants;
@@ -126,6 +127,7 @@ public class MovieController : BaseController
         var model = new MovieAndReviewViewModel()
         {
             AddReview = new AddReviewViewModel(),
+            AddComment = new AddCommentViewModel(),
             MovieDetails = movie
         };
 
@@ -165,10 +167,27 @@ public class MovieController : BaseController
             }
             catch
             {
+                this.TempData[ErrorMessage] = "Something went wrong. Please try again later.";
+            }
+        }
+        return this.RedirectToAction("Details", "Movie", new { movieId });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddComment(AddCommentViewModel model, string reviewId,int movieId)
+    {
+
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                await this._movieService.AddCommentAsync(model, reviewId,this.GetUserId());
+            }
+            catch
+            {
                 this.TempData[ErrorMessage] = "Invalid review";
             }
 
-            return this.RedirectToAction("Details", "Movie", new { movieId });
         }
         return this.RedirectToAction("Details", "Movie", new { movieId });
     }

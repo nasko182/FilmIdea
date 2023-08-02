@@ -1,9 +1,21 @@
-﻿// JavaScript to toggle the visibility of the Add review form
-$(document).ready(function () {
+﻿$(document).ready(function () {
     const addReviewButton = $("#addReviewButton");
     const addReviewForm = $("#addReviewForm");
+    const addCommentButton = $("#addCommentButton");
+    const addCommentForm = $("#addCommentForm");
 
     addReviewButton.on("click", function () {
         addReviewForm.toggle();
     });
+
+    addReviewForm.on("submit", function () {
+        location.reload();
+    });
+    addCommentButton.click(function () {
+        addCommentForm.toggle();
+    });
+
+    //addCommentForm.on("submit", function () {
+    //    location.reload();
+    //});
 });
