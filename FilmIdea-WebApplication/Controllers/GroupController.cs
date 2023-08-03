@@ -72,7 +72,7 @@ public class GroupController : BaseController
             }
             catch (Exception)
             {
-                TempData[ErrorMessage] = UsersDontExistErrorMessage;
+                TempData[ErrorMessage] = UsersDoNotExistErrorMessage;
             }
         }
 
@@ -106,7 +106,7 @@ public class GroupController : BaseController
             }
             catch (Exception)
             {
-                TempData[ErrorMessage] = UsersDontExistErrorMessage;
+                TempData[ErrorMessage] = UsersDoNotExistErrorMessage;
             }
         }
 

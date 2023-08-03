@@ -12,6 +12,7 @@ using ViewModels.Review;
 
 using static Common.NotificationMessageConstants;
 using static Common.ExceptionMessages;
+using static Common.SuccessMessages;
 
 public class MovieController : BaseController
 {
@@ -25,7 +26,6 @@ public class MovieController : BaseController
     //TODO: Change All forms to asp to add validations(critic,new group.....)
     //TODO: Check site like user,critic and un logged
     //TODO: Hide buttons from users that don't need to see them
-    //TODO: Add success messages when add and edit also put them in class
 
     private readonly IMovieService _movieService;
 
@@ -242,6 +242,7 @@ public class MovieController : BaseController
                 this.TempData[ErrorMessage] = GeneralErrorMessage;
             }
         }
+
         return this.RedirectToAction("Details", "Movie", new { movieId });
     }
 
@@ -261,6 +262,7 @@ public class MovieController : BaseController
             }
 
         }
+
         return this.RedirectToAction("Details", "Movie", new { movieId });
     }
 
@@ -354,6 +356,7 @@ public class MovieController : BaseController
             return this.InvalidDataError("review ot movie id");
         }
 
+        TempData[SuccessMessage] = EditReviewSuccess;
         return this.RedirectToAction("Details", "Movie", new { movieId });
     }
 
@@ -364,6 +367,8 @@ public class MovieController : BaseController
         {
             var criticId = await this._criticService.GetCriticIdAsync(this.GetUserId());
             await this._movieService.DeleteReviewAsync(reviewId,criticId);
+
+            TempData[SuccessMessage] = DeleteReviewSuccess;
 
             return this.RedirectToAction(this.TempData["LastAction"]!.ToString(),
                 this.TempData["LastController"]!.ToString());
@@ -386,6 +391,7 @@ public class MovieController : BaseController
             return this.InvalidDataError("user or review id");
         }
 
+        TempData[SuccessMessage] = EditCommentSuccess;
         return this.RedirectToAction("Details", "Movie", new { movieId });
     }
 
@@ -395,6 +401,8 @@ public class MovieController : BaseController
         try
         {
             await this._movieService.DeleteCommentAsync(commentId, this.GetUserId());
+
+            TempData[SuccessMessage] = DeleteCommentSuccess;
 
             return this.RedirectToAction(this.TempData["LastAction"]!.ToString(),
                 this.TempData["LastController"]!.ToString());

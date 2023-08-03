@@ -64,6 +64,7 @@
             reviewId: reviewId
         })
         location.reload();
+        location.reload();
     });
 
     deleteCommentButton.click(function (e) {
@@ -73,6 +74,7 @@
         $.post(removeComment, {
             commentId: commentId
         })
+        location.reload();
         location.reload();
     });
 });

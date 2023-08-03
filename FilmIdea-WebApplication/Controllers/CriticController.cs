@@ -7,6 +7,7 @@ using Services.Data.Interfaces;
 using ViewModels.Critic;
 
 using static Common.NotificationMessageConstants;
+using static Common.SuccessMessages;
 using static Common.ExceptionMessages;
 
 public class CriticController : BaseController
@@ -21,7 +22,7 @@ public class CriticController : BaseController
     {
         if (await this._criticService.CriticExistByUserIdAsync(this.GetUserId()))
         {
-            TempData[ErrorMessage] = "You are already an critic";
+            TempData[ErrorMessage] = AlreadyCriticErrorMessage;
 
             return this.RedirectToAction("All", "Movie");
         }
@@ -66,6 +67,8 @@ public class CriticController : BaseController
         var photoUrl = await this._criticService.UploadPhotoAsync(model.ProfileImage, this.GetUserName());
 
         await this._criticService.CreateCriticAsync(this.GetUserId(), model, photoUrl);
+
+        TempData[SuccessMessage] = BecomeCriticSuccess;
 
         return this.RedirectToAction("All", "Movie");
     }

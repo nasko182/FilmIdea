@@ -12,7 +12,6 @@ public static class ExceptionMessages
 
     public static string InvalidDateOfBirthErrorMessage => "Please enter an valid date of birth or contact administrator";
 
-    public static string UsersDontExistErrorMessage => "One or more users don't exist.";
-
-
+    public static string UsersDoNotExistErrorMessage => "One or more users don't exist.";
+    
 }
