@@ -34,7 +34,7 @@ public class MovieService : FilmIdeaService, IMovieService
             .Include(m => m.Genres)
             .ThenInclude(g => g.Genre)
             .Include(m => m.Ratings)
-            .Include(m=>m.UsersWatchlists)
+            .Include(m => m.UsersWatchlists)
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(queryModel.Genre))
@@ -68,30 +68,51 @@ public class MovieService : FilmIdeaService, IMovieService
             _ => moviesQuery.OrderBy(m => m.Id)
         };
 
-        var userRatings = await this._dbContext.UserRatings
-            .Where(r => r.UserId.ToString() == userId)
-            .Select(r => new UserRating()
-            {
-                Rating = r.Rating,
-                MovieId = r.MovieId
-            })
-            .ToListAsync();
+        ICollection<MovieViewModel> allMovies;
+        if (userId != null)
+        {
+            var userRatings = await this._dbContext.UserRatings
+                .Where(r => r.UserId.ToString() == userId)
+                .Select(r => new UserRating()
+                {
+                    Rating = r.Rating,
+                    MovieId = r.MovieId
+                })
+                .ToListAsync();
 
-        ICollection<MovieViewModel> allMovies = await moviesQuery
-            .Skip((queryModel.CurrentPage - 1) * queryModel.MoviesPerPage)
-            .Take(queryModel.MoviesPerPage)
-            .Select(m => new MovieViewModel
-            {
-                Id = m.Id,
-                Title = m.Title,
-                CoverPhotoUrl = m.CoverImageUrl,
-                ReleaseYear = m.ReleaseDate.Year,
-                UserRating = GetRating(userRatings, m.Id),
-                Duration = m.Duration,
-                Rating = m.CalculateUserRating(),
-                HasMovieInWatchlist = HasMovieInUserWatchlist(userId, m)
-            })
-            .ToArrayAsync();
+            allMovies = await moviesQuery
+                .Skip((queryModel.CurrentPage - 1) * queryModel.MoviesPerPage)
+                .Take(queryModel.MoviesPerPage)
+                .Select(m => new MovieViewModel
+                {
+                    Id = m.Id,
+                    Title = m.Title,
+                    CoverPhotoUrl = m.CoverImageUrl,
+                    ReleaseYear = m.ReleaseDate.Year,
+                    UserRating = GetRating(userRatings, m.Id),
+                    Duration = m.Duration,
+                    Rating = m.CalculateUserRating(),
+                    HasMovieInWatchlist = HasMovieInUserWatchlist(userId, m)
+                })
+                .ToArrayAsync();
+        }
+        else
+        {
+            allMovies = await moviesQuery
+                .Skip((queryModel.CurrentPage - 1) * queryModel.MoviesPerPage)
+                .Take(queryModel.MoviesPerPage)
+                .Select(m => new MovieViewModel
+                {
+                    Id = m.Id,
+                    Title = m.Title,
+                    CoverPhotoUrl = m.CoverImageUrl,
+                    ReleaseYear = m.ReleaseDate.Year,
+                    Duration = m.Duration,
+                    Rating = m.CalculateUserRating(),
+                    HasMovieInWatchlist = HasMovieInUserWatchlist(userId, m)
+                })
+                .ToArrayAsync();
+        }
 
         var totalMovies = moviesQuery.Count();
 
@@ -115,17 +136,6 @@ public class MovieService : FilmIdeaService, IMovieService
             .Where(g => g.Id == genreId)
             .Select(g => g.Name)
             .FirstOrDefaultAsync();
-    }
-
-    public async Task<MoviesAndTopViewModel> GetAllMoviesAsync(string? userId)
-    {
-        var n = await this.GetMoviesForTopSectionAsync();
-        return new MoviesAndTopViewModel()
-        {
-            TopMovies = await this.GetMoviesForTopSectionAsync(),
-            Movies = await this.GetMoviesForAllAsync(userId)
-        };
-
     }
 
     public async Task<MoviesAndTopViewModel> GetNewMoviesAsync(string userId)
@@ -195,7 +205,7 @@ public class MovieService : FilmIdeaService, IMovieService
                     Id = mg.GenreId,
                     Name = mg.Genre.Name
                 }).ToList(),
-                Reviews = m.Reviews.OrderBy(r => r.ReviewDate).Select(r => new ReviewViewModel()
+                Reviews = m.Reviews.OrderByDescending(r => r.ReviewDate).Select(r => new ReviewViewModel()
                 {
                     Title = r.Title,
                     MovieId = r.MovieId,
@@ -207,7 +217,7 @@ public class MovieService : FilmIdeaService, IMovieService
                     Likes = r.Likes.Count,
                     Dislikes = r.Dislikes.Count,
                     ReviewDate = r.ReviewDate.ToString("MMM dd, yyyy"),
-                    Comments = r.Comments.OrderBy(c => c.CommentDate).Select(c => new CommentViewModel()
+                    Comments = r.Comments.OrderByDescending(c => c.CommentDate).Select(c => new CommentViewModel()
                     {
                         Content = c.Content,
                         CommentDate = c.CommentDate.ToString("yyyy MM dd HH-mm"),
@@ -377,17 +387,41 @@ public class MovieService : FilmIdeaService, IMovieService
             {
                 await this._dbContext.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException ex)
+            catch
             {
-                Console.WriteLine(ex.Message);
+                throw new InvalidOperationException("Invalid operation");
             }
         }
     }
 
-    public async Task AddCommentAsync(AddCommentViewModel model, string reviewId, string userId)
+    public async Task EditReviewAsync(EditReviewViewModel model, string criticId)
     {
         var review = await this._dbContext.Reviews
-            .Where(r => r.Id.ToString() == reviewId)
+            .Where(r=>r.Id.ToString()==model.ReviewId)
+            .FirstOrDefaultAsync();
+
+        if (review != null && review.CriticId.ToString()==criticId)
+        {
+
+            review.Content = model.Content;
+            review.Rating = model.Rating;
+            review.Title = model.Title;
+
+            try
+            {
+                await this._dbContext.SaveChangesAsync();
+            }
+            catch
+            {
+                throw new ArgumentException("Invalid critic or review id.");
+            }
+        }
+    }
+
+    public async Task AddCommentAsync(AddCommentViewModel model, string userId)
+    {
+        var review = await this._dbContext.Reviews
+            .Where(r => r.Id.ToString() == model.ReviewId)
             .Include(r => r.Comments)
             .FirstOrDefaultAsync();
 
@@ -396,7 +430,7 @@ public class MovieService : FilmIdeaService, IMovieService
             await this._dbContext.Comments.AddAsync(new Comment()
             {
                 Content = model.Content,
-                ReviewId = Guid.Parse(reviewId),
+                ReviewId = Guid.Parse(model.ReviewId),
                 WriterId = Guid.Parse(userId)
             });
 
@@ -408,6 +442,31 @@ public class MovieService : FilmIdeaService, IMovieService
             {
                 Console.WriteLine(ex.Message);
             }
+        }
+    }
+
+    public async Task EditCommentAsync(EditCommentViewModel model, string userId)
+    {
+        var comment = await this._dbContext.Comments
+            .Where(c => c.Id.ToString() == model.CommentId)
+            .FirstOrDefaultAsync();
+
+        if (comment != null && comment.WriterId.ToString() == userId)
+        {
+            comment.Content = model.Content;
+        }
+        else
+        {
+            throw new ArgumentException("Invalid user or comment id");
+        }
+
+        try
+        {
+            await this._dbContext.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            throw new InvalidOperationException("Unexpected error!");
         }
     }
 
@@ -527,58 +586,55 @@ public class MovieService : FilmIdeaService, IMovieService
         }
     }
 
-
-    private async Task<List<MovieViewModel>> GetMoviesForAllAsync(string? userId)
+    public async Task DeleteReviewAsync(string reviewId, string criticId)
     {
-        if (userId == null)
+        var review = await this._dbContext.Reviews
+            .Where(r => r.Id.ToString() == reviewId)
+            .FirstOrDefaultAsync();
+
+        if (review != null && review.CriticId.ToString()==criticId)
         {
-            var movies = await this._dbContext
-                .Movies
-                .Include(m => m.Ratings)
-                .Select(m => new MovieViewModel()
-                {
-                    Title = m.Title,
-                    CoverPhotoUrl = m.CoverImageUrl,
-                    Duration = m.Duration,
-                    Id = m.Id,
-                    Rating = m.CalculateUserRating(),
-                    ReleaseYear = m.ReleaseDate.Year,
-                })
+            var comments = await this._dbContext.Comments
+                .Where(c=>c.ReviewId.ToString()==reviewId)
                 .ToListAsync();
 
-            return movies;
+            this._dbContext.Comments.RemoveRange(comments);
+            this._dbContext.Reviews.Remove(review);
         }
-        else
+
+        try
         {
-            var userRatings = await this._dbContext.UserRatings
-                .Where(r => r.UserId.ToString() == userId)
-                .Select(r => new UserRating()
-                {
-                    Rating = r.Rating,
-                    MovieId = r.MovieId
-                })
-                .ToListAsync();
-
-            var movies = await this._dbContext
-                .Movies
-                .Include(m => m.Ratings)
-                .Include(m => m.UsersWatchlists)
-                .Select(m => new MovieViewModel()
-                {
-                    Title = m.Title,
-                    CoverPhotoUrl = m.CoverImageUrl,
-                    Duration = m.Duration,
-                    Id = m.Id,
-                    Rating = m.CalculateUserRating(),
-                    ReleaseYear = m.ReleaseDate.Year,
-                    HasMovieInWatchlist = HasMovieInUserWatchlist(userId!, m),
-                    UserRating = GetRating(userRatings, m.Id)
-                })
-                .ToListAsync();
-
-            return movies;
+            await this._dbContext.SaveChangesAsync();
+        }
+        catch
+        {
+            throw new ArgumentException("Invalid review or critic id");
         }
     }
+
+    public async Task DeleteCommentAsync(string commentId, string userId)
+    {
+        var comment = await this._dbContext.Comments
+            .Where(c => c.Id.ToString() == commentId)
+            .FirstOrDefaultAsync();
+
+
+        if (comment != null && comment.WriterId.ToString() == userId)
+        {
+            this._dbContext.Comments.Remove(comment);
+        }
+
+        try
+        {
+            await this._dbContext.SaveChangesAsync();
+        }
+        catch
+        {
+            throw new ArgumentException("Invalid review or critic id");
+        }
+    }
+
+
 
     private async Task<List<MovieViewModel>> GetMoviesForNewAsync(string? userId)
     {

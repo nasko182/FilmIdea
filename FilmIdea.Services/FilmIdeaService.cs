@@ -21,6 +21,10 @@ public class FilmIdeaService : IFilmIdeaService
 
     public static bool HasMovieInUserWatchlist(string userId, Movie movie)
     {
+        if (userId == null)
+        {
+            return false;
+        }
         return movie.UsersWatchlists.Any(um => um.MovieId == movie.Id && um.UserId == Guid.Parse(userId));
     }
 }

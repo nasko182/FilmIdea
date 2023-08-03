@@ -16,7 +16,8 @@ public interface IMovieService
 
     Task<string?> GetGenreNameByIdAsync(int genreId);
 
-    Task<MoviesAndTopViewModel> GetAllMoviesAsync(string? userId);
+    //TODO: check is need
+    //Task<MoviesAndTopViewModel> GetAllMoviesAsync(string? criticId);
 
     Task<MoviesAndTopViewModel> GetMoviesByGenreAsync(string userId,int genreId);
 
@@ -36,7 +37,11 @@ public interface IMovieService
 
     Task AddReviewAsync(AddReviewViewModel model, int movieId,string userId);
 
-    Task AddCommentAsync(AddCommentViewModel model, string reviewId,string userId);
+    Task EditReviewAsync(EditReviewViewModel model, string criticId);
+
+    Task AddCommentAsync(AddCommentViewModel model,string userId);
+
+    Task EditCommentAsync(EditCommentViewModel model,string userId);
 
     Task AddToUserWatchlist(string userId, int movieId);
 
@@ -45,5 +50,9 @@ public interface IMovieService
     Task AddRemoveLike(string reviewId, string userId);
 
     Task AddRemoveDislike(string reviewId, string userId);
+
+    Task DeleteReviewAsync(string reviewId,string criticId);
+
+    Task DeleteCommentAsync(string commentId,string userId);
 
 }

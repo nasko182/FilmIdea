@@ -13,15 +13,18 @@ using FilmIdea.Services.Data.Models.Movies;
 
 public class MovieController : BaseController
 {
-    //TODO: (Ask)Edit views to be more beautiful
-    //TODO: (Ask)Add soft Delete(add is active to props, set isActive when delete, add where(prop=>prop.isActive) in all queries to get valid data)
+    //TODO: Check all views and js for more todo
+    //TODO: Check all using
+    //TODO: why only first review buttons work
+    //TODO: Edit views to be more beautiful
+    //TODO: Edit Swipe View Add Link to details on movie
+    //TODO: Change All forms to asp to add validations(critic,new group.....)
     //TODO: Check site like user,critic and un logged
     //TODO: Hide buttons from users that don't need to see them
-    //TODO: Add edit and delete for Reviews and Comments
     //TODO: Add success messages when add and edit also put them in class
     //TODO: Add exception messages class
-    //TODO: Make Filter by genre in all,new,roulette and genre views(second workshop like 1h from begging)
-    //TODO: Add pagination
+    //TODO: Check all methods in service are Async
+    //TODO:Edit comment date to be in current time add the whole view style to be like person view
 
     private readonly IMovieService _movieService;
 
@@ -186,6 +189,10 @@ public class MovieController : BaseController
             AddComment = new AddCommentViewModel(),
             MovieDetails = movie
         };
+        ViewBag.UserId = this.GetUserId().ToUpper();
+
+        this.TempData["LastAction"] = this.ControllerContext.ActionDescriptor.ActionName;
+        this.TempData["LastController"] = this.ControllerContext.ActionDescriptor.ControllerName;
 
         return this.View(model);
     }
@@ -238,14 +245,14 @@ public class MovieController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddComment(AddCommentViewModel model, string reviewId, int movieId)
+    public async Task<IActionResult> AddComment(AddCommentViewModel model, int movieId)
     {
 
         if (this.ModelState.IsValid)
         {
             try
             {
-                await this._movieService.AddCommentAsync(model, reviewId, this.GetUserId());
+                await this._movieService.AddCommentAsync(model, this.GetUserId());
             }
             catch
             {
@@ -332,4 +339,69 @@ public class MovieController : BaseController
             return this.GeneralError();
         }
     }
+
+    [HttpPost]
+    public async Task<IActionResult> EditReview(EditReviewViewModel model, int movieId)
+    {
+        try
+        {
+            var criticId = await this._criticService.GetCriticIdAsync(this.GetUserId());
+            await this._movieService.EditReviewAsync(model,criticId);
+        }
+        catch
+        {
+            return this.UnexpectedDataError("critic or review id");
+        }
+
+        return this.RedirectToAction("Details", "Movie", new { movieId });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> DeleteReview(string reviewId)
+    {
+        try
+        {
+            var criticId = await this._criticService.GetCriticIdAsync(this.GetUserId());
+            await this._movieService.DeleteReviewAsync(reviewId,criticId);
+
+            return this.RedirectToAction(this.TempData["LastAction"]!.ToString(),
+                this.TempData["LastController"]!.ToString());
+        }
+        catch
+        {
+            return UnexpectedDataError("review or critic id");
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> EditComment(EditCommentViewModel model, int movieId)
+    {
+        try
+        {
+            await this._movieService.EditCommentAsync(model,this.GetUserId());
+        }
+        catch
+        {
+            return this.UnexpectedDataError("user or review id");
+        }
+
+        return this.RedirectToAction("Details", "Movie", new { movieId });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> DeleteComment(string commentId)
+    {
+        try
+        {
+            await this._movieService.DeleteCommentAsync(commentId, this.GetUserId());
+
+            return this.RedirectToAction(this.TempData["LastAction"]!.ToString(),
+                this.TempData["LastController"]!.ToString());
+        }
+        catch
+        {
+            return UnexpectedDataError("comment or user id");
+        }
+    }
+
 }
