@@ -220,7 +220,7 @@ public class MovieService : FilmIdeaService, IMovieService
                     Comments = r.Comments.OrderByDescending(c => c.CommentDate).Select(c => new CommentViewModel()
                     {
                         Content = c.Content,
-                        CommentDate = c.CommentDate.ToString("yyyy MM dd HH-mm"),
+                        CommentDate = TimeZoneInfo.ConvertTimeFromUtc(c.CommentDate, TimeZoneInfo.Local).ToString("dd.MM.yyyy HH:mm"),
                         Id = c.Id.ToString(),
                         ReviewId = c.ReviewId.ToString(),
                         WriterId = c.WriterId.ToString(),

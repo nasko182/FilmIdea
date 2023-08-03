@@ -13,9 +13,10 @@ using FilmIdea.Services.Data.Models.Movies;
 
 public class MovieController : BaseController
 {
+    //TODO Fix bug with likes and dislikes
     //TODO: Check all views and js for more todo
     //TODO: Check all using
-    //TODO: why only first review buttons work
+    //TODO: Why only first review buttons work
     //TODO: Edit views to be more beautiful
     //TODO: Edit Swipe View Add Link to details on movie
     //TODO: Change All forms to asp to add validations(critic,new group.....)
