@@ -40,7 +40,7 @@ public class SwipeService : FilmIdeaService, ISwipeService
             .ToListAsync();
     }
 
-    public async Task AddMovieToUserPassedList(string userId, int movieId)
+    public async Task AddMovieToUserPassedListAsync(string userId, int movieId)
     {
         var movie = await this._dbContext.Movies
             .Include(m => m.PassedUsers)
@@ -70,7 +70,7 @@ public class SwipeService : FilmIdeaService, ISwipeService
         }
     }
 
-    public async Task ResetPassedList(string userId)
+    public async Task ResetPassedListAsync(string userId)
     {
         var passedMovies = await this._dbContext.PassedMovies
             .Where(pm => pm.UserId == Guid.Parse(userId))

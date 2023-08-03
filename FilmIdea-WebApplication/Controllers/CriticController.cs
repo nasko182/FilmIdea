@@ -7,6 +7,7 @@ using Services.Data.Interfaces;
 using ViewModels.Critic;
 
 using static Common.NotificationMessageConstants;
+using static Common.ExceptionMessages;
 
 public class CriticController : BaseController
 {
@@ -32,21 +33,21 @@ public class CriticController : BaseController
     {
         if (await this._criticService.CriticExistByUserIdAsync(this.GetUserId()))
         {
-            TempData[ErrorMessage] = "You are already an critic";
+            TempData[ErrorMessage] = AlreadyCriticErrorMessage;
 
             return this.RedirectToAction("All", "Movie");
         }
 
-        if (model.DateOfBirth > DateTime.UtcNow.Date)
+        if (model.DateOfBirth > DateTime.UtcNow.Date || model.DateOfBirth.Year < 1900)
         {
-            TempData[ErrorMessage] = "Please enter an valid date of birth.";
+            TempData[ErrorMessage] = InvalidDateOfBirthErrorMessage;
 
             return this.RedirectToAction("Become");
         }
 
         if (model.ProfileImage == null)
         {
-            TempData[ErrorMessage] = "Add profile image";
+            TempData[ErrorMessage] = InvalidInputErrorMessage("picture");
 
             return this.RedirectToAction("Become");
         }
@@ -57,7 +58,7 @@ public class CriticController : BaseController
 
         if (!allowedMimeTypes.Contains(mimeType!))
         {
-            TempData[ErrorMessage] = "Inserted file is not an image";
+            TempData[ErrorMessage] = InvalidInputErrorMessage("image.Inserted file is not an image");
 
             return this.RedirectToAction("Become");
         }

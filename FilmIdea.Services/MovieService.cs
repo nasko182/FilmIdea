@@ -124,7 +124,7 @@ public class MovieService : FilmIdeaService, IMovieService
 
     }
 
-    public async Task<bool> IsGenreIdValid(int genreId)
+    public async Task<bool> IsGenreIdValidAsync(int genreId)
     {
         return await this._dbContext.Genres
             .AnyAsync(g => g.Id == genreId);
@@ -464,13 +464,13 @@ public class MovieService : FilmIdeaService, IMovieService
         {
             await this._dbContext.SaveChangesAsync();
         }
-        catch (Exception e)
+        catch 
         {
             throw new InvalidOperationException("Unexpected error!");
         }
     }
 
-    public async Task AddToUserWatchlist(string userId, int movieId)
+    public async Task AddToUserWatchlistAsync(string userId, int movieId)
     {
         var movie = await this._dbContext.Movies
             .Include(m => m.UsersWatchlists)
@@ -500,7 +500,7 @@ public class MovieService : FilmIdeaService, IMovieService
         }
     }
 
-    public async Task RemoveFromUserWatchlist(string userId, int movieId)
+    public async Task RemoveFromUserWatchlistAsync(string userId, int movieId)
     {
         var movie = await this._dbContext.Movies
             .Include(m => m.UsersWatchlists)
@@ -528,7 +528,7 @@ public class MovieService : FilmIdeaService, IMovieService
         }
     }
 
-    public async Task AddRemoveLike(string reviewId, string userId)
+    public async Task AddRemoveLikeAsync(string reviewId, string userId)
     {
         var like = await this._dbContext.Likes
             .FirstOrDefaultAsync(l => l.UserId.ToString() == userId && l.ReviewId.ToString() == reviewId);
@@ -557,7 +557,7 @@ public class MovieService : FilmIdeaService, IMovieService
         }
     }
 
-    public async Task AddRemoveDislike(string reviewId, string userId)
+    public async Task AddRemoveDislikeAsync(string reviewId, string userId)
     {
         var dislike = await this._dbContext.Dislikes
             .FirstOrDefaultAsync(dl => dl.UserId.ToString() == userId && dl.ReviewId.ToString() == reviewId);

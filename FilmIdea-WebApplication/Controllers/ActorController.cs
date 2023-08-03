@@ -24,7 +24,7 @@ public class ActorController : BaseController
         }
         catch
         {
-            return this.UnexpectedDataError("actor id");
+            return this.InvalidDataError("actor id");
         }
     }
 }

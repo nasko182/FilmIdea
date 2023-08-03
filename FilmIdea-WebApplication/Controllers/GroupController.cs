@@ -5,6 +5,7 @@ using Services.Data.Interfaces;
 using ViewModels.Group;
 
 using static Common.NotificationMessageConstants;
+using static Common.ExceptionMessages;
 
 public class GroupController : BaseController
 {
@@ -40,10 +41,8 @@ public class GroupController : BaseController
         }
         catch
         {
-            return this.UnexpectedDataError("genre id");
+            return this.InvalidDataError("genre id");
         }
-
-        // TODO: Implement receiving messages with singleR
     }
 
     public async Task<IActionResult> Create()
@@ -73,7 +72,7 @@ public class GroupController : BaseController
             }
             catch (Exception)
             {
-                TempData[ErrorMessage] = "One or more users don't exist.";
+                TempData[ErrorMessage] = UsersDontExistErrorMessage;
             }
         }
 
@@ -107,7 +106,7 @@ public class GroupController : BaseController
             }
             catch (Exception)
             {
-                TempData[ErrorMessage] = "One or more users don't exist.";
+                TempData[ErrorMessage] = UsersDontExistErrorMessage;
             }
         }
 
@@ -125,7 +124,7 @@ public class GroupController : BaseController
             }
             catch (Exception)
             {
-                TempData[ErrorMessage] = "Invalid Message";
+                TempData[ErrorMessage] = InvalidInputErrorMessage("message");
             }
         }
 
@@ -141,7 +140,7 @@ public class GroupController : BaseController
         }
         catch (Exception)
         {
-            TempData[ErrorMessage] = "Something went wrong.Please try again.";
+            TempData[ErrorMessage] = GeneralErrorMessage;
         }
 
         return this.RedirectToAction("All");

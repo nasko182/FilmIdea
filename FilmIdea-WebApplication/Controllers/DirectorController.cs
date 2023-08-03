@@ -24,7 +24,7 @@ public class DirectorController : BaseController
         }
         catch
         {
-            return this.UnexpectedDataError("director id");
+            return this.InvalidDataError("director id");
         }
     }
 }

@@ -3,16 +3,19 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
+using Services.Data.Models.Movies;
 using Services.Data.Interfaces;
 using ViewModels.Comment;
 using ViewModels.Movie;
 using ViewModels.Review;
 
+
 using static Common.NotificationMessageConstants;
-using FilmIdea.Services.Data.Models.Movies;
+using static Common.ExceptionMessages;
 
 public class MovieController : BaseController
 {
+    //TODO: Implement receiving messages with singleR
     //TODO Fix bug with likes and dislikes
     //TODO: Check all views and js for more todo
     //TODO: Check all using
@@ -23,9 +26,6 @@ public class MovieController : BaseController
     //TODO: Check site like user,critic and un logged
     //TODO: Hide buttons from users that don't need to see them
     //TODO: Add success messages when add and edit also put them in class
-    //TODO: Add exception messages class
-    //TODO: Check all methods in service are Async
-    //TODO:Edit comment date to be in current time add the whole view style to be like person view
 
     private readonly IMovieService _movieService;
 
@@ -103,7 +103,7 @@ public class MovieController : BaseController
     [HttpGet]
     public async Task<IActionResult> ByGenre(int genreId)
     {
-        bool isValid = await this._movieService.IsGenreIdValid(genreId);
+        bool isValid = await this._movieService.IsGenreIdValidAsync(genreId);
 
         if (!isValid)
         {
@@ -126,7 +126,7 @@ public class MovieController : BaseController
             }
         }
 
-        return this.UnexpectedDataError("genre id");
+        return this.InvalidDataError("genre id");
     }
 
     [AllowAnonymous]
@@ -167,7 +167,7 @@ public class MovieController : BaseController
         }
         catch
         {
-            TempData[ErrorMessage] = "Invalid movie id. Please try again later";
+            TempData[ErrorMessage] = InvalidInputErrorMessage("movie id");
 
             return this.RedirectToAction("Index", "Home");
         }
@@ -227,7 +227,7 @@ public class MovieController : BaseController
         {
             if (!isCritic)
             {
-                this.TempData[ErrorMessage] = "You must become an critic in order to add new review";
+                this.TempData[ErrorMessage] = UnauthorizedAccessErrorMessage;
 
                 return this.RedirectToAction("Become", "Critic");
             }
@@ -239,7 +239,7 @@ public class MovieController : BaseController
             }
             catch
             {
-                this.TempData[ErrorMessage] = "Something went wrong. Please try again later.";
+                this.TempData[ErrorMessage] = GeneralErrorMessage;
             }
         }
         return this.RedirectToAction("Details", "Movie", new { movieId });
@@ -257,7 +257,7 @@ public class MovieController : BaseController
             }
             catch
             {
-                this.TempData[ErrorMessage] = "Invalid review";
+                this.TempData[ErrorMessage] = InvalidInputErrorMessage("review id");
             }
 
         }
@@ -284,7 +284,7 @@ public class MovieController : BaseController
     {
         try
         {
-            await this._movieService.AddToUserWatchlist(this.GetUserId(), movieId);
+            await this._movieService.AddToUserWatchlistAsync(this.GetUserId(), movieId);
 
             return this.RedirectToAction(this.TempData["LastAction"]!.ToString(),
                 this.TempData["LastController"]!.ToString());
@@ -300,7 +300,7 @@ public class MovieController : BaseController
     {
         try
         {
-            await this._movieService.RemoveFromUserWatchlist(this.GetUserId(), movieId);
+            await this._movieService.RemoveFromUserWatchlistAsync(this.GetUserId(), movieId);
 
             return this.RedirectToAction(this.TempData["LastAction"]!.ToString(),
                 this.TempData["LastController"]!.ToString());
@@ -316,7 +316,7 @@ public class MovieController : BaseController
     {
         try
         {
-            await this._movieService.AddRemoveLike(reviewId, this.GetUserId());
+            await this._movieService.AddRemoveLikeAsync(reviewId, this.GetUserId());
 
             return this.RedirectToAction("Details", "Movie", new { movieId });
         }
@@ -331,7 +331,7 @@ public class MovieController : BaseController
     {
         try
         {
-            await this._movieService.AddRemoveDislike(reviewId, this.GetUserId());
+            await this._movieService.AddRemoveDislikeAsync(reviewId, this.GetUserId());
 
             return this.RedirectToAction("Details", "Movie", new { movieId });
         }
@@ -351,7 +351,7 @@ public class MovieController : BaseController
         }
         catch
         {
-            return this.UnexpectedDataError("critic or review id");
+            return this.InvalidDataError("review ot movie id");
         }
 
         return this.RedirectToAction("Details", "Movie", new { movieId });
@@ -370,7 +370,7 @@ public class MovieController : BaseController
         }
         catch
         {
-            return UnexpectedDataError("review or critic id");
+            return InvalidDataError("review or critic id");
         }
     }
 
@@ -383,7 +383,7 @@ public class MovieController : BaseController
         }
         catch
         {
-            return this.UnexpectedDataError("user or review id");
+            return this.InvalidDataError("user or review id");
         }
 
         return this.RedirectToAction("Details", "Movie", new { movieId });
@@ -401,7 +401,7 @@ public class MovieController : BaseController
         }
         catch
         {
-            return UnexpectedDataError("comment or user id");
+            return InvalidDataError("comment or user id");
         }
     }
 

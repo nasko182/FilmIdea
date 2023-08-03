@@ -33,7 +33,7 @@ public class SwipeController : BaseController
     {
         try
         {
-            await this._swipeService.ResetPassedList(this.GetUserId());
+            await this._swipeService.ResetPassedListAsync(this.GetUserId());
 
             return this.RedirectToAction("Swipe");
         }
@@ -48,7 +48,7 @@ public class SwipeController : BaseController
     {
         try
         {
-            await this._swipeService.AddMovieToUserPassedList(GetUserId(), movieId);
+            await this._swipeService.AddMovieToUserPassedListAsync(GetUserId(), movieId);
 
             return RedirectToAction(TempData["LastAction"]!.ToString(), TempData["LastController"]!.ToString());
         }

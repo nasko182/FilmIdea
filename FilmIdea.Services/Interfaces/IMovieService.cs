@@ -12,12 +12,9 @@ public interface IMovieService
 
     Task<ICollection<TopSectionMovieViewModel>> GetMoviesForTopSectionAsync();
 
-    Task<bool> IsGenreIdValid(int genreId);
+    Task<bool> IsGenreIdValidAsync(int genreId);
 
     Task<string?> GetGenreNameByIdAsync(int genreId);
-
-    //TODO: check is need
-    //Task<MoviesAndTopViewModel> GetAllMoviesAsync(string? criticId);
 
     Task<MoviesAndTopViewModel> GetMoviesByGenreAsync(string userId,int genreId);
 
@@ -43,13 +40,13 @@ public interface IMovieService
 
     Task EditCommentAsync(EditCommentViewModel model,string userId);
 
-    Task AddToUserWatchlist(string userId, int movieId);
+    Task AddToUserWatchlistAsync(string userId, int movieId);
 
-    Task RemoveFromUserWatchlist(string userId, int movieId);
+    Task RemoveFromUserWatchlistAsync(string userId, int movieId);
 
-    Task AddRemoveLike(string reviewId, string userId);
+    Task AddRemoveLikeAsync(string reviewId, string userId);
 
-    Task AddRemoveDislike(string reviewId, string userId);
+    Task AddRemoveDislikeAsync(string reviewId, string userId);
 
     Task DeleteReviewAsync(string reviewId,string criticId);
 
