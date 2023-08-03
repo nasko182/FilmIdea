@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Services.Data.Interfaces;
 using ViewModels.Group;
+
 using static Common.NotificationMessageConstants;
 
 public class GroupController : BaseController
@@ -15,27 +16,48 @@ public class GroupController : BaseController
     }
     public async Task<IActionResult> All()
     {
-        var groups = await this._groupService.GetAllGroupsAsync();
+        try
+        {
+            var groups = await this._groupService.GetAllGroupsAsync();
 
-        return View(groups);
+            return View(groups);
+        }
+        catch
+        {
+            return this.GeneralError();
+        }
     }
 
     public async Task<IActionResult> Details(string groupId)
     {
-        var group = await this._groupService.GetGroupDetailsAsync(groupId, this.GetUserId());
+        try
+        {
+            var group = await this._groupService.GetGroupDetailsAsync(groupId, this.GetUserId());
 
-        TempData["LastGroupId"] = groupId;
+            TempData["LastGroupId"] = groupId;
 
-        return View(group);
+            return View(group);
+        }
+        catch
+        {
+            return this.UnexpectedDataError("genre id");
+        }
 
         // TODO: Implement receiving messages with singleR
     }
 
     public async Task<IActionResult> Create()
     {
-        var model = await this._groupService.CreateGroupModelAsync(this.GetUserId());
+        try
+        {
+            var model = await this._groupService.CreateGroupModelAsync(this.GetUserId());
 
-        return View(model);
+            return View(model);
+        }
+        catch
+        {
+            return this.GeneralError();
+        }
     }
 
     [HttpPost]
@@ -45,7 +67,9 @@ public class GroupController : BaseController
         {
             try
             {
-                await this._groupService.CreateGroupAsync(viewModel, this.GetUserId());
+               var groupId =  await this._groupService.CreateGroupAsync(viewModel, this.GetUserId());
+
+                return RedirectToAction("Details",new{groupId});
             }
             catch (Exception)
             {
@@ -54,8 +78,6 @@ public class GroupController : BaseController
         }
 
         return this.RedirectToAction("All");
-
-        //TODO: Change users selection to be without CTRL or put message how users are selected
     }
 
     public async Task<IActionResult> Edit(string icon, string name, string userIds,string groupId)
@@ -107,9 +129,7 @@ public class GroupController : BaseController
             }
         }
 
-        return this.RedirectToAction("Details", new { groupId = groupId });
-
-        //TODO: Change users selection to be without CTRL or put message how users are selected
+        return this.RedirectToAction("Details", new { groupId });
     }
 
     [HttpPost]

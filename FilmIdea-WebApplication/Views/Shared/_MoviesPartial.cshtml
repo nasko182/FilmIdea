@@ -13,7 +13,7 @@
     @foreach (var movie in Model)
     {
         <div class="col-md-3 mb-4 movie-card" style="width: 20%;">
-            <div class="card position-relative h-100" >
+            <div class="card position-relative h-100">
                 <div style="position: relative; height: 100%;">
                     <a href="@Url.Action("Details", "Movie", new { movieId = movie.Id })">
                         <img src="@movie.CoverPhotoUrl" class="card-img-top h-100" alt="@movie.Title">
@@ -27,32 +27,32 @@
                         @hours @minutes
                     </button>
                 </div>
-               @if (User.Identity.IsAuthenticated)
-               {
-                   @if (movie.HasMovieInWatchlist)
-                   {
-                       <button class="btn btn-secondary btn-sm added-button position-absolute top-0 start-0 mt-0 ms-0" style="background-color: #00dc89;" data-movie="@movie.Id">
-                           ✔
-                       </button>
-                   }
-                   else
-                   {
-                       <button class="btn btn-secondary btn-sm watchlist-button position-absolute top-0 start-0 mt-0 ms-0" style="color: aliceblue" data-movie="@movie.Id">
-                           ➕
-                       </button>
-                   }
-                   <button class="btn btn-primary btn-sm position-absolute top-0 start-0 mt-5 ms-0 rate-button" data-toggle="modal" data-target="#rateModal" data-movie="@movie.Id">
-                       @if (movie.UserRating > 0)
-                       {
-                           <span>★ @movie.UserRating/10</span>
-                       }
-                       else
-                       {
-                           <span>✰</span>
-                       }
-                   </button>
-               }
-               <div class="card-body card-footer" style="display: none;">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    @if (movie.HasMovieInWatchlist)
+                    {
+                        <button class="btn btn-secondary btn-sm added-button position-absolute top-0 start-0 mt-0 ms-0" style="background-color: #00dc89;" data-movie="@movie.Id">
+                            ✔
+                        </button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-secondary btn-sm watchlist-button position-absolute top-0 start-0 mt-0 ms-0" style="color: aliceblue" data-movie="@movie.Id">
+                            ➕
+                        </button>
+                    }
+                    <button class="btn btn-primary btn-sm position-absolute top-0 start-0 mt-5 ms-0 rate-button" data-toggle="modal" data-target="#rateModal" data-movie="@movie.Id">
+                        @if (movie.UserRating > 0)
+                        {
+                            <span>★ @movie.UserRating/10</span>
+                        }
+                        else
+                        {
+                            <span>✰</span>
+                        }
+                    </button>
+                }
+                <div class="card-body card-footer" style="display: none;">
                     <p class="card-font"><strong>⭐</strong> @movie.Rating</p>
                     <h6 class="card-title"><strong>@movie.Title (@movie.ReleaseYear)</strong></h6>
                 </div>
@@ -100,5 +100,14 @@
     var addToUserWatchlistUrl = '@Url.Action("AddToUserWatchlist", "Movie")';
     var removeFromUserWatchlistUrl = '@Url.Action("RemoveFromUserWatchlist", "Movie")';
     var addRatingUrl = '@Url.Action("AddRating", "Movie")';
+
+    $(".movie-card").hover(
+        function () {
+            $(this).find(".card-footer").fadeIn(200);
+        },
+        function () {
+            $(this).find(".card-footer").fadeOut(200);
+        }
+    );
 </script>
 <script src="~/js/WatchlistAndRating.js"></script>

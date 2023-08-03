@@ -16,8 +16,15 @@ public class ActorController : BaseController
     [AllowAnonymous]
     public async Task<IActionResult> Details(int actorId)
     {
-        var actor = await this._actorService.GetActorDetailsAsync(actorId,this.GetUserId());
+        try
+        {
+            var actor = await this._actorService.GetActorDetailsAsync(actorId, this.GetUserId());
 
-        return View(actor);
+            return View(actor);
+        }
+        catch
+        {
+            return this.UnexpectedDataError("actor id");
+        }
     }
 }

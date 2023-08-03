@@ -9,24 +9,18 @@ using ViewModels.Movie;
 using ViewModels.Review;
 
 using static Common.NotificationMessageConstants;
-using Dropbox.Api.Users;
-using static Dropbox.Api.TeamLog.EventCategory;
-using System.Security.Principal;
 
 public class MovieController : BaseController
 {
-    //TODO: Correct all using
+    //TODO: (Ask)Edit views to be more beautiful
+    //TODO: (Ask)Add soft Delete(add is active to props, set isActive when delete, add where(prop=>prop.isActive) in all queries to get valid data)
+    //TODO: Check site like user,critic and un logged
     //TODO: Hide buttons from users that don't need to see them
-    //TODO: Make Filter by genre in all,new,roulette and genre views(second workshop like 1h from begging)
-    //TODO: Add pagination
-    //TODO: Add validations to all methods that uses data taken from view
     //TODO: Add edit and delete for Reviews and Comments
-    //TODO: Add soft Delete(add is active to props, set isActive when delete, add where(prop=>prop.isActive) in all queries to get valid data)
     //TODO: Add success messages when add and edit also put them in class
     //TODO: Add exception messages class
-    //TODO: Check site like user,critic and un logged
-    //TODO: Add try catches in all controllers 
-    //TODO: Where need can get movieId like result from service not from view
+    //TODO: Make Filter by genre in all,new,roulette and genre views(second workshop like 1h from begging)
+    //TODO: Add pagination
 
     private readonly IMovieService _movieService;
 
@@ -205,20 +199,25 @@ public class MovieController : BaseController
         };
 
         return this.View(model);
-
-        //TODO: Make add to watchlist and Add review to redirect to login page if user is not authenticated in controller?
-        //TODO: in director no rating appear
     }
 
     [HttpGet]
     public async Task<IActionResult> Watchlist()
     {
-        var movies = await this._movieService.GetWatchlistMoviesAsync(this.GetUserId());
+        try
+        {
+            var movies = await this._movieService.GetWatchlistMoviesAsync(this.GetUserId());
 
-        this.TempData["LastAction"] = this.ControllerContext.ActionDescriptor.ActionName;
-        this.TempData["LastController"] = this.ControllerContext.ActionDescriptor.ControllerName;
 
-        return this.View(movies);
+            this.TempData["LastAction"] = this.ControllerContext.ActionDescriptor.ActionName;
+            this.TempData["LastController"] = this.ControllerContext.ActionDescriptor.ControllerName;
+
+            return this.View(movies);
+        }
+        catch
+        {
+            return this.GeneralError();
+        }
     }
 
     [HttpPost]
@@ -236,9 +235,9 @@ public class MovieController : BaseController
                 return this.RedirectToAction("Become", "Critic");
             }
 
-            var criticId = await this._criticService.GetCriticIdAsync(this.GetUserId());
             try
             {
+                var criticId = await this._criticService.GetCriticIdAsync(this.GetUserId());
                 await this._movieService.AddReviewAsync(model, movieId, criticId);
             }
             catch
@@ -271,60 +270,77 @@ public class MovieController : BaseController
     [HttpPost]
     public async Task<IActionResult> AddRating(int movieId, int ratingValue)
     {
-        await this._movieService.AddRatingAsync(movieId, ratingValue, this.GetUserId());
+        try
+        {
+            await this._movieService.AddRatingAsync(movieId, ratingValue, this.GetUserId());
 
-        return this.RedirectToAction("Details", new { id = movieId });
+            return this.RedirectToAction("Details", new { id = movieId });
+        }
+        catch
+        {
+            return this.GeneralError();
+        }
     }
 
     [HttpPost]
     public async Task<IActionResult> AddToUserWatchlist(int movieId)
     {
-        await this._movieService.AddToUserWatchlist(this.GetUserId(), movieId);
+        try
+        {
+            await this._movieService.AddToUserWatchlist(this.GetUserId(), movieId);
 
-        return this.RedirectToAction(this.TempData["LastAction"]!.ToString(),
-            this.TempData["LastController"]!.ToString());
+            return this.RedirectToAction(this.TempData["LastAction"]!.ToString(),
+                this.TempData["LastController"]!.ToString());
+        }
+        catch
+        {
+            return this.GeneralError();
+        }
     }
 
     [HttpPost]
     public async Task<IActionResult> RemoveFromUserWatchlist(int movieId)
     {
-        await this._movieService.RemoveFromUserWatchlist(this.GetUserId(), movieId);
+        try
+        {
+            await this._movieService.RemoveFromUserWatchlist(this.GetUserId(), movieId);
 
-        return this.RedirectToAction(this.TempData["LastAction"]!.ToString(),
-            this.TempData["LastController"]!.ToString());
+            return this.RedirectToAction(this.TempData["LastAction"]!.ToString(),
+                this.TempData["LastController"]!.ToString());
+        }
+        catch
+        {
+            return this.GeneralError();
+        }
     }
 
     [HttpPost]
     public async Task<IActionResult> AddRemoveLike(string reviewId, int movieId)
     {
-        await this._movieService.AddRemoveLike(reviewId, this.GetUserId());
+        try
+        {
+            await this._movieService.AddRemoveLike(reviewId, this.GetUserId());
 
-        return this.RedirectToAction("Details", "Movie", new { movieId });
+            return this.RedirectToAction("Details", "Movie", new { movieId });
+        }
+        catch
+        {
+            return this.GeneralError();
+        }
     }
 
     [HttpPost]
     public async Task<IActionResult> AddRemoveDislike(string reviewId, int movieId)
     {
-        await this._movieService.AddRemoveDislike(reviewId, this.GetUserId());
+        try
+        {
+            await this._movieService.AddRemoveDislike(reviewId, this.GetUserId());
 
-        return this.RedirectToAction("Details", "Movie", new { movieId });
-    }
-
-
-
-
-    private IActionResult GeneralError()
-    {
-        this.TempData[ErrorMessage] =
-            "Unexpected error occurred! Please try again later or contact administrator";
-
-        return this.RedirectToAction(this.TempData["LastAction"]!.ToString(), this.TempData["LastController"]!.ToString());
-    }
-
-    private IActionResult UnexpectedDataError(string parameter)
-    {
-        TempData[ErrorMessage] = $"Invalid {parameter}. Please try again later";
-
-        return this.RedirectToAction("Index", "Home");
+            return this.RedirectToAction("Details", "Movie", new { movieId });
+        }
+        catch
+        {
+            return this.GeneralError();
+        }
     }
 }

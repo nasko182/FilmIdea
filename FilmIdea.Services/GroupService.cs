@@ -11,7 +11,6 @@ using Web.ViewModels.Group;
 using Web.ViewModels.Message;
 using Web.ViewModels.Movie;
 using Web.ViewModels.User;
-using static Dropbox.Api.Files.SearchMatchType;
 
 public class GroupService : FilmIdeaService, IGroupService
 {
@@ -32,7 +31,7 @@ public class GroupService : FilmIdeaService, IGroupService
             .ToListAsync();
     }
 
-    public async Task CreateGroupAsync(AddGroupViewModel model, string userId)
+    public async Task<string> CreateGroupAsync(AddGroupViewModel model, string userId)
     {
         var chat = new Chat();
         var group = new Group()
@@ -70,6 +69,8 @@ public class GroupService : FilmIdeaService, IGroupService
         }
 
         await this._dbContext.SaveChangesAsync();
+
+        return group.Id.ToString();
     }
 
     public async Task<CreateGroupViewModel> CreateGroupModelAsync(string userId)

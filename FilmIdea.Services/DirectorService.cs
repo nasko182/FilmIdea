@@ -22,6 +22,8 @@ public class DirectorService : FilmIdeaService, IDirectorService
         {
             return await this._dbContext.Directors
                 .Where(a => a.Id == directorId)
+                .Include(d=>d.Movies)
+                .ThenInclude(m=>m.Ratings)
                 .Select(a => new DirectorDetailsViewModel()
                 {
                     Id = a.Id,

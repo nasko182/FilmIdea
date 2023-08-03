@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿namespace FilmIdea.Web.Controllers;
 
-namespace FilmIdea.Web.Controllers;
+using Microsoft.AspNetCore.Mvc;
 
-using FilmIdea.Data.Models;
-using FilmIdea.Services.Data;
 using Services.Data.Interfaces;
 
 public class SwipeController : BaseController
@@ -16,26 +14,47 @@ public class SwipeController : BaseController
     }
     public async Task<IActionResult> Swipe()
     {
-        var movies = await this._swipeService.GetMoviesAsync(this.GetUserId());
+        try
+        {
+            var movies = await this._swipeService.GetMoviesAsync(this.GetUserId());
 
-        TempData["LastAction"] = ControllerContext.ActionDescriptor.ActionName;
-        TempData["LastController"] = ControllerContext.ActionDescriptor.ControllerName;
+            TempData["LastAction"] = ControllerContext.ActionDescriptor.ActionName;
+            TempData["LastController"] = ControllerContext.ActionDescriptor.ControllerName;
 
-        return View(movies);
+            return View(movies);
+        }
+        catch
+        {
+            return this.GeneralError();
+        }
     }
 
     public async Task<IActionResult> Reset()
     {
-        await this._swipeService.ResetPassedList(this.GetUserId());
+        try
+        {
+            await this._swipeService.ResetPassedList(this.GetUserId());
 
-        return this.RedirectToAction("Swipe");
+            return this.RedirectToAction("Swipe");
+        }
+        catch
+        {
+            return this.GeneralError();
+        }
     }
 
 
     public async Task<IActionResult> PassMovie(int movieId)
     {
-        await this._swipeService.AddMovieToUserPassedList(GetUserId(), movieId);
+        try
+        {
+            await this._swipeService.AddMovieToUserPassedList(GetUserId(), movieId);
 
-        return RedirectToAction(TempData["LastAction"]!.ToString(), TempData["LastController"]!.ToString());
+            return RedirectToAction(TempData["LastAction"]!.ToString(), TempData["LastController"]!.ToString());
+        }
+        catch
+        {
+            return this.GeneralError();
+        }
     }
 }

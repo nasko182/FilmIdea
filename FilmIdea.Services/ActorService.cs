@@ -2,7 +2,6 @@
 
 using FilmIdea.Data;
 using FilmIdea.Data.Models;
-using FilmIdea.Web.ViewModels.Director;
 using Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Web.ViewModels.Actor;
@@ -23,6 +22,9 @@ public class ActorService : FilmIdeaService, IActorService
         {
             return await this._dbContext.Actors
                 .Where(a => a.Id == actorId)
+                .Include(a => a.Movies)
+                .ThenInclude(ma=>ma.Movie)
+                .ThenInclude(m=>m.Ratings)
                 .Select(a => new ActorDetailsViewModel()
                 {
                     Id = a.Id,

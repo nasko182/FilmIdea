@@ -1,6 +1,5 @@
 ﻿namespace FilmIdea.Services.Data.Interfaces;
 
-using FilmIdea.Web.ViewModels.Director;
 using Web.ViewModels.Actor;
 
 public interface IActorService 

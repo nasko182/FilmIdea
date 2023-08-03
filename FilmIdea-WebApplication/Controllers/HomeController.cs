@@ -10,7 +10,7 @@ public class HomeController : BaseController
     [AllowAnonymous]
     public IActionResult Index()
     {
-        if (this.User?.Identity?.IsAuthenticated ?? false)
+        if (this.IsAuthenticated())
         {
             return this.RedirectToAction("Swipe","Swipe");
         }
