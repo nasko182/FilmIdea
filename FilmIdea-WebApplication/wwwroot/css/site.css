@@ -99,7 +99,10 @@ img.logo {
     cursor: default;
 }
 
-
+.page-btn {
+    text-decoration: unset;
+    font-size: 55px;
+}
 button.btn-login {
     width: 122px;
     background-color: white !important;

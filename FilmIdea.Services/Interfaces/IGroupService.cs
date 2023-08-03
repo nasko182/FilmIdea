@@ -6,7 +6,7 @@ public interface IGroupService
 {
     Task<List<AllGroupViewModel>> GetAllGroupsAsync();
 
-    Task<int> CreateGroupAsync(AddGroupViewModel model,string userId);
+    Task<string> CreateGroupAsync(AddGroupViewModel model,string userId);
 
     Task<CreateGroupViewModel> CreateGroupModelAsync(string userId);
 

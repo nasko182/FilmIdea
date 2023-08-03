@@ -2,7 +2,7 @@
 @model MoviesAndTopViewModel
 @{
     Layout = "_Layout";
-    ViewBag.Title = $"List of {ViewBag.GenreName} Movies";
+    ViewBag.Title = $"List of {ViewBag.GenreName} Genres";
 
     var movies = Model.TopMovies.ToList();
 }
@@ -34,7 +34,7 @@
 </div>
 
 <div class="m-5 center-container">
-    <h3>@ViewBag.GenreName Movies</h3>
+    <h3>@ViewBag.GenreName Genres</h3>
 </div>
 
 <partial name="_MoviesPartial" model="Model.Movies" />

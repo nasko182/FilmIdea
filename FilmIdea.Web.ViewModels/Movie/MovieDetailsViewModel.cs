@@ -2,6 +2,7 @@
 
 using Actor;
 using Director;
+using Genre;
 using Review;
 
 public class MovieDetailsViewModel

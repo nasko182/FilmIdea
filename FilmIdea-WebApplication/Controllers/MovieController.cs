@@ -9,6 +9,7 @@ using ViewModels.Movie;
 using ViewModels.Review;
 
 using static Common.NotificationMessageConstants;
+using FilmIdea.Services.Data.Models.Movies;
 
 public class MovieController : BaseController
 {
@@ -34,29 +35,17 @@ public class MovieController : BaseController
 
     [AllowAnonymous]
     [HttpGet]
-    public async Task<IActionResult> All()
+    public async Task<IActionResult> All([FromQuery]MoviesQueryModel queryModel)
     {
-        try
-        {
-            AllMoviesViewModel movies;
-            if (this.IsAuthenticated())
-            {
-                movies = await this._movieService.GetAllMoviesAsync(this.GetUserId());
-            }
-            else
-            {
-                movies = await this._movieService.GetAllMoviesAsync(null);
-            }
+        MoviesFilteredAndPagesServiceModel serviceModel
+            = await this._movieService.AllAsync(queryModel,this.GetUserId());
 
-            this.TempData["LastAction"] = this.ControllerContext.ActionDescriptor.ActionName;
-            this.TempData["LastController"] = this.ControllerContext.ActionDescriptor.ControllerName;
+        queryModel.Movies = serviceModel.Movies;
+        queryModel.TotalMovies = serviceModel.TotalMoviesCount;
+        queryModel.Genres = await this._movieService.GetAllGenresAsync();
+        queryModel.TopSectionMovies = await this._movieService.GetMoviesForTopSectionAsync();
 
-            return this.View(movies);
-        }
-        catch
-        {
-            return this.GeneralError();
-        }
+        return View(queryModel);
     }
 
     [AllowAnonymous]
@@ -101,7 +90,7 @@ public class MovieController : BaseController
     [HttpGet]
     public async Task<IActionResult> BrowseGenre()
     {
-        var genres = await this._movieService.GetGenresAsync();
+        var genres = await this._movieService.GetAllGenresAsync();
 
         return this.View(genres);
     }

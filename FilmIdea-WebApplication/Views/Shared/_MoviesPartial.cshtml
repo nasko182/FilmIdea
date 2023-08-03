@@ -12,11 +12,11 @@
 <div class="row">
     @foreach (var movie in Model)
     {
-        <div class="col-md-3 mb-4 movie-card" style="width: 20%;">
-            <div class="card position-relative h-100">
+        <div class="col-md-3 mb-4 movie-card" style="width: 255px;">
+            <div class="card position-relative h-100 border-0">
                 <div style="position: relative; height: 100%;">
                     <a href="@Url.Action("Details", "Movie", new { movieId = movie.Id })">
-                        <img src="@movie.CoverPhotoUrl" class="card-img-top h-100" alt="@movie.Title">
+                        <img src="@movie.CoverPhotoUrl" class="card-img-top" style="height: 355px" alt="@movie.Title">
                     </a>
                     <button class="btn-hide btn btn-secondary btn-sm position-absolute bottom-0 mt-0 ms-0 duration-button" style="right: 0;background-color: #5454548a; border: none" disabled>
                         @{
@@ -27,7 +27,7 @@
                         @hours @minutes
                     </button>
                 </div>
-                @if (User.Identity.IsAuthenticated)
+                @if (User?.Identity?.IsAuthenticated ?? false)
                 {
                     @if (movie.HasMovieInWatchlist)
                     {

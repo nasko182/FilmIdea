@@ -4,10 +4,10 @@ using FilmIdea.Data;
 using Microsoft.EntityFrameworkCore;
 
 using Interfaces;
-using Web.ViewModels.Movie;
 using Web.ViewModels.Swipe;
 using FilmIdea.Data.Models.Join_Tables;
 using FilmIdea.Data.Models;
+using Web.ViewModels.Genre;
 
 public class SwipeService : FilmIdeaService, ISwipeService
 {

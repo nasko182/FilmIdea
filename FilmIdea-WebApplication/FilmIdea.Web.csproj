@@ -20,6 +20,7 @@
     <ProjectReference Include="..\FilmIdea.Common\FilmIdea.Common.csproj" />
     <ProjectReference Include="..\FilmIdea.Data.Models\FilmIdea.Data.Models.csproj" />
     <ProjectReference Include="..\FilmIdea.Data\FilmIdea.Data.csproj" />
+    <ProjectReference Include="..\FilmIdea.Services.Data.Models\FilmIdea.Services.Data.Models.csproj" />
     <ProjectReference Include="..\FilmIdea.Services\FilmIdea.Services.Data.csproj" />
     <ProjectReference Include="..\FilmIdea.Web.Infrastucture\FilmIdea.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\FilmIdea.Web.ViewModels\FilmIdea.Web.ViewModels.csproj" />

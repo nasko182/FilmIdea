@@ -1,16 +1,22 @@
 ﻿namespace FilmIdea.Services.Data.Interfaces;
 
+using Models.Movies;
 using Web.ViewModels.Comment;
+using Web.ViewModels.Genre;
 using Web.ViewModels.Movie;
 using Web.ViewModels.Review;
 
 public interface IMovieService
 {
+    Task<MoviesFilteredAndPagesServiceModel> AllAsync(MoviesQueryModel queryModel,string userId);
+
+    Task<ICollection<TopSectionMovieViewModel>> GetMoviesForTopSectionAsync();
+
     Task<bool> IsGenreIdValid(int genreId);
 
     Task<string?> GetGenreNameByIdAsync(int genreId);
 
-    Task<AllMoviesViewModel> GetAllMoviesAsync(string? userId);
+    Task<MoviesAndTopViewModel> GetAllMoviesAsync(string? userId);
 
     Task<MoviesAndTopViewModel> GetMoviesByGenreAsync(string userId,int genreId);
 
@@ -22,7 +28,7 @@ public interface IMovieService
 
     Task<MovieViewModel> GetRouletteMovieAsync(string? userId);
 
-    Task<List<GenreViewModel>> GetGenresAsync();
+    Task<List<GenreViewModel>> GetAllGenresAsync();
 
     Task<List<MovieViewModel>> GetWatchlistMoviesAsync(string userId);
 

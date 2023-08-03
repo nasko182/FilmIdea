@@ -1,6 +1,6 @@
 ﻿namespace FilmIdea.Web.ViewModels.Swipe;
 
-using Movie;
+using Genre;
 
 public class SwipeMovieViewModel
 {

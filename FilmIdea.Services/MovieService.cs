@@ -6,10 +6,13 @@ using Interfaces;
 using FilmIdea.Data;
 using FilmIdea.Data.Models;
 using FilmIdea.Data.Models.Join_Tables;
+using Models.Movies;
 using Web.ViewModels.Actor;
 using Web.ViewModels.Comment;
 using Web.ViewModels.Director;
+using Web.ViewModels.Genre;
 using Web.ViewModels.Movie;
+using Web.ViewModels.Movie.Enums;
 using Web.ViewModels.Review;
 
 public class MovieService : FilmIdeaService, IMovieService
@@ -21,6 +24,83 @@ public class MovieService : FilmIdeaService, IMovieService
     {
         this._dbContext = dbContext;
         this._random = new Random();
+    }
+
+    public async Task<MoviesFilteredAndPagesServiceModel> AllAsync(MoviesQueryModel queryModel, string userId)
+    {
+        var moviesQuery = this._dbContext.Movies
+            .Include(m => m.Actors)
+            .ThenInclude(ma => ma.Actor)
+            .Include(m => m.Genres)
+            .ThenInclude(g => g.Genre)
+            .Include(m => m.Ratings)
+            .Include(m=>m.UsersWatchlists)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(queryModel.Genre))
+        {
+            moviesQuery = moviesQuery
+                .Where(m => m.Genres.Any(g => g.Genre.Name == queryModel.Genre));
+        }
+        if (!string.IsNullOrWhiteSpace(queryModel.SearchString))
+        {
+            string wildCard = $"%{queryModel.SearchString.ToLower()}%";
+
+            moviesQuery = moviesQuery
+                .Where(m =>
+                    EF.Functions.Like(m.Title, wildCard) ||
+                    EF.Functions.Like(m.Director.Name, wildCard) ||
+                    m.Genres.Select(g => g.Genre.Name).Any(gn => EF.Functions.Like(gn, wildCard) ||
+                    m.Actors.Select(a => a.Actor.Name).Any(a => EF.Functions.Like(a, wildCard)))
+                    );
+        }
+
+        moviesQuery = queryModel.MovieSorting switch
+        {
+            MovieSorting.Newest => moviesQuery
+                .OrderBy(m => m.ReleaseDate),
+            MovieSorting.Oldest => moviesQuery
+                .OrderByDescending(m => m.ReleaseDate),
+            MovieSorting.RatingAscending => moviesQuery
+                .OrderBy(m => m.Ratings.Average(r => r.Rating)),
+            MovieSorting.RatingDescending => moviesQuery
+                .OrderByDescending(m => m.Ratings.Average(r => r.Rating)),
+            _ => moviesQuery.OrderBy(m => m.Id)
+        };
+
+        var userRatings = await this._dbContext.UserRatings
+            .Where(r => r.UserId.ToString() == userId)
+            .Select(r => new UserRating()
+            {
+                Rating = r.Rating,
+                MovieId = r.MovieId
+            })
+            .ToListAsync();
+
+        ICollection<MovieViewModel> allMovies = await moviesQuery
+            .Skip((queryModel.CurrentPage - 1) * queryModel.MoviesPerPage)
+            .Take(queryModel.MoviesPerPage)
+            .Select(m => new MovieViewModel
+            {
+                Id = m.Id,
+                Title = m.Title,
+                CoverPhotoUrl = m.CoverImageUrl,
+                ReleaseYear = m.ReleaseDate.Year,
+                UserRating = GetRating(userRatings, m.Id),
+                Duration = m.Duration,
+                Rating = m.CalculateUserRating(),
+                HasMovieInWatchlist = HasMovieInUserWatchlist(userId, m)
+            })
+            .ToArrayAsync();
+
+        var totalMovies = moviesQuery.Count();
+
+        return new MoviesFilteredAndPagesServiceModel()
+        {
+            TotalMoviesCount = totalMovies,
+            Movies = allMovies
+        };
+
     }
 
     public async Task<bool> IsGenreIdValid(int genreId)
@@ -37,10 +117,10 @@ public class MovieService : FilmIdeaService, IMovieService
             .FirstOrDefaultAsync();
     }
 
-    public async Task<AllMoviesViewModel> GetAllMoviesAsync(string? userId)
+    public async Task<MoviesAndTopViewModel> GetAllMoviesAsync(string? userId)
     {
         var n = await this.GetMoviesForTopSectionAsync();
-        return new AllMoviesViewModel()
+        return new MoviesAndTopViewModel()
         {
             TopMovies = await this.GetMoviesForTopSectionAsync(),
             Movies = await this.GetMoviesForAllAsync(userId)
@@ -77,15 +157,19 @@ public class MovieService : FilmIdeaService, IMovieService
 
     public async Task<MovieDetailsViewModel?> GetMovieAsync(int movieId, string userId)
     {
-        var userRating = await this._dbContext.UserRatings
+        var userRatings = await this._dbContext.UserRatings
             .Where(r => r.UserId.ToString() == userId)
-            .Select(r => r.Rating)
-            .FirstOrDefaultAsync();
+            .Select(r => new UserRating()
+            {
+                Rating = r.Rating,
+                MovieId = r.MovieId
+            })
+            .ToListAsync(); ;
 
         var movie = await this._dbContext
             .Movies
             .Where(m => m.Id == movieId)
-            .Include(m=>m.Ratings)
+            .Include(m => m.Ratings)
             .Select(m => new MovieDetailsViewModel()
             {
                 Id = m.Id,
@@ -111,7 +195,7 @@ public class MovieService : FilmIdeaService, IMovieService
                     Id = mg.GenreId,
                     Name = mg.Genre.Name
                 }).ToList(),
-                Reviews = m.Reviews.OrderBy(r=>r.ReviewDate).Select(r => new ReviewViewModel()
+                Reviews = m.Reviews.OrderBy(r => r.ReviewDate).Select(r => new ReviewViewModel()
                 {
                     Title = r.Title,
                     MovieId = r.MovieId,
@@ -123,7 +207,7 @@ public class MovieService : FilmIdeaService, IMovieService
                     Likes = r.Likes.Count,
                     Dislikes = r.Dislikes.Count,
                     ReviewDate = r.ReviewDate.ToString("MMM dd, yyyy"),
-                    Comments = r.Comments.OrderBy(c=>c.CommentDate).Select(c => new CommentViewModel()
+                    Comments = r.Comments.OrderBy(c => c.CommentDate).Select(c => new CommentViewModel()
                     {
                         Content = c.Content,
                         CommentDate = c.CommentDate.ToString("yyyy MM dd HH-mm"),
@@ -135,7 +219,7 @@ public class MovieService : FilmIdeaService, IMovieService
                 }).ToList(),
                 Photos = m.Photos.Select(p => p.Url).ToList(),
                 Videos = m.Videos.Select(v => v.Url).ToList(),
-                UserRating = userRating
+                UserRating = GetRating(userRatings, movieId)
             })
             .FirstOrDefaultAsync();
 
@@ -204,7 +288,7 @@ public class MovieService : FilmIdeaService, IMovieService
         }
     }
 
-    public async Task<List<GenreViewModel>> GetGenresAsync()
+    public async Task<List<GenreViewModel>> GetAllGenresAsync()
     {
         return await this._dbContext.Genres.Select(g => new GenreViewModel()
         {
@@ -661,7 +745,7 @@ public class MovieService : FilmIdeaService, IMovieService
         }
     }
 
-    private async Task<IEnumerable<TopSectionMovieViewModel>> GetMoviesForTopSectionAsync()
+    public async Task<ICollection<TopSectionMovieViewModel>> GetMoviesForTopSectionAsync()
     {
         return await this._dbContext
             .Movies

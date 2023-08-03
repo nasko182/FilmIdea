@@ -1,16 +1,13 @@
-﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
-@model AllMoviesViewModel
+﻿@model MoviesQueryModel
 @{
-    Layout = "_Layout";
-    ViewBag.Title = "Full list of Movies";
-
-    var movies = Model.TopMovies.ToList();
+    ViewBag.Title = "Movies";
+    var topMovies = @Model.TopSectionMovies.ToList();
 }
 <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
-        @for (int i = 0; i < movies.Count(); i++)
+        @for (int i = 0; i < topMovies.Count(); i++)
         {
-            var movie = movies[i];
+            var movie = topMovies[i];
             <div class="carousel-item @(i == 0 ? "active" : string.Empty)">
                 <img class="d-block w-100" style="height:500px"
                      src="@movie.PictureUrl" alt="@movie.Title">
@@ -33,9 +30,102 @@
     </button>
 </div>
 
-<div class="m-5 center-container">
-    <h3>All Movies</h3>
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+
+<form class="mb-4" method="get">
+    <div class="row">
+        <div class="form-group col-md-2">
+            <div class="form-group">
+                <label asp-for="Genre"></label>
+                <select asp-for="Genre" class="form-control">
+                    <option value="">All</option>
+                    @foreach (var category in Model.Genres)
+                    {
+                        <option value="@category.Name">@category.Name</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="SearchString"></label>
+            <input asp-for="SearchString" class="form-control" placeholder="...">
+        </div>
+        <div class="form-group col-md-2">
+            <div class="form-group">
+                <label asp-for="MovieSorting"></label>
+                <select asp-for="MovieSorting" class="form-control">
+                    <option value="">Sort by...</option>
+                    <option value="0">Newest</option>
+                    <option value="1">Oldest</option>
+                    <option value="2">Rating Ascending</option>
+                    <option value="3">Rating Descending</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="MoviesPerPage"></label>
+            <select asp-for="MoviesPerPage" class="form-control">
+                <option value="5">5</option>
+                <option value="15">15</option>
+                <option value="25">25</option>
+                
+            </select>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group mt-4 p-2">
+                <input type="submit" value="Search" class="btn btn-primary" />
+            </div>
+        </div>
+
+    </div>
+</form>
+
+@if (!Model.Movies.Any())
+{
+    <h2 class="text-center">No movies found by the given criteria!</h2>
+}
+
+<partial name="_MoviesPartial" model="@Model.Movies.ToList()" />
+
+@{
+    var previousPage = Model.CurrentPage - 1;
+    if (previousPage < 1)
+    {
+        previousPage = 1;
+    }
+    var maxPage = Math.Ceiling((double)Model.TotalMovies / Model.MoviesPerPage);
+}
+<div class="row mb-5">
+    <div class="col-md-6 d-grid fixed-bottom gap-2 d-md-flex justify-content-md-start">
+        @if (Model.CurrentPage > 1)
+        {
+            <a class="page-btn"
+               asp-controller="Movie"
+               asp-action="All"
+               asp-route-currentPage="@previousPage"
+               asp-route-genre="@Model.Genre"
+               asp-route-searchString="@Model.SearchString"
+               asp-route-moviesPerPage="@Model.MoviesPerPage"
+               asp-route-movieSorting="@((int)Model.MovieSorting)">◀️</a>
+        }
+    </div>
+    @{
+        var shouldButtonBeDisabled = Model.CurrentPage == maxPage ||
+        !Model.Movies.Any();
+    }
+    <div class="col-md-6 d-grid w-100 fixed-bottom gap-2 d-md-flex justify-content-md-end">
+        @if (!shouldButtonBeDisabled)
+        {
+            <a class="page-btn"
+               asp-controller="Movie"
+               asp-action="All"
+               asp-route-currentPage="@(Model.CurrentPage + 1)"
+               asp-route-genre="@Model.Genre"
+               asp-route-searchString="@Model.SearchString"
+               asp-route-moviesPerPage="@Model.MoviesPerPage"
+               asp-route-movieSorting="@((int)Model.MovieSorting)">▶️</a>
+        }
+    </div>
 </div>
-
-<partial name="_MoviesPartial" model="Model.Movies"/>
-

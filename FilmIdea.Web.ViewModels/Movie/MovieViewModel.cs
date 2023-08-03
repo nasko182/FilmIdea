@@ -1,4 +1,4 @@
-﻿namespace FilmIdea.Web.ViewModels.Movie;
+﻿ namespace FilmIdea.Web.ViewModels.Movie;
 
 public class MovieViewModel
 {
