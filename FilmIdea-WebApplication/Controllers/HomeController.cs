@@ -1,7 +1,5 @@
 ﻿namespace FilmIdea.Web.Controllers;
 
-using System.Diagnostics;
-using ViewModels.Home;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,8 +17,16 @@ public class HomeController : BaseController
 
     [AllowAnonymous]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
+    public IActionResult Error(int statusCode)
     {
-        return this.View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier });
+        if (statusCode == 404 || statusCode == 400)
+        {
+            return this.View("Error404");
+        }
+        else if (statusCode == 401)
+        {
+            return this.View("Error404");
+        }
+        return this.View();
     }
 }

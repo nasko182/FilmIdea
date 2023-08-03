@@ -16,15 +16,15 @@ using static Common.SuccessMessages;
 
 public class MovieController : BaseController
 {
-    //TODO: Implement receiving messages with singleR
-    //TODO Fix bug with likes and dislikes
     //TODO: Check all views and js for more todo
     //TODO: Check all using
-    //TODO: Why only first review buttons work
-    //TODO: Edit views to be more beautiful
-    //TODO: Edit Swipe View Add Link to details on movie
-    //TODO: Change All forms to asp to add validations(critic,new group.....)
     //TODO: Check site like user,critic and un logged
+    //TODO: Change All forms to asp to add validations(critic,new group.....)
+    //TODO: Edit views to be more beautiful
+    //TODO: Edit Swipe View Add Link to details on movie pic in swipe
+    //TODO: Implement receiving messages with singleR
+    //TODO: Fix bug with likes and dislikes
+    //TODO: Why only first review buttons work
     //TODO: Hide buttons from users that don't need to see them
 
     private readonly IMovieService _movieService;
