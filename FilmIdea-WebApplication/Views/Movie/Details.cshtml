@@ -65,11 +65,12 @@
             <div class="col-md-12">
                 <div class="d-flex" style="justify-content: space-between;width: 80%;">
                     <h3>Reviews</h3>
-
+                @if (User.Identity!.IsAuthenticated)
+                {
                     <button id="addReviewButton" class="btn">
-                        <strong style="color: #2776ff;
-    font-size: 17px;">+ Review</strong>
+                        <strong style="color: #2776ff; font-size: 17px;">+ Review</strong>
                     </button>
+                }
                 </div>
 
 
@@ -129,12 +130,12 @@
                                         <button class="btn btn-sm btn-success" id="addCommentButton" data-review-id="@review.Id">Add Comment</button>
                                     }
 
-                                    @if (User.Identity!.IsAuthenticated && review.CriticId.ToLower() == ViewBag.CriticId)
+                                    @if (User.Identity.IsAuthenticated && review.CriticId.ToLower() == ViewBag.CriticId)
                                     {
                                         <button class="btn btn-sm btn-primary" id="editReviewButton" data-review-id="@review.Id">Edit</button>
                                     }
 
-                                    @if (User.Identity!.IsAuthenticated && review.CriticId.ToLower() == ViewBag.CriticId)
+                                    @if (User.Identity.IsAuthenticated && review.CriticId.ToLower() == ViewBag.CriticId)
                                     {
                                         <button class="btn btn-sm btn-danger" id="deleteReviewButton" data-review-id="@review.Id">Delete</button>
                                     }

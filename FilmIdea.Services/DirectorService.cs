@@ -16,12 +16,12 @@ public class DirectorService : FilmIdeaService, IDirectorService
         this._dbContext = dbContext;
     }
 
-    public async Task<DirectorDetailsViewModel?> GetDirectorDetailsAsync(int diretorId,string? userId)
+    public async Task<DirectorDetailsViewModel?> GetDirectorDetailsAsync(int directorId,string? userId)
     {
         if (userId == null)
         {
             return await this._dbContext.Directors
-                .Where(a => a.Id == diretorId)
+                .Where(a => a.Id == directorId)
                 .Select(a => new DirectorDetailsViewModel()
                 {
                     Id = a.Id,
@@ -55,7 +55,7 @@ public class DirectorService : FilmIdeaService, IDirectorService
                 .ToListAsync();
 
             return await this._dbContext.Directors
-                .Where(a => a.Id == diretorId)
+                .Where(a => a.Id == directorId)
                 .Include(a=>a.Movies)
                 .ThenInclude(m=>m.Ratings)
                 .Include(a => a.Movies)

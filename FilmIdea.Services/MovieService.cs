@@ -23,6 +23,20 @@ public class MovieService : FilmIdeaService, IMovieService
         this._random = new Random();
     }
 
+    public async Task<bool> IsGenreIdValid(int genreId)
+    {
+        return await this._dbContext.Genres
+            .AnyAsync(g => g.Id == genreId);
+    }
+
+    public async Task<string?> GetGenreNameByIdAsync(int genreId)
+    {
+        return await this._dbContext.Genres
+            .Where(g => g.Id == genreId)
+            .Select(g => g.Name)
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<AllMoviesViewModel> GetAllMoviesAsync(string? userId)
     {
         var n = await this.GetMoviesForTopSectionAsync();

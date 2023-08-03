@@ -7,65 +7,100 @@ using Services.Data.Interfaces;
 using ViewModels.Comment;
 using ViewModels.Movie;
 using ViewModels.Review;
+
 using static Common.NotificationMessageConstants;
+using Dropbox.Api.Users;
+using static Dropbox.Api.TeamLog.EventCategory;
+using System.Security.Principal;
 
 public class MovieController : BaseController
 {
-    //TODO: Make Filter by genre in all,new,roulette and genre views
-    //TODO: Check Site like not logged user
+    //TODO: Correct all using
+    //TODO: Hide buttons from users that don't need to see them
+    //TODO: Make Filter by genre in all,new,roulette and genre views(second workshop like 1h from begging)
+    //TODO: Add pagination
+    //TODO: Add validations to all methods that uses data taken from view
+    //TODO: Add edit and delete for Reviews and Comments
+    //TODO: Add soft Delete(add is active to props, set isActive when delete, add where(prop=>prop.isActive) in all queries to get valid data)
+    //TODO: Add success messages when add and edit also put them in class
+    //TODO: Add exception messages class
+    //TODO: Check site like user,critic and un logged
+    //TODO: Add try catches in all controllers 
+    //TODO: Where need can get movieId like result from service not from view
 
     private readonly IMovieService _movieService;
 
     private readonly ICriticService _criticService;
 
-    public MovieController(IMovieService movieService,ICriticService criticService)
+    public MovieController(IMovieService movieService, ICriticService criticService)
     {
         this._movieService = movieService;
-        this._criticService= criticService;
+        this._criticService = criticService;
     }
 
     [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> All()
     {
-        AllMoviesViewModel movies;
-        if (this.IsAuthenticated())
+        try
         {
-            movies = await this._movieService.GetAllMoviesAsync(this.GetUserId());
+            AllMoviesViewModel movies;
+            if (this.IsAuthenticated())
+            {
+                movies = await this._movieService.GetAllMoviesAsync(this.GetUserId());
+            }
+            else
+            {
+                movies = await this._movieService.GetAllMoviesAsync(null);
+            }
+
+            this.TempData["LastAction"] = this.ControllerContext.ActionDescriptor.ActionName;
+            this.TempData["LastController"] = this.ControllerContext.ActionDescriptor.ControllerName;
+
+            return this.View(movies);
         }
-        else
+        catch
         {
-            movies = await this._movieService.GetAllMoviesAsync(null);
+            return this.GeneralError();
         }
-
-        TempData["LastAction"] = ControllerContext.ActionDescriptor.ActionName;
-        TempData["LastController"] = ControllerContext.ActionDescriptor.ControllerName;
-
-        return View(movies);
     }
 
     [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> New()
     {
-        var movies = await this._movieService.GetNewMoviesAsync(GetUserId());
+        try
+        {
+            var movies = await this._movieService.GetNewMoviesAsync(this.GetUserId());
 
-        TempData["LastAction"] = ControllerContext.ActionDescriptor.ActionName;
-        TempData["LastController"] = ControllerContext.ActionDescriptor.ControllerName;
+            this.TempData["LastAction"] = this.ControllerContext.ActionDescriptor.ActionName;
+            this.TempData["LastController"] = this.ControllerContext.ActionDescriptor.ControllerName;
 
-        return View(movies);
+            return this.View(movies);
+        }
+        catch
+        {
+            return this.GeneralError();
+        }
     }
 
     [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> Top250()
     {
-        var movies = await this._movieService.GetTop250MoviesAsync(GetUserId());
+        try
+        {
+            var movies = await this._movieService.GetTop250MoviesAsync(this.GetUserId());
 
-        TempData["LastAction"] = ControllerContext.ActionDescriptor.ActionName;
-        TempData["LastController"] = ControllerContext.ActionDescriptor.ControllerName;
+            this.TempData["LastAction"] = this.ControllerContext.ActionDescriptor.ActionName;
+            this.TempData["LastController"] = this.ControllerContext.ActionDescriptor.ControllerName;
 
-        return View(movies);
+            return this.View(movies);
+        }
+        catch
+        {
+            return this.GeneralError();
+        }
     }
 
     [AllowAnonymous]
@@ -79,50 +114,88 @@ public class MovieController : BaseController
 
     [AllowAnonymous]
     [HttpGet]
-    public async Task<IActionResult> ByGenre(int genreId,string genreName)
+    public async Task<IActionResult> ByGenre(int genreId)
     {
-        var movies = await this._movieService.GetMoviesByGenreAsync(GetUserId(),genreId);
+        bool isValid = await this._movieService.IsGenreIdValid(genreId);
 
-        TempData["LastAction"] = ControllerContext.ActionDescriptor.ActionName;
-        TempData["LastController"] = ControllerContext.ActionDescriptor.ControllerName;
+        if (!isValid)
+        {
+            try
+            {
+                var movies = await this._movieService.GetMoviesByGenreAsync(this.GetUserId(), genreId);
 
-        ViewBag.GenreName = genreName;
-        
-        return View(movies);
+                this.TempData["LastAction"] = this.ControllerContext.ActionDescriptor.ActionName;
+                this.TempData["LastController"] = this.ControllerContext.ActionDescriptor.ControllerName;
+
+                var genreName = await this._movieService.GetGenreNameByIdAsync(genreId);
+
+                this.ViewBag.GenreName = genreName!;
+
+                return this.View(movies);
+            }
+            catch
+            {
+                this.GeneralError();
+            }
+        }
+
+        return this.UnexpectedDataError("genre id");
     }
 
     [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> Roulette()
     {
-        MovieViewModel movie;
-        if (this.IsAuthenticated())
+        try
         {
-            movie = await this._movieService.GetRouletteMovieAsync(GetUserId());
+            MovieViewModel movie;
+            if (this.IsAuthenticated())
+            {
+                movie = await this._movieService.GetRouletteMovieAsync(this.GetUserId());
+            }
+            else
+            {
+                movie = await this._movieService.GetRouletteMovieAsync(null);
+            }
+
+            this.TempData["LastAction"] = this.ControllerContext.ActionDescriptor.ActionName;
+            this.TempData["LastController"] = this.ControllerContext.ActionDescriptor.ControllerName;
+
+            return this.View(movie);
         }
-        else
+        catch
         {
-            movie = await this._movieService.GetRouletteMovieAsync(null);
+            return this.GeneralError();
         }
-
-        TempData["LastAction"] = ControllerContext.ActionDescriptor.ActionName;
-        TempData["LastController"] = ControllerContext.ActionDescriptor.ControllerName;
-
-        return View(movie);
     }
 
     [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> Details(int movieId)
     {
-        var movie = await this._movieService.GetMovieAsync(movieId, GetUserId());
+        MovieDetailsViewModel? movie;
+        try
+        {
+            movie = await this._movieService.GetMovieAsync(movieId, this.GetUserId());
+        }
+        catch
+        {
+            TempData[ErrorMessage] = "Invalid movie id. Please try again later";
+
+            return this.RedirectToAction("Index", "Home");
+        }
 
         if (movie == null)
         {
-            return RedirectToAction("All");
+            return this.RedirectToAction("All");
         }
 
-        ViewBag.CriticId = await this._criticService.GetCriticIdAsync(this.GetUserId());
+        var isCriticExist = await this._criticService.CriticExistByUserIdAsync(this.GetUserId());
+
+        if (isCriticExist)
+        {
+            this.ViewBag.CriticId = await this._criticService.GetCriticIdAsync(this.GetUserId());
+        }
 
         var model = new MovieAndReviewViewModel()
         {
@@ -131,33 +204,36 @@ public class MovieController : BaseController
             MovieDetails = movie
         };
 
-        return View(model);
+        return this.View(model);
+
+        //TODO: Make add to watchlist and Add review to redirect to login page if user is not authenticated in controller?
+        //TODO: in director no rating appear
     }
 
     [HttpGet]
     public async Task<IActionResult> Watchlist()
     {
-        var movies = await this._movieService.GetWatchlistMoviesAsync(GetUserId());
+        var movies = await this._movieService.GetWatchlistMoviesAsync(this.GetUserId());
 
-        TempData["LastAction"] = ControllerContext.ActionDescriptor.ActionName;
-        TempData["LastController"] = ControllerContext.ActionDescriptor.ControllerName;
+        this.TempData["LastAction"] = this.ControllerContext.ActionDescriptor.ActionName;
+        this.TempData["LastController"] = this.ControllerContext.ActionDescriptor.ControllerName;
 
-        return View(movies);
+        return this.View(movies);
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddReview(AddReviewViewModel model,int movieId)
+    public async Task<IActionResult> AddReview(AddReviewViewModel model, int movieId)
     {
-        bool isCritic = 
+        bool isCritic =
             await this._criticService.CriticExistByUserIdAsync(this.GetUserId());
 
-        if (ModelState.IsValid)
+        if (this.ModelState.IsValid)
         {
             if (!isCritic)
             {
                 this.TempData[ErrorMessage] = "You must become an critic in order to add new review";
 
-                return RedirectToAction("Become", "Critic");
+                return this.RedirectToAction("Become", "Critic");
             }
 
             var criticId = await this._criticService.GetCriticIdAsync(this.GetUserId());
@@ -174,14 +250,14 @@ public class MovieController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddComment(AddCommentViewModel model, string reviewId,int movieId)
+    public async Task<IActionResult> AddComment(AddCommentViewModel model, string reviewId, int movieId)
     {
 
-        if (ModelState.IsValid)
+        if (this.ModelState.IsValid)
         {
             try
             {
-                await this._movieService.AddCommentAsync(model, reviewId,this.GetUserId());
+                await this._movieService.AddCommentAsync(model, reviewId, this.GetUserId());
             }
             catch
             {
@@ -195,25 +271,27 @@ public class MovieController : BaseController
     [HttpPost]
     public async Task<IActionResult> AddRating(int movieId, int ratingValue)
     {
-        await this._movieService.AddRatingAsync(movieId, ratingValue, GetUserId());
+        await this._movieService.AddRatingAsync(movieId, ratingValue, this.GetUserId());
 
-        return RedirectToAction("Details", new { id = movieId });
+        return this.RedirectToAction("Details", new { id = movieId });
     }
 
     [HttpPost]
     public async Task<IActionResult> AddToUserWatchlist(int movieId)
     {
-        await this._movieService.AddToUserWatchlist(GetUserId(),movieId);
+        await this._movieService.AddToUserWatchlist(this.GetUserId(), movieId);
 
-        return RedirectToAction(TempData["LastAction"]!.ToString(), TempData["LastController"]!.ToString());
+        return this.RedirectToAction(this.TempData["LastAction"]!.ToString(),
+            this.TempData["LastController"]!.ToString());
     }
 
     [HttpPost]
     public async Task<IActionResult> RemoveFromUserWatchlist(int movieId)
     {
-        await this._movieService.RemoveFromUserWatchlist(GetUserId(), movieId);
+        await this._movieService.RemoveFromUserWatchlist(this.GetUserId(), movieId);
 
-        return RedirectToAction(TempData["LastAction"]!.ToString(), TempData["LastController"]!.ToString());
+        return this.RedirectToAction(this.TempData["LastAction"]!.ToString(),
+            this.TempData["LastController"]!.ToString());
     }
 
     [HttpPost]
@@ -221,7 +299,7 @@ public class MovieController : BaseController
     {
         await this._movieService.AddRemoveLike(reviewId, this.GetUserId());
 
-        return RedirectToAction("Details", "Movie", new { movieId });
+        return this.RedirectToAction("Details", "Movie", new { movieId });
     }
 
     [HttpPost]
@@ -229,6 +307,24 @@ public class MovieController : BaseController
     {
         await this._movieService.AddRemoveDislike(reviewId, this.GetUserId());
 
-        return RedirectToAction("Details", "Movie", new { movieId });
+        return this.RedirectToAction("Details", "Movie", new { movieId });
+    }
+
+
+
+
+    private IActionResult GeneralError()
+    {
+        this.TempData[ErrorMessage] =
+            "Unexpected error occurred! Please try again later or contact administrator";
+
+        return this.RedirectToAction(this.TempData["LastAction"]!.ToString(), this.TempData["LastController"]!.ToString());
+    }
+
+    private IActionResult UnexpectedDataError(string parameter)
+    {
+        TempData[ErrorMessage] = $"Invalid {parameter}. Please try again later";
+
+        return this.RedirectToAction("Index", "Home");
     }
 }

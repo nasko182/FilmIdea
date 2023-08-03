@@ -71,7 +71,5 @@ public class Program
         app.MapRazorPages();
 
         app.Run();
-
-        //TODO: Remove review and comment seed after review logic is implemented
     }
 }

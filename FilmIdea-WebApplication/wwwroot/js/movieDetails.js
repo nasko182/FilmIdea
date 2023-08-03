@@ -5,6 +5,7 @@
     const addCommentForm = $("#addCommentForm");
     const addLikeButton = $("#addLikeButton");
     const addDislikeButton = $("#addDislikeButton");
+    const deleteReviewButton = $("#deleteReviewButton");
     var movieId = $('#movieId').data('movie');
     var reviewId = $('#reviewId').data('review');
 
@@ -37,6 +38,26 @@
             movieId: movieId
         })
         location.reload();
+    });
 
+    addDislikeButton.click(function (e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        $.post(addRemoveDislike, {
+            reviewId: reviewId,
+            movieId: movieId
+        })
+        location.reload();
+    });
+
+    deleteReviewButton.click(function (e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        $.post(RemoveReview, {
+            reviewId: reviewId
+        })
+        location.reload();
     });
 });

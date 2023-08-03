@@ -9,7 +9,7 @@
     @foreach (var genre in Model)
     {
         <div class="genre-card">
-            <a href="@Url.Action("ByGenre", "Movie", new { genreId = genre.Id, genreName = genre.Name })" class="genre-link">
+            <a href="@Url.Action("ByGenre", "Movie", new { genreId = genre.Id})" class="genre-link">
                 <div class="genre-icon">
                         @if (genre.Name == "Action")
                         {

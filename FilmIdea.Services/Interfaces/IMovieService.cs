@@ -1,11 +1,16 @@
 ﻿namespace FilmIdea.Services.Data.Interfaces;
 
+using FilmIdea.Data.Models;
 using Web.ViewModels.Comment;
 using Web.ViewModels.Movie;
 using Web.ViewModels.Review;
 
-public interface IMovieService 
+public interface IMovieService
 {
+    Task<bool> IsGenreIdValid(int genreId);
+
+    Task<string?> GetGenreNameByIdAsync(int genreId);
+
     Task<AllMoviesViewModel> GetAllMoviesAsync(string? userId);
 
     Task<MoviesAndTopViewModel> GetMoviesByGenreAsync(string userId,int genreId);
