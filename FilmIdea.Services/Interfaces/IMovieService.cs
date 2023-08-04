@@ -22,7 +22,7 @@ public interface IMovieService
 
     Task<MoviesAndTopViewModel> GetTop250MoviesAsync(string userId);
 
-    Task<MovieDetailsViewModel?> GetMovieAsync(int movieId, string userId);
+    Task<MovieDetailsViewModel?> GetMovieDetailsAsync(int movieId, string userId);
 
     Task<MovieViewModel> GetRouletteMovieAsync(string? userId);
 
@@ -51,5 +51,11 @@ public interface IMovieService
     Task DeleteReviewAsync(string reviewId,string criticId);
 
     Task DeleteCommentAsync(string commentId,string userId);
+
+    Task<bool> IsCriticOwnerOfReview(string? criticId, string? reviewId);
+
+    Task<bool> IsUserOwnerOfComment(string? userId, string? commentId);
+
+    Task<int> GetMovieIdByReviewId(string? reviewId);
 
 }

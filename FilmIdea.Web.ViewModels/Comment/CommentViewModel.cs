@@ -13,4 +13,6 @@ public class CommentViewModel
     public string WriterName { get; set; } = null!;
 
     public string ReviewId { get; set; } = null!;
+
+    public AddCommentViewModel AddComment { get; set; } = null!;
 }

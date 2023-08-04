@@ -4,7 +4,7 @@
 @inject ICriticService CriticService
 @{
     var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-    bool isCritic = await CriticService.CriticExistByUserIdAsync(userId!);
+    bool isCritic = await CriticService.CriticExistByUserIdAsync(userId);
 
     var email = User.Identity?.Name;
     var username = email?.Substring(0, email.IndexOf("@"));

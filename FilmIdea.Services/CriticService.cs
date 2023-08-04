@@ -22,23 +22,23 @@ public class CriticService : FilmIdeaService, ICriticService
 
         this._dropboxClient = new DropboxClient("Paste Dropbox token here");
     }
-    public async Task<bool> CriticExistByUserIdAsync(string userId)
+    public async Task<bool> CriticExistByUserIdAsync(string? userId)
     {
         return await this._dbContext
             .Critics
             .AnyAsync(c => c.UserId.ToString() == userId);
     }
 
-    public async Task<string> GetCriticIdAsync(string userid)
+    public async Task<string?> GetCriticIdAsync(string? userid)
     {
-        Critic critic = await this._dbContext.Critics
+        Critic? critic = await this._dbContext.Critics
             .Where(c => c.UserId.ToString() == userid)
-            .FirstAsync();
+            .FirstOrDefaultAsync();
 
-        return critic.Id.ToString();
+        return critic?.Id.ToString();
     }
 
-    public async Task<string> UploadPhotoAsync(IFormFile imageFile,string userName)
+    public async Task<string> UploadPhotoAsync(IFormFile imageFile, string userName)
     {
         var fileName = userName + "_ProfileImage";
         var path = "/Critics/" + fileName;
@@ -71,7 +71,7 @@ public class CriticService : FilmIdeaService, ICriticService
         return modifiedUrl;
     }
 
-    public async Task CreateCriticAsync(string userId, BecomeCriticViewModel model,string photoUrl)
+    public async Task CreateCriticAsync(string userId, BecomeCriticViewModel model, string photoUrl)
     {
         var critic = new Critic()
         {

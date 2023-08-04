@@ -28,5 +28,9 @@ public class ReviewViewModel
 
     public string CriticName { get; set; } = null!;
 
+    public AddReviewViewModel AddReview { get; set; } = null!;
+
+    public AddCommentViewModel AddComment { get; set; } = null!;
+
     public ICollection<CommentViewModel> Comments { get; set; }
 }

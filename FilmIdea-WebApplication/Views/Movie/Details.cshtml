@@ -1,12 +1,14 @@
 ﻿@using FilmIdea.Services.Data.Interfaces
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @inject ICriticService CriticService
+@inject IMovieService MovieService
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 
 @model MovieAndReviewViewModel
 @{
     var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-    bool isCritic = await CriticService.CriticExistByUserIdAsync(userId!);
+    var isCritic = await CriticService.CriticExistByUserIdAsync(userId);
+    var criticId = await CriticService.GetCriticIdAsync(userId!);
 
     ViewBag.Title = Model.MovieDetails.Title;
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -107,17 +109,21 @@
                 <div class="card-columns">
                     @foreach (var review in Model.MovieDetails.Reviews)
                     {
+                        
+                            var isCriticOwner = await MovieService.IsCriticOwnerOfReview(criticId, @review.Id);
+
                         <div class="card mb-2" style="width: 80%">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
                                     <p class="justify-content-start"><strong>@review.CriticName</strong> - @review.ReviewDate</p>
-                                    @if (User.Identity.IsAuthenticated && review.CriticId.ToLower() == ViewBag.CriticId)
+                                    @if (isCriticOwner)
                                     {
-                                        <button class="btn justify-content-end" id="editReviewButton" data-review-id="@review.Id">Edit ✎</button>
+                                        <button class="btn justify-content-end editReviewButton" data-review-id="@review.Id">Edit ✎</button>
                                     }
                                 </div>
-                                <div id="editReviewForm" style="display: none;">
-                                    <form asp-action="EditReview" id="editReviewForm" method="post">
+                                <div class="editReviewForm"  data-review-id="@review.Id"
+                                    style="display: none;">
+                                    <form asp-action="EditReview" method="post">
                                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                         <div class="mb-3">
                                             <label asp-for="@Model.AddReview.Title" class="form-label-add-edit">Title</label>
@@ -159,19 +165,19 @@
                                         <button id="addDislikeButton">👎</button>
                                         <p>@review.Dislikes</p>
 
-                                        <button class="btn btn-sm btn-success d-flex justify-content-end" id="addCommentButton" data-review-id="@review.Id">Add Comment</button>
+                                        <button class="btn btn-sm btn-success d-flex justify-content-end addCommentButton" data-review-id="@review.Id">Add Comment</button>
 
                                     }
 
                                     <div class=" d-flex justify-content-end">
-                                        @if (User.Identity.IsAuthenticated && review.CriticId.ToLower() == ViewBag.CriticId)
+                                        @if (isCriticOwner)
                                         {
-                                            <button class="btn btn-sm btn-danger" id="deleteReviewButton" data-review-id="@review.Id">Delete</button>
+                                            <button class="btn btn-sm btn-danger deleteReviewButton" data-review-id="@review.Id">Delete</button>
                                         }
                                     </div>
                                 </div>
 
-                                <div id="addCommentForm" style="display: none;">
+                                <div class="addCommentForm" data-review-id="@review.Id" style="display: none;">
                                     <form asp-action="AddComment" method="post">
                                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
@@ -188,20 +194,20 @@
                                     </form>
                                 </div>
 
-
                                 <div class="comments mt-3">
                                     @foreach (var comment in review.Comments)
                                     {
+                                        var isUserOwner = await MovieService.IsUserOwnerOfComment(userId, comment.Id);
                                         <div class="card bg-light mb-2">
                                             <div class="card-body">
                                                 <div class="d-flex justify-content-between">
                                                     <p class="small mb-0 text-muted justify-content-start"><strong>@comment.WriterName</strong> - @comment.CommentDate</p>
-                                                    @if (User.Identity.IsAuthenticated && comment.WriterId == ViewBag.UserId)
+                                                    @if (isUserOwner)
                                                     {
-                                                        <button class="btn justify-content-end" id="editCommentButton">Edit ✎</button>
+                                                        <button class="btn justify-content-end editCommentButton" data-comment-id="@comment.Id">Edit ✎</button>
                                                     }
                                                 </div>
-                                                <div id="editCommentForm" style="display: none;">
+                                                <div class="editCommentForm" data-comment-id="@comment.Id" style="display: none;">
                                                     <form asp-action="EditComment" method="post">
                                                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
@@ -220,10 +226,10 @@
                                                 </div>
                                                 <hr />
                                                 <p class="card-text d-flex justify-content-start">@comment.Content</p>
-                                                @if(User.Identity.IsAuthenticated && @comment.WriterId==ViewBag.UserId)
+                                                @if(isUserOwner)
                                                 {
                                                     <div id="commentId" data-comment='@Html.Raw(@comment.Id)'></div>
-                                                    <button type="submit" class="btn btn-danger d-flex justify-content-end" id="deleteCommentButton">Delete</button>
+                                                    <button type="submit" class="btn btn-danger d-flex justify-content-end] deleteCommentButton" data-comment-id="@comment.Id">Delete</button>
                                                 }
                                             </div>
                                         </div>

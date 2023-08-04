@@ -16,9 +16,11 @@ using static Common.SuccessMessages;
 
 public class MovieController : BaseController
 {
-    //TODO: Security from(CSRF,Parameter-tampering using guid, )
+    //TODO: Security from(CSRF _|_,Parameter-tampering using guid, )
     //TODO: Implement receiving messages with singleR
     //TODO: Fix bug with likes and dislikes Web API
+    //TODO: Fix bug with reload page in details Deleting Edit Like don't reload properly 
+    //TODO: Check for buttons to hide from users that don't need to see them
     //TODO: Check all views and js for more todo
     //TODO: Check all using
     //TODO: Check site like user,critic and un logged
@@ -26,8 +28,7 @@ public class MovieController : BaseController
     //TODO: Make manage button to be size of the username
     //TODO: Edit views to be more beautiful
     //TODO: Edit Swipe View Add Link to details on movie pic in swipe
-    //TODO: Why only first review buttons work
-    //TODO: Hide buttons from users that don't need to see them
+    //TODO: Edit in view Details userId(1:33m)
 
     private readonly IMovieService _movieService;
 
@@ -41,10 +42,10 @@ public class MovieController : BaseController
 
     [AllowAnonymous]
     [HttpGet]
-    public async Task<IActionResult> All([FromQuery]MoviesQueryModel queryModel)
+    public async Task<IActionResult> All([FromQuery] MoviesQueryModel queryModel)
     {
         MoviesFilteredAndPagesServiceModel serviceModel
-            = await this._movieService.AllAsync(queryModel,this.GetUserId());
+            = await this._movieService.AllAsync(queryModel, this.GetUserId());
 
         queryModel.Movies = serviceModel.Movies;
         queryModel.TotalMovies = serviceModel.TotalMoviesCount;
@@ -165,7 +166,7 @@ public class MovieController : BaseController
         MovieDetailsViewModel? movie;
         try
         {
-            movie = await this._movieService.GetMovieAsync(movieId, this.GetUserId());
+            movie = await this._movieService.GetMovieDetailsAsync(movieId, this.GetUserId());
         }
         catch
         {
@@ -181,18 +182,12 @@ public class MovieController : BaseController
 
         var isCriticExist = await this._criticService.CriticExistByUserIdAsync(this.GetUserId());
 
-        if (isCriticExist)
-        {
-            this.ViewBag.CriticId = await this._criticService.GetCriticIdAsync(this.GetUserId());
-        }
-
         var model = new MovieAndReviewViewModel()
         {
             AddReview = new AddReviewViewModel(),
             AddComment = new AddCommentViewModel(),
             MovieDetails = movie
         };
-        ViewBag.UserId = this.GetUserId().ToUpper();
 
         this.TempData["LastAction"] = this.ControllerContext.ActionDescriptor.ActionName;
         this.TempData["LastController"] = this.ControllerContext.ActionDescriptor.ControllerName;
@@ -237,7 +232,7 @@ public class MovieController : BaseController
             try
             {
                 var criticId = await this._criticService.GetCriticIdAsync(this.GetUserId());
-                await this._movieService.AddReviewAsync(model, movieId, criticId);
+                await this._movieService.AddReviewAsync(model, movieId, criticId!);
             }
             catch
             {
@@ -351,7 +346,10 @@ public class MovieController : BaseController
         try
         {
             var criticId = await this._criticService.GetCriticIdAsync(this.GetUserId());
-            await this._movieService.EditReviewAsync(model,criticId);
+            if (criticId != null)
+            {
+                await this._movieService.EditReviewAsync(model, criticId);
+            }
         }
         catch
         {
@@ -368,7 +366,10 @@ public class MovieController : BaseController
         try
         {
             var criticId = await this._criticService.GetCriticIdAsync(this.GetUserId());
-            await this._movieService.DeleteReviewAsync(reviewId,criticId);
+            if (criticId != null)
+            {
+                await this._movieService.DeleteReviewAsync(reviewId, criticId);
+            }
 
             TempData[SuccessMessage] = DeleteReviewSuccess;
 
@@ -386,7 +387,7 @@ public class MovieController : BaseController
     {
         try
         {
-            await this._movieService.EditCommentAsync(model,this.GetUserId());
+            await this._movieService.EditCommentAsync(model, this.GetUserId());
         }
         catch
         {
