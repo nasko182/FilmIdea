@@ -17,7 +17,8 @@ using static Common.SuccessMessages;
 public class MovieController : BaseController
 {
     //TODO: Security from(CSRF _|_,Parameter-tampering using guid, )
-    //TODO: Implement receiving messages with singleR
+    //TODO: Add security from parameter tampering for int-s(Security (1:10m), and XXS
+    //TODO: Implement receiving messages with SignalR
     //TODO: Fix bug with likes and dislikes Web API
     //TODO: Fix bug with reload page in details Deleting Edit Like don't reload properly 
     //TODO: Check for buttons to hide from users that don't need to see them
@@ -28,7 +29,6 @@ public class MovieController : BaseController
     //TODO: Make manage button to be size of the username
     //TODO: Edit views to be more beautiful
     //TODO: Edit Swipe View Add Link to details on movie pic in swipe
-    //TODO: Edit in view Details userId(1:33m)
 
     private readonly IMovieService _movieService;
 
@@ -108,7 +108,7 @@ public class MovieController : BaseController
     {
         bool isValid = await this._movieService.IsGenreIdValidAsync(genreId);
 
-        if (!isValid)
+        if (isValid)
         {
             try
             {
