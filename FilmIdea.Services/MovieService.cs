@@ -533,6 +533,13 @@ public class MovieService : FilmIdeaService, IMovieService
         var like = await this._dbContext.Likes
             .FirstOrDefaultAsync(l => l.UserId.ToString() == userId && l.ReviewId.ToString() == reviewId);
 
+        var dislike = await this._dbContext.Dislikes
+            .FirstOrDefaultAsync(dl => dl.UserId.ToString() == userId && dl.ReviewId.ToString() == reviewId);
+
+        if (dislike!=null)
+        {
+            this._dbContext.Dislikes.Remove(dislike);
+        }
         if (like != null)
         {
             this._dbContext.Likes.Remove(like);
@@ -562,6 +569,13 @@ public class MovieService : FilmIdeaService, IMovieService
         var dislike = await this._dbContext.Dislikes
             .FirstOrDefaultAsync(dl => dl.UserId.ToString() == userId && dl.ReviewId.ToString() == reviewId);
 
+        var like = await this._dbContext.Likes
+            .FirstOrDefaultAsync(l => l.UserId.ToString() == userId && l.ReviewId.ToString() == reviewId);
+
+        if (like != null)
+        {
+            this._dbContext.Likes.Remove(like);
+        }
         if (dislike != null)
         {
             this._dbContext.Dislikes.Remove(dislike);
@@ -601,6 +615,10 @@ public class MovieService : FilmIdeaService, IMovieService
             this._dbContext.Comments.RemoveRange(comments);
             this._dbContext.Reviews.Remove(review);
         }
+        else
+        {
+            throw new ArgumentException("critic id");
+        }
 
         try
         {
@@ -608,7 +626,7 @@ public class MovieService : FilmIdeaService, IMovieService
         }
         catch
         {
-            throw new ArgumentException("Invalid review or critic id");
+            throw new ArgumentException("review id");
         }
     }
 
@@ -623,6 +641,10 @@ public class MovieService : FilmIdeaService, IMovieService
         {
             this._dbContext.Comments.Remove(comment);
         }
+        else
+        {
+            throw new ArgumentException("user id");
+        }
 
         try
         {
@@ -630,7 +652,7 @@ public class MovieService : FilmIdeaService, IMovieService
         }
         catch
         {
-            throw new ArgumentException("Invalid review or critic id");
+            throw new ArgumentException("review id");
         }
     }
 

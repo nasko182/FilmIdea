@@ -1,8 +1,12 @@
 ﻿$(document).ready(function () {
+    var movieId = $('#movieId').data('movie');
+    var commentId = $('#commentId').data('comment');
+    var reviewId = $('#reviewId').data('review');
+
     const addReviewButton = $("#addReviewButton");
     const addReviewForm = $("#addReviewForm");
-    const editReviewButton = $("#editReviewButton");
-    const editReviewForm = $("#editReviewForm");
+    const editReviewButton = $("#editReviewButton-");
+    const editReviewForm = $("#editReviewForm-");
     const addCommentButton = $("#addCommentButton");
     const addCommentForm = $("#addCommentForm");
     const editCommentButton = $("#editCommentButton");
@@ -12,9 +16,6 @@
     const deleteReviewButton = $("#deleteReviewButton");
     const deleteCommentButton = $("#deleteCommentButton");
 
-    var movieId = $('#movieId').data('movie');
-    var reviewId = $('#reviewId').data('review');
-    var commentId = $('#commentId').data('comment');
 
 
     addReviewButton.on("click", function () {
@@ -37,11 +38,17 @@
         e.preventDefault();
         e.stopImmediatePropagation();
 
-        $.post(addRemoveLike, {
-            reviewId: reviewId,
-            movieId: movieId
-        })
-        location.reload();
+        $.ajax({
+            type: 'POST',
+            url: addRemoveLike,
+            headers: {
+                'RequestVerificationToken': csrfToken
+            },
+            data: {
+                reviewId: reviewId,
+                movieId: movieId
+            }
+        });
         location.reload();
     });
 
@@ -49,10 +56,17 @@
         e.preventDefault();
         e.stopImmediatePropagation();
 
-        $.post(addRemoveDislike, {
-            reviewId: reviewId,
-            movieId: movieId
-        })
+        $.ajax({
+            type: 'POST',
+            url: addRemoveDislike,
+            headers: {
+                'RequestVerificationToken': csrfToken
+            },
+            data: {
+                reviewId: reviewId,
+                movieId: movieId
+            }
+        });
         location.reload();
     });
 
@@ -60,10 +74,16 @@
         e.preventDefault();
         e.stopImmediatePropagation();
 
-        $.post(removeReview, {
-            reviewId: reviewId
-        })
-        location.reload();
+        $.ajax({
+            type: 'POST',
+            url: removeReview,
+            headers: {
+                'RequestVerificationToken': csrfToken
+            },
+            data: {
+               reviewId: reviewId
+            }
+        });
         location.reload();
     });
 
@@ -71,10 +91,17 @@
         e.preventDefault();
         e.stopImmediatePropagation();
 
-        $.post(removeComment, {
-            commentId: commentId
-        })
+        $.ajax({
+            type: 'POST',
+            url: removeComment,
+            headers: {
+                'RequestVerificationToken': csrfToken
+            },
+            data: {
+                commentId: commentId
+            }
+        });
         location.reload();
-        location.reload();
+        
     });
 });

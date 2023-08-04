@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Data;
 using Data.Models;
+using Microsoft.AspNetCore.Mvc;
 using Services.Data.Interfaces;
 
 public class Program
@@ -42,7 +43,12 @@ public class Program
 
         builder.Services.AddApplicationServices(typeof(IMovieService));
 
-        builder.Services.AddControllersWithViews();
+        builder.Services
+            .AddControllersWithViews()
+            .AddMvcOptions(option =>
+            {
+                option.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+            });
 
         var app = builder.Build();
 

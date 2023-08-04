@@ -1,7 +1,14 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
-
+@using FilmIdea.Services.Data.Interfaces
+@inject ICriticService CriticService
 @{
+    var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+    bool isCritic = await CriticService.CriticExistByUserIdAsync(userId!);
+
+    var email = User.Identity?.Name;
+    var username = email?.Substring(0, email.IndexOf("@"));
+
     var currentPage = Context.Request.Path.ToString().ToLower();
 }
 
@@ -10,14 +17,17 @@
     {
         <li class="nav-item" style="text-align: left !important">
             <button class="btn-login rounded-pill" style="width: 163px;height: 29px;">
-                <a class="nav-link login-btn" style="padding-top: 0;padding-bottom: 10px;" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><strong style="color: black !important; font-size: 17px">@User.Identity?.Name</strong></a>
+                <a class="nav-link login-btn" style="padding-top: 0;padding-bottom: 10px;" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><strong style="color: black !important; font-size: 17px">@username</strong></a>
             </button>
         </li>
-        <li class="nav-item" style="text-align: left !important">
-            <button class="btn-login rounded-pill" style="width: 163px;height: 29px;">
-                <a class="nav-link text-white login-btn" style="padding-top: 0;padding-bottom: 10px;" asp-area="" asp-controller="Critic" asp-action="Become"><strong style="color: black !important; font-size: 17px">Become Critic</strong></a>
-            </button>
-        </li>
+        @if (!isCritic)
+        {
+            <li class="nav-item" style="text-align: left !important">
+                <button class="btn-login rounded-pill" style="width: 163px;height: 29px;">
+                    <a class="nav-link text-white login-btn" style="padding-top: 0;padding-bottom: 10px;" asp-area="" asp-controller="Critic" asp-action="Become"><strong style="color: black !important; font-size: 17px">Become Critic</strong></a>
+                </button>
+            </li>
+        }
         <li class="nav-item">
             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                 <button class="btn-login rounded-pill"><strong style="color: black !important;">Sign Out</strong></button>

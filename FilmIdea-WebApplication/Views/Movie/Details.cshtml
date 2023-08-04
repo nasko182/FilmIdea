@@ -1,12 +1,17 @@
-﻿@model MovieAndReviewViewModel
+﻿@using FilmIdea.Services.Data.Interfaces
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@inject ICriticService CriticService
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 
+@model MovieAndReviewViewModel
 @{
+    var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+    bool isCritic = await CriticService.CriticExistByUserIdAsync(userId!);
+
     ViewBag.Title = Model.MovieDetails.Title;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@*TODO:Edit view to look better*@
-@*TODO:Edit Swipe View Add Link to details on movie*@
-@*TODO:Edit comment date to be in current time add the whole view style to be like person view*@
+
 
 <div class="container mt-5">
     <div class="row">
@@ -65,7 +70,7 @@
             <div class="col-md-12">
                 <div class="d-flex justify-content-between" style="width: 80%;">
                     <h3>Reviews</h3>
-                    @if (User.Identity!.IsAuthenticated)
+                    @if (isCritic)
                     {
                         <button id="addReviewButton" class="btn">
                             <strong style="color: #2776ff; font-size: 17px;">+ Review</strong>
@@ -187,7 +192,6 @@
                                 <div class="comments mt-3">
                                     @foreach (var comment in review.Comments)
                                     {
-                                        <div id="commentId" data-comment='@Html.Raw(@comment.Id)'></div>
                                         <div class="card bg-light mb-2">
                                             <div class="card-body">
                                                 <div class="d-flex justify-content-between">
@@ -218,6 +222,7 @@
                                                 <p class="card-text d-flex justify-content-start">@comment.Content</p>
                                                 @if(User.Identity.IsAuthenticated && @comment.WriterId==ViewBag.UserId)
                                                 {
+                                                    <div id="commentId" data-comment='@Html.Raw(@comment.Id)'></div>
                                                     <button type="submit" class="btn btn-danger d-flex justify-content-end" id="deleteCommentButton">Delete</button>
                                                 }
                                             </div>
@@ -241,6 +246,8 @@
         var addRemoveDislike = '@Url.Action("AddRemoveDislike", "Movie")';
         var removeReview = '@Url.Action("DeleteReview", "Movie")';
         var removeComment = '@Url.Action("DeleteComment", "Movie")';
+
+        var csrfToken = '@Antiforgery.GetAndStoreTokens(Context).RequestToken';
     </script>
     <script src="~/js/movieDetails.js"></script>
 

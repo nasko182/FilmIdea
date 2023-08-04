@@ -16,14 +16,16 @@ using static Common.SuccessMessages;
 
 public class MovieController : BaseController
 {
+    //TODO: Security from(CSRF,Parameter-tampering using guid, )
+    //TODO: Implement receiving messages with singleR
+    //TODO: Fix bug with likes and dislikes Web API
     //TODO: Check all views and js for more todo
     //TODO: Check all using
     //TODO: Check site like user,critic and un logged
     //TODO: Change All forms to asp to add validations(critic,new group.....)
+    //TODO: Make manage button to be size of the username
     //TODO: Edit views to be more beautiful
     //TODO: Edit Swipe View Add Link to details on movie pic in swipe
-    //TODO: Implement receiving messages with singleR
-    //TODO: Fix bug with likes and dislikes
     //TODO: Why only first review buttons work
     //TODO: Hide buttons from users that don't need to see them
 
@@ -373,9 +375,9 @@ public class MovieController : BaseController
             return this.RedirectToAction(this.TempData["LastAction"]!.ToString(),
                 this.TempData["LastController"]!.ToString());
         }
-        catch
+        catch (Exception e)
         {
-            return InvalidDataError("review or critic id");
+            return InvalidDataError(e.Message);
         }
     }
 
@@ -407,10 +409,9 @@ public class MovieController : BaseController
             return this.RedirectToAction(this.TempData["LastAction"]!.ToString(),
                 this.TempData["LastController"]!.ToString());
         }
-        catch
+        catch (Exception e)
         {
-            return InvalidDataError("comment or user id");
+            return InvalidDataError(e.Message);
         }
     }
-
 }
