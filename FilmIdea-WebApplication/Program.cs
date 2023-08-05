@@ -1,12 +1,14 @@
 namespace FilmIdea.Web;
 
 using Microsoft.EntityFrameworkCore;
-
-using Data;
-using Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+
 using Services.Data.Interfaces;
+using Data;
+using Data.Models;
+
+using static Common.GeneralApplicationConstants;
 
 public class Program
 {
@@ -42,7 +44,7 @@ public class Program
 
                 options.User.RequireUniqueEmail = true;
             })
-            .AddRoles<IdentityRole<Guid>>()
+            .AddRoles<IdentityRole<Guid>>() 
             .AddEntityFrameworkStores<FilmIdeaDbContext>();
 
         builder.Services.AddApplicationServices(typeof(IMovieService));
@@ -82,6 +84,8 @@ public class Program
 
         app.UseAuthentication();
         app.UseAuthorization();
+
+        app.SeedAdministrator(DevelopmentAdminEmail);
 
         app.MapDefaultControllerRoute();
         app.MapRazorPages();

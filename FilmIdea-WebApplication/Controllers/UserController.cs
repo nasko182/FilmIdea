@@ -15,16 +15,13 @@ public class UserController : BaseController
 {
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IUserStore<ApplicationUser> _userStore;
 
     public UserController(
         SignInManager<ApplicationUser> signInManager,
-        UserManager<ApplicationUser> userManager,
-        IUserStore<ApplicationUser> userStore)
+        UserManager<ApplicationUser> userManager)
     {
         this._userManager = userManager;
         this._signInManager = signInManager;
-        this._userStore = userStore;
     }
     [HttpGet]
     [AllowAnonymous]
