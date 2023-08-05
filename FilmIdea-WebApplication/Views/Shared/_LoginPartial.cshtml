@@ -6,9 +6,6 @@
     var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
     bool isCritic = await CriticService.CriticExistByUserIdAsync(userId);
 
-    var email = User.Identity?.Name;
-    var username = email?.Substring(0, email.IndexOf("@"));
-
     var currentPage = Context.Request.Path.ToString().ToLower();
 }
 
@@ -17,7 +14,7 @@
     {
         <li class="nav-item" style="text-align: left !important">
             <button class="btn-login rounded-pill" style="width: 163px;height: 29px;">
-                <a class="nav-link login-btn" style="padding-top: 0;padding-bottom: 10px;" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><strong style="color: black !important; font-size: 17px">@username</strong></a>
+                <a class="nav-link login-btn" style="padding-top: 0;padding-bottom: 10px;" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><strong style="color: black !important; font-size: 17px">@User.Identity!.Name</strong></a>
             </button>
         </li>
         @if (!isCritic)
@@ -56,7 +53,7 @@
 
         <li class="nav-item">
             <button class="btn-login rounded-pill">
-                <a class="nav-link text-white login-btn" asp-area="Identity" asp-page="/Account/Register"><strong style="color: black !important;">Register</strong></a>
+                <a class="nav-link text-white login-btn" asp-area="" asp-controller="User" asp-action="Register"><strong style="color: black !important;">Register</strong></a>
             </button>
         </li>
     }

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 using Join_Tables;
 
-//using static Common.EntityValidationConstants.User;
+using static Common.EntityValidationConstants.User;
 
 public class ApplicationUser: IdentityUser<Guid> 
 {
@@ -24,6 +24,10 @@ public class ApplicationUser: IdentityUser<Guid>
         this.Likes = new HashSet<Like>();
         this.DisLikes = new HashSet<Dislike>();
     }
+
+    [Required]
+    [MaxLength(UsernameMaxLength)]
+    public override string UserName { get; set; } = null!;
 
     public Guid? CriticId { get; set; }
 

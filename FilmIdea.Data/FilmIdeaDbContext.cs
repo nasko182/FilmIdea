@@ -46,6 +46,8 @@ public class FilmIdeaDbContext : IdentityDbContext<ApplicationUser, IdentityRole
 
     public DbSet<Dislike> Dislikes { get; set; } = null!;
 
+    public DbSet<ApplicationUser> ApplicationUsers { get; set; } = null!;
+
 
     // Join Tables
 

@@ -4,6 +4,7 @@ using FilmIdea.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FilmIdea.Data.Migrations
 {
     [DbContext(typeof(FilmIdeaDbContext))]
-    partial class FilmIdeaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230805095458_AddUserFirsAndLastName")]
+    partial class AddUserFirsAndLastName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,6 +96,16 @@ namespace FilmIdea.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -124,7 +136,6 @@ namespace FilmIdea.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -149,27 +160,31 @@ namespace FilmIdea.Data.Migrations
                         {
                             Id = new Guid("2532ddaa-63f0-4de8-71cb-08db8c333233"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "134545f4-6d10-4eda-8ece-22847147ec3a",
+                            ConcurrencyStamp = "9c8a8807-b931-4eca-92a0-b6711b63a774",
                             Email = "user@user.bg",
                             EmailConfirmed = false,
+                            FirstName = "User",
+                            LastName = "Testov",
                             LockoutEnabled = false,
                             PasswordHash = "AQAAAAEAACcQAAAAEAsQ9sg0mW31vlM2DKquhykexBxdIKzD8YMSV5aAVT9ii4TazrF0Ep9t4AwwalAV8w==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
-                            UserName = "user182"
+                            UserName = "user@user.bg"
                         },
                         new
                         {
                             Id = new Guid("15eb7825-840b-4528-71cc-08db8c333233"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "59239abf-0f8c-43db-9638-b9189d25f748",
+                            ConcurrencyStamp = "083310f7-842e-444d-b8f4-488ef23688ba",
                             Email = "critic@critic.bg",
                             EmailConfirmed = false,
+                            FirstName = "Critic",
+                            LastName = "Testov",
                             LockoutEnabled = false,
                             PasswordHash = "AQAAAAEAACcQAAAAED8AiAX7LsAuELS3lYisOFNJVOGpUD+yNBUxLCVvKeE0nRH/nHDdWjTTbUk9Pt6efA==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
-                            UserName = "CriticTestov"
+                            UserName = "critic@critic.bg"
                         });
                 });
 
@@ -224,8 +239,8 @@ namespace FilmIdea.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("bcecd0a8-0e5f-4a70-96de-d410b23b0b6f"),
-                            CommentDate = new DateTime(2023, 8, 5, 12, 35, 17, 263, DateTimeKind.Utc).AddTicks(7964),
+                            Id = new Guid("5f6acd50-28f1-4493-84bc-5b6c7e5215f4"),
+                            CommentDate = new DateTime(2023, 8, 5, 9, 54, 57, 690, DateTimeKind.Utc).AddTicks(9969),
                             Content = "I like the movie",
                             ReviewId = new Guid("7dcc5bd6-1133-432b-b6a6-f6c27da75948"),
                             WriterId = new Guid("2532ddaa-63f0-4de8-71cb-08db8c333233")
@@ -245,11 +260,6 @@ namespace FilmIdea.Data.Migrations
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(105)
-                        .HasColumnType("nvarchar(105)");
 
                     b.Property<string>("ProfileImageUrl")
                         .IsRequired()
@@ -742,19 +752,19 @@ namespace FilmIdea.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0eb8afd0-e028-4c35-95da-c97044c4567c"),
+                            Id = new Guid("1d4b2fed-3db8-423a-aa9a-c25394c5ead3"),
                             ActorId = 2,
                             Url = "https://dl.dropboxusercontent.com/s/oxqc24aw3xb9n9z/MV5BMTY4Mjg0NjIxOV5BMl5Ban_profile_image.jpg"
                         },
                         new
                         {
-                            Id = new Guid("4357d61d-f845-4643-b573-d9decd34b81f"),
+                            Id = new Guid("99b5a3d2-2e87-4b25-8f42-5f2227c8a1cc"),
                             MovieId = 2,
                             Url = "https://dl.dropboxusercontent.com/s/kban35sz6tw0d0x/Indiana_Jones_and_the_Dial_of_Destiny_cover_image.jpg"
                         },
                         new
                         {
-                            Id = new Guid("7d6e434b-42d7-4627-b8dc-52fa56aedcd8"),
+                            Id = new Guid("9c488d9f-632c-42cd-8654-7d8c724aa490"),
                             DirectorId = 2,
                             Url = "https://dl.dropboxusercontent.com/s/491y3cpjoc4ulzm/MV5BNDI3MzgwMmYtY2JjYy00ZWQ2LTgzN_profile_image.jpg"
                         });
@@ -799,12 +809,12 @@ namespace FilmIdea.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7dcc5bd6-1133-432b-b6a6-f6c27da75948"),
+                            Id = new Guid("80950fdc-f333-4819-b77b-05149fae405d"),
                             Content = "I like the movie",
                             CriticId = new Guid("bcc5c503-128b-4ba6-a736-6efbeda1ee34"),
                             MovieId = 2,
                             Rating = 9,
-                            ReviewDate = new DateTime(2023, 8, 5, 12, 35, 17, 267, DateTimeKind.Utc).AddTicks(950),
+                            ReviewDate = new DateTime(2023, 8, 5, 9, 54, 57, 694, DateTimeKind.Utc).AddTicks(3412),
                             Title = "About the movie"
                         });
                 });
@@ -866,19 +876,19 @@ namespace FilmIdea.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3bad0a61-b76b-48d2-8970-3db6f5d43529"),
+                            Id = new Guid("00bf070a-ca2e-48c8-ade7-98dd3909fad1"),
                             MovieId = 2,
                             Url = "https://dl.dropboxusercontent.com/s/evfvsgzlf9f4vok/1434659607842-pgv4ql-1680875129724_trailer.mp4"
                         },
                         new
                         {
-                            Id = new Guid("150c31a5-4df9-42b5-86bd-cfbb323e9ee6"),
+                            Id = new Guid("270736ee-7c47-4cb3-802c-01f5aeaae120"),
                             DirectorId = 2,
                             Url = "https://dl.dropboxusercontent.com/s/joz6wy1q4o55jz4/1434659607842-pgv4ql-1687560633004.mp4"
                         },
                         new
                         {
-                            Id = new Guid("c9bd1b17-296f-4fda-959b-45086c8cd1d3"),
+                            Id = new Guid("5dc44bac-cef2-46a9-bd7c-b7216f3aca73"),
                             ActorId = 2,
                             Url = "https://dl.dropboxusercontent.com/s/l6151myomc65wqc/1434659607842-pgv4ql-1687556762812.mp4"
                         });

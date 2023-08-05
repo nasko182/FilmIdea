@@ -75,7 +75,6 @@ public class CriticService : FilmIdeaService, ICriticService
     {
         var critic = new Critic()
         {
-            Name = model.Name,
             Bio = model.Bio,
             DateOfBirth = model.DateOfBirth,
             ProfileImageUrl = photoUrl,

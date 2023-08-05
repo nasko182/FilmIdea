@@ -94,7 +94,7 @@ public static class EntityValidationConstants
 
     public static class User
     {
-        public const int UsernameMaxLength = 30;
-        public const int UsernameMinLength = 5;
+        public const int UsernameMaxLength = 20;
+        public const int UsernameMinLength = 6;
     }
 }

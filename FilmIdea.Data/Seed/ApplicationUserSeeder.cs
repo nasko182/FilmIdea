@@ -12,7 +12,7 @@ public class ApplicationUserSeeder
             {
             Id = Guid.Parse("2532DDAA-63F0-4DE8-71CB-08DB8C333233"),
             Email = "user@user.bg",
-            UserName = "User182",
+            UserName = "user182",
             PasswordHash = "AQAAAAEAACcQAAAAEAsQ9sg0mW31vlM2DKquhykexBxdIKzD8YMSV5aAVT9ii4TazrF0Ep9t4AwwalAV8w=="
             },
             new ApplicationUser()

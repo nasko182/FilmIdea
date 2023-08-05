@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Dropbox.Api" Version="6.37.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.15" />
   </ItemGroup>
 
   <ItemGroup>
