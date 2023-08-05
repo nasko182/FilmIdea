@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Data;
 using Data.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Services.Data.Interfaces;
 
@@ -41,6 +42,7 @@ public class Program
 
                 options.User.RequireUniqueEmail = true;
             })
+            .AddRoles<IdentityRole<Guid>>()
             .AddEntityFrameworkStores<FilmIdeaDbContext>();
 
         builder.Services.AddApplicationServices(typeof(IMovieService));

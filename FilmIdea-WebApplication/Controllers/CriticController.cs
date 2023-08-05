@@ -64,7 +64,15 @@ public class CriticController : BaseController
             return this.RedirectToAction("Become");
         }
 
-        var photoUrl = await this._criticService.UploadPhotoAsync(model.ProfileImage, this.GetUserName());
+        string photoUrl = String.Empty;
+        try
+        {
+            photoUrl = await this._criticService.UploadPhotoAsync(model.ProfileImage, this.GetUserName());
+        }
+        catch
+        {
+            TempData[ErrorMessage] = InvalidToken;
+        }
 
         await this._criticService.CreateCriticAsync(this.GetUserId(), model, photoUrl);
 

@@ -13,8 +13,6 @@ using static Common.ExceptionMessages;
 
 public class UserController : BaseController
 {
-    //TODO: Delete default Registration
-
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IUserStore<ApplicationUser> _userStore;

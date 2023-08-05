@@ -20,7 +20,7 @@ public class CriticService : FilmIdeaService, ICriticService
     {
         this._dbContext = dbContext;
 
-        this._dropboxClient = new DropboxClient("Paste Dropbox token here");
+        this._dropboxClient = new DropboxClient("Insert Dropbox Token here");
     }
     public async Task<bool> CriticExistByUserIdAsync(string? userId)
     {
@@ -40,14 +40,14 @@ public class CriticService : FilmIdeaService, ICriticService
 
     public async Task<string> UploadPhotoAsync(IFormFile imageFile, string userName)
     {
-        var fileName = userName + "_ProfileImage";
+        var fileName = userName + "_ProfileImage.jpg";
         var path = "/Critics/" + fileName;
 
         try
         {
             await using (var stream = imageFile.OpenReadStream())
             {
-                var uploadResult = await _dropboxClient.Files.UploadAsync(path, WriteMode.Overwrite.Instance, body: stream);
+                 await _dropboxClient.Files.UploadAsync(path, WriteMode.Overwrite.Instance, body: stream);
             }
         }
         catch (Exception e)
@@ -75,6 +75,7 @@ public class CriticService : FilmIdeaService, ICriticService
     {
         var critic = new Critic()
         {
+            Name = model.Name,
             Bio = model.Bio,
             DateOfBirth = model.DateOfBirth,
             ProfileImageUrl = photoUrl,

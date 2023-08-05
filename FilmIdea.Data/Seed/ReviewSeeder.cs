@@ -14,7 +14,7 @@ public class ReviewSeeder
                 Title = "About the movie",
                 MovieId = 2,
                 Content = "I like the movie",
-                CriticId = Guid.Parse("BCC5C503-128B-4BA6-A736-6EFBEDA1EE34"),
+                CriticId = Guid.Parse("bf595423-7323-4e40-bd43-0f876c1beece"),
                 Rating = 9
             }
         };
