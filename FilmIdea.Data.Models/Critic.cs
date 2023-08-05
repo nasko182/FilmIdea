@@ -1,4 +1,4 @@
-﻿namespace FilmIdea.Data.Models;
+﻿ namespace FilmIdea.Data.Models;
 
 using System.ComponentModel.DataAnnotations;
 

@@ -91,4 +91,10 @@ public static class EntityValidationConstants
     {
         public const int UrlMaxLength = 2048;
     }
+
+    public static class User
+    {
+        public const int UsernameMaxLength = 30;
+        public const int UsernameMinLength = 5;
+    }
 }

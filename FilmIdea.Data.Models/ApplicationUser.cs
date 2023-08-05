@@ -1,12 +1,20 @@
-﻿namespace FilmIdea.Data.Models;
+﻿// ReSharper disable VirtualMemberCallInConstructor
+namespace FilmIdea.Data.Models;
+
+using System.ComponentModel.DataAnnotations;
+
+using Microsoft.AspNetCore.Identity;
 
 using Join_Tables;
-using Microsoft.AspNetCore.Identity;
+
+//using static Common.EntityValidationConstants.User;
 
 public class ApplicationUser: IdentityUser<Guid> 
 {
     public ApplicationUser()
     {
+        this.Id = Guid.NewGuid();
+
         this.Ratings = new HashSet<UserRating>();
         this.Comments = new HashSet<Comment>();
         this.Groups = new HashSet<GroupUser>();
@@ -16,6 +24,7 @@ public class ApplicationUser: IdentityUser<Guid>
         this.Likes = new HashSet<Like>();
         this.DisLikes = new HashSet<Dislike>();
     }
+
     public Guid? CriticId { get; set; }
 
     public Critic? Critic { get; set; }

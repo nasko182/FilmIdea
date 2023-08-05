@@ -29,6 +29,7 @@ public class MovieController : BaseController
     //TODO: Make manage button to be size of the username
     //TODO: Edit views to be more beautiful
     //TODO: Edit Swipe View Add Link to details on movie pic in swipe
+    //TODO: Remove user from validation constants also using in applicationUser
 
     private readonly IMovieService _movieService;
 
