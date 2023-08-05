@@ -49,6 +49,8 @@ public class Program
 
         builder.Services.AddApplicationServices(typeof(IMovieService));
 
+        builder.Services.AddRecaptchaService();
+
         builder.Services.ConfigureApplicationCookie(cfg =>
         {
             cfg.LoginPath = "/User/Login";

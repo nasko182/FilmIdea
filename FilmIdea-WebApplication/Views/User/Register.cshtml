@@ -34,7 +34,7 @@
                 <label asp-for="ConfirmPassword"></label>
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+            <recaptcha-v3 form-id="registerForm" action="submit" class="w-100 btn btn-lg btn-primary">Register</recaptcha-v3>
             <div>
                 <p>
                     Already have an account?
@@ -46,5 +46,6 @@
 </div>
 
 @section Scripts {
+    <recaptcha-script/>
     <partial name="_ValidationScriptsPartial" />
 }

@@ -16,6 +16,8 @@ using static Common.SuccessMessages;
 
 public class MovieController : BaseController
 {
+    //TODO: view component
+    //TODO: check if admin work when get project from github with new db
     //TODO: Try go to Critic/Becom when logged like critic
     //TODO: Everywhere where Critic is Write something use criticName in blue,  Everywhere where user write something use UserName in green, to be clear that this is critic
     //TODO: Security from(CSRF _|_,Parameter-tampering using guid, )
@@ -32,6 +34,8 @@ public class MovieController : BaseController
     //TODO: Edit views to be more beautiful
     //TODO: Edit Swipe View Add Link to details on movie pic in swipe
     //TODO: Remove user from validation constants also using in applicationUser
+    //TODO: if is admin in views show him buttons(delete comment,Reviews)also remove logic for deleting from users in controller
+    //TODO: add recepcha
 
     private readonly IMovieService _movieService;
 
