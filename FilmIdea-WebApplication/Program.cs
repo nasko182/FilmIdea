@@ -38,10 +38,17 @@ public class Program
                     .Configuration.GetValue<bool>("Identity:SignIn:RequireNonAlphanumeric");
                 options.Password.RequiredLength = builder
                     .Configuration.GetValue<int>("Identity:Password:RequiredLength");
+
+                options.User.RequireUniqueEmail = true;
             })
             .AddEntityFrameworkStores<FilmIdeaDbContext>();
 
         builder.Services.AddApplicationServices(typeof(IMovieService));
+
+        builder.Services.ConfigureApplicationCookie(cfg =>
+        {
+            cfg.LoginPath = "/User/Login";
+        });
 
         builder.Services
             .AddControllersWithViews()

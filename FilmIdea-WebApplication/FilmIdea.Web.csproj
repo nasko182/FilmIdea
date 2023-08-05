@@ -26,4 +26,8 @@
     <ProjectReference Include="..\FilmIdea.Web.ViewModels\FilmIdea.Web.ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Identity\Pages\Account\" />
+  </ItemGroup>
+
 </Project>

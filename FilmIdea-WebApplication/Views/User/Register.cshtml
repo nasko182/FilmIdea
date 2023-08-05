@@ -35,6 +35,12 @@
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+            <div>
+                <p>
+                    Already have an account?
+                    <a asp-action="Login" asp-controller="User">Login</a>
+                </p>
+            </div>
         </form>
     </div>
 </div>

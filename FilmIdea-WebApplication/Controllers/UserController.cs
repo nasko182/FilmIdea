@@ -1,24 +1,32 @@
 ﻿namespace FilmIdea.Web.Controllers;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 using Data.Models;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
 using ViewModels.User;
+
+using static Common.NotificationMessageConstants;
+using static Common.ExceptionMessages;
 
 public class UserController : BaseController
 {
+    //TODO: Delete default Registration
+
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IUserStore<ApplicationUser> _userStore;
 
     public UserController(
         SignInManager<ApplicationUser> signInManager,
-        UserManager<ApplicationUser> userManager)
+        UserManager<ApplicationUser> userManager,
+        IUserStore<ApplicationUser> userStore)
     {
-        this._userManager= userManager;
+        this._userManager = userManager;
         this._signInManager = signInManager;
+        this._userStore = userStore;
     }
     [HttpGet]
     [AllowAnonymous]
@@ -58,18 +66,35 @@ public class UserController : BaseController
 
     }
 
-
     [HttpGet]
     [AllowAnonymous]
-    public IActionResult Login()
+    public async Task<IActionResult> Login(string? returnUrl)
     {
-        return View();
+        await this.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
+        var model = new LoginFormModel()
+        {
+            ReturnUrl = returnUrl
+        };
+        return this.View(model);
     }
 
     [HttpPost]
     [AllowAnonymous]
-    public IActionResult Login(LoginFormModel model)
+    public async Task<IActionResult> Login(LoginFormModel model)
     {
-        return View();
+        if (!ModelState.IsValid)
+        {
+            return this.View(model);
+        }
+
+        var result = await this._signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
+
+        if (!result.Succeeded)
+        {
+            TempData[ErrorMessage] = InvalidLogin;
+        }
+
+        return Redirect(model.ReturnUrl ?? "/Home/Index");
     }
 }

@@ -16,6 +16,7 @@ using static Common.SuccessMessages;
 
 public class MovieController : BaseController
 {
+    //TODO: Everywhere where Critic is Write something use criticName in blue,  Everywhere where user write something use UserName in green, to be clear that this is critic
     //TODO: Security from(CSRF _|_,Parameter-tampering using guid, )
     //TODO: Add security from parameter tampering for int-s(Security (1:10m), and XXS
     //TODO: Implement receiving messages with SignalR

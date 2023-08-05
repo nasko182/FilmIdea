@@ -2,7 +2,6 @@
 
 using FilmIdea.Data;
 using FilmIdea.Data.Models;
-using FilmIdea.Services.Data.Interfaces;
 using Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Web.ViewModels.Actor;
