@@ -23,9 +23,9 @@ public class HomeController : BaseController
         {
             return this.View("Error404");
         }
-        else if (statusCode == 401)
+        if (statusCode == 401)
         {
-            return this.View("Error404");
+            return this.View("Error401");
         }
         return this.View();
     }

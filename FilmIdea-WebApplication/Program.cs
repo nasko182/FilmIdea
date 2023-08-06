@@ -54,6 +54,7 @@ public class Program
         builder.Services.ConfigureApplicationCookie(cfg =>
         {
             cfg.LoginPath = "/User/Login";
+            cfg.AccessDeniedPath = "/Home/Error/401";
         });
 
         builder.Services
@@ -87,10 +88,26 @@ public class Program
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.SeedAdministrator(DevelopmentAdminEmail);
+        if (app.Environment.IsDevelopment())
+        {
+            app.SeedAdministrator(DevelopmentAdminEmail);
+        }
 
-        app.MapDefaultControllerRoute();
-        app.MapRazorPages();
+        app.UseEndpoints(config =>
+        {
+            config.MapControllerRoute(
+                    name: "areas",
+                    pattern: "/{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
+            //config.MapControllerRoute(
+            //    name: "ProtectingUrlRoute",
+            //    pattern: "/{controller}/{action}/{id}/{information}",
+            //    defaults: new { Controller = "Movie", Action = "Details" });
+
+            config.MapDefaultControllerRoute();
+
+            config.MapRazorPages();
+        });
 
         app.Run();
     }

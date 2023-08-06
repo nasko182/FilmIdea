@@ -1,6 +1,5 @@
 ﻿namespace FilmIdea.Web.Controllers;
 
-using Dropbox.Api.Sharing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
@@ -9,27 +8,27 @@ using Services.Data.Interfaces;
 using ViewModels.Comment;
 using ViewModels.Movie;
 using ViewModels.Review;
+using Infrastructure.Extensions;
 
 
 using static Common.NotificationMessageConstants;
 using static Common.ExceptionMessages;
 using static Common.SuccessMessages;
-using FilmIdea.Data.Models;
-using Infrastructure.Extensions;
 
 public class MovieController : BaseController
 {
-    //TODO: check IServices for unused methods(IMovieService last)
-    //TODO: add not authenticated where redirect to login
+    //TODO: Check IServices for unused methods(IMovieService last)
+    //TODO: Add not authenticated where redirect to login
     //TODO: View component
     //TODO: Check all views and js for more todo
     //TODO: Check all using
-    //TODO: Check site like user,critic and un logged
+    //TODO: Check all collections if empty message?
+    //TODO: Check site like user,critic and un logged if btn don't work add asp-area="" 
     //TODO: Check if admin work when get project from github with new db
     //TODO: Check for buttons to hide from users that don't need to see them
     //TODO: unit tests
     //TODO: Everywhere where Critic is Write something use criticName in blue,  Everywhere where user write something use UserName in green, to be clear that this is critic
-    //TODO: Add security from parameter tampering for int-s(Security (1:10m), and XXS
+    //TODO: Add security from parameter tampering for int-s(Security (1:10m), and XXS (edit program.cs endpoints)
     //TODO: Implement receiving messages with SignalR
     //TODO: Fix bug with likes and dislikes Web API
     //TODO: Fix bug with reload page in details Deleting Edit Like don't reload properly 
