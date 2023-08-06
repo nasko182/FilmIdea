@@ -1,5 +1,6 @@
 ﻿namespace FilmIdea.Web.Controllers;
 
+using Dropbox.Api.Sharing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
@@ -13,29 +14,29 @@ using ViewModels.Review;
 using static Common.NotificationMessageConstants;
 using static Common.ExceptionMessages;
 using static Common.SuccessMessages;
+using FilmIdea.Data.Models;
+using Infrastructure.Extensions;
 
 public class MovieController : BaseController
 {
-    //TODO: view component
-    //TODO: check if admin work when get project from github with new db
-    //TODO: Try go to Critic/Becom when logged like critic
+    //TODO: check IServices for unused methods(IMovieService last)
+    //TODO: add not authenticated where redirect to login
+    //TODO: View component
+    //TODO: Check all views and js for more todo
+    //TODO: Check all using
+    //TODO: Check site like user,critic and un logged
+    //TODO: Check if admin work when get project from github with new db
+    //TODO: Check for buttons to hide from users that don't need to see them
+    //TODO: unit tests
     //TODO: Everywhere where Critic is Write something use criticName in blue,  Everywhere where user write something use UserName in green, to be clear that this is critic
-    //TODO: Security from(CSRF _|_,Parameter-tampering using guid, )
     //TODO: Add security from parameter tampering for int-s(Security (1:10m), and XXS
     //TODO: Implement receiving messages with SignalR
     //TODO: Fix bug with likes and dislikes Web API
     //TODO: Fix bug with reload page in details Deleting Edit Like don't reload properly 
-    //TODO: Check for buttons to hide from users that don't need to see them
-    //TODO: Check all views and js for more todo
-    //TODO: Check all using
-    //TODO: Check site like user,critic and un logged
-    //TODO: Change All forms to asp to add validations(critic,new group.....)
     //TODO: Make manage button to be size of the username
     //TODO: Edit views to be more beautiful
     //TODO: Edit Swipe View Add Link to details on movie pic in swipe
-    //TODO: Remove user from validation constants also using in applicationUser
-    //TODO: if is admin in views show him buttons(delete comment,Reviews)also remove logic for deleting from users in controller
-    //TODO: add recepcha
+    //TODO: Change All forms to asp to add validations(critic,new group.....)
 
     private readonly IMovieService _movieService;
 
@@ -205,6 +206,13 @@ public class MovieController : BaseController
     [HttpGet]
     public async Task<IActionResult> Watchlist()
     {
+        if (!this.IsAuthenticated())
+        {
+            this.TempData[ErrorMessage] = NotAuthenticated;
+
+            return this.RedirectToAction("Login", "User");
+
+        }
         try
         {
             var movies = await this._movieService.GetWatchlistMoviesAsync(this.GetUserId());
@@ -224,6 +232,13 @@ public class MovieController : BaseController
     [HttpPost]
     public async Task<IActionResult> AddReview(AddReviewViewModel model, int movieId)
     {
+        if (!this.IsAuthenticated())
+        {
+            this.TempData[ErrorMessage] = NotAuthenticated;
+
+            return this.RedirectToAction("Login", "User");
+
+        }
         bool isCritic =
             await this._criticService.CriticExistByUserIdAsync(this.GetUserId());
 
@@ -256,6 +271,13 @@ public class MovieController : BaseController
 
         if (this.ModelState.IsValid)
         {
+            if (!this.IsAuthenticated())
+            {
+                this.TempData[ErrorMessage] = NotAuthenticated;
+
+                return this.RedirectToAction("Login", "User");
+
+            }
             try
             {
                 await this._movieService.AddCommentAsync(model, this.GetUserId());
@@ -273,6 +295,13 @@ public class MovieController : BaseController
     [HttpPost]
     public async Task<IActionResult> AddRating(int movieId, int ratingValue)
     {
+        if (!this.IsAuthenticated())
+        {
+            this.TempData[ErrorMessage] = NotAuthenticated;
+
+            return this.RedirectToAction("Login", "User");
+
+        }
         try
         {
             await this._movieService.AddRatingAsync(movieId, ratingValue, this.GetUserId());
@@ -288,6 +317,13 @@ public class MovieController : BaseController
     [HttpPost]
     public async Task<IActionResult> AddToUserWatchlist(int movieId)
     {
+        if (!this.IsAuthenticated())
+        {
+            this.TempData[ErrorMessage] = NotAuthenticated;
+
+            return this.RedirectToAction("Login", "User");
+
+        }
         try
         {
             await this._movieService.AddToUserWatchlistAsync(this.GetUserId(), movieId);
@@ -304,6 +340,13 @@ public class MovieController : BaseController
     [HttpPost]
     public async Task<IActionResult> RemoveFromUserWatchlist(int movieId)
     {
+        if (!this.IsAuthenticated())
+        {
+            this.TempData[ErrorMessage] = NotAuthenticated;
+
+            return this.RedirectToAction("Login", "User");
+
+        }
         try
         {
             await this._movieService.RemoveFromUserWatchlistAsync(this.GetUserId(), movieId);
@@ -320,6 +363,13 @@ public class MovieController : BaseController
     [HttpPost]
     public async Task<IActionResult> AddRemoveLike(string reviewId, int movieId)
     {
+        if (!this.IsAuthenticated())
+        {
+            this.TempData[ErrorMessage] = NotAuthenticated;
+
+            return this.RedirectToAction("Login", "User");
+
+        }
         try
         {
             await this._movieService.AddRemoveLikeAsync(reviewId, this.GetUserId());
@@ -335,6 +385,13 @@ public class MovieController : BaseController
     [HttpPost]
     public async Task<IActionResult> AddRemoveDislike(string reviewId, int movieId)
     {
+        if (!this.IsAuthenticated())
+        {
+            this.TempData[ErrorMessage] = NotAuthenticated;
+
+            return this.RedirectToAction("Login", "User");
+
+        }
         try
         {
             await this._movieService.AddRemoveDislikeAsync(reviewId, this.GetUserId());
@@ -350,6 +407,13 @@ public class MovieController : BaseController
     [HttpPost]
     public async Task<IActionResult> EditReview(EditReviewViewModel model, int movieId)
     {
+        if (!this.IsAuthenticated())
+        {
+            this.TempData[ErrorMessage] = NotAuthenticated;
+
+            return this.RedirectToAction("Login", "User");
+
+        }
         try
         {
             var criticId = await this._criticService.GetCriticIdAsync(this.GetUserId());
@@ -370,23 +434,31 @@ public class MovieController : BaseController
     [HttpPost]
     public async Task<IActionResult> DeleteReview(string reviewId)
     {
+        if (!this.IsAuthenticated())
+        {
+            this.TempData[ErrorMessage] = NotAuthenticated;
+
+            return this.RedirectToAction("Login", "User");
+
+        }
         try
         {
             var criticId = await this._criticService.GetCriticIdAsync(this.GetUserId());
-            if (criticId != null)
+            var isOwner = await this._movieService.IsCriticOwnerOfReview(criticId, reviewId);
+            if (isOwner || this.User.IsAdmin())
             {
-                await this._movieService.DeleteReviewAsync(reviewId, criticId);
+                await this._movieService.DeleteReviewAsync(reviewId);
             }
 
-            TempData[SuccessMessage] = DeleteReviewSuccess;
-
-            return this.RedirectToAction(this.TempData["LastAction"]!.ToString(),
-                this.TempData["LastController"]!.ToString());
         }
-        catch (Exception e)
+        catch
         {
-            return InvalidDataError(e.Message);
+            return this.GeneralError();
         }
+        TempData[SuccessMessage] = DeleteReviewSuccess;
+
+        return this.RedirectToAction(this.TempData["LastAction"]!.ToString(),
+            this.TempData["LastController"]!.ToString());
     }
 
     [HttpPost]
@@ -408,18 +480,31 @@ public class MovieController : BaseController
     [HttpPost]
     public async Task<IActionResult> DeleteComment(string commentId)
     {
+        if (!this.IsAuthenticated())
+        {
+            this.TempData[ErrorMessage] = NotAuthenticated;
+
+            return this.RedirectToAction("Login", "User");
+
+        }
         try
         {
-            await this._movieService.DeleteCommentAsync(commentId, this.GetUserId());
+            var userId = this.User.GetId();
+            var isOwner = await  this._movieService.IsUserOwnerOfComment(userId!, commentId);
+
+            if (isOwner || this.User.IsAdmin())
+            {
+                await this._movieService.DeleteCommentAsync(commentId); 
+            }
 
             TempData[SuccessMessage] = DeleteCommentSuccess;
 
             return this.RedirectToAction(this.TempData["LastAction"]!.ToString(),
                 this.TempData["LastController"]!.ToString());
         }
-        catch (Exception e)
+        catch
         {
-            return InvalidDataError(e.Message);
+            return this.GeneralError();
         }
     }
 }

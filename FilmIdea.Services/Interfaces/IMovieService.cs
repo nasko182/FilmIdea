@@ -48,9 +48,9 @@ public interface IMovieService
 
     Task AddRemoveDislikeAsync(string reviewId, string userId);
 
-    Task DeleteReviewAsync(string reviewId,string criticId);
+    Task DeleteReviewAsync(string reviewId);
 
-    Task DeleteCommentAsync(string commentId,string userId);
+    Task DeleteCommentAsync(string commentId);
 
     Task<bool> IsCriticOwnerOfReview(string? criticId, string? reviewId);
 

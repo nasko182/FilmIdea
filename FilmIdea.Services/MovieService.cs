@@ -602,25 +602,18 @@ public class MovieService : FilmIdeaService, IMovieService
         }
     }
 
-    public async Task DeleteReviewAsync(string reviewId, string criticId)
+    public async Task DeleteReviewAsync(string reviewId)
     {
         var review = await this._dbContext.Reviews
             .Where(r => r.Id.ToString() == reviewId)
-            .FirstOrDefaultAsync();
+            .FirstAsync();
 
-        if (review != null && review.CriticId.ToString() == criticId)
-        {
-            var comments = await this._dbContext.Comments
-                .Where(c => c.ReviewId.ToString() == reviewId)
-                .ToListAsync();
+        var comments = await this._dbContext.Comments
+            .Where(c => c.ReviewId.ToString() == reviewId)
+            .ToListAsync();
 
-            this._dbContext.Comments.RemoveRange(comments);
-            this._dbContext.Reviews.Remove(review);
-        }
-        else
-        {
-            throw new ArgumentException("critic id");
-        }
+        this._dbContext.Comments.RemoveRange(comments);
+        this._dbContext.Reviews.Remove(review); ;
 
         try
         {
@@ -628,25 +621,17 @@ public class MovieService : FilmIdeaService, IMovieService
         }
         catch
         {
-            throw new ArgumentException("review id");
+            throw new InvalidOperationException("Something went wrong!");
         }
     }
 
-    public async Task DeleteCommentAsync(string commentId, string userId)
+    public async Task DeleteCommentAsync(string commentId)
     {
         var comment = await this._dbContext.Comments
             .Where(c => c.Id.ToString() == commentId)
-            .FirstOrDefaultAsync();
+            .FirstAsync();
 
-
-        if (comment != null && comment.WriterId.ToString() == userId)
-        {
-            this._dbContext.Comments.Remove(comment);
-        }
-        else
-        {
-            throw new ArgumentException("user id");
-        }
+        this._dbContext.Comments.Remove(comment);
 
         try
         {
@@ -654,7 +639,7 @@ public class MovieService : FilmIdeaService, IMovieService
         }
         catch
         {
-            throw new ArgumentException("review id");
+            throw new InvalidOperationException("Something went wrong!");
         }
     }
 

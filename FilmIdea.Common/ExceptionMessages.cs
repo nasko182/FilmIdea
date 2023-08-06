@@ -8,6 +8,8 @@ public static class ExceptionMessages
 
     public static string UnauthorizedAccessErrorMessage => "You must become an critic in order to add new review";
 
+    public static string NotAuthenticated => "Please login first";
+
     public static string AlreadyCriticErrorMessage => "You are already an critic";
 
     public static string InvalidDateOfBirthErrorMessage => "Please enter an valid date of birth or contact administrator";
