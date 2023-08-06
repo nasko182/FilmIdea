@@ -5,14 +5,17 @@
 
 <h2>Create New Group</h2>
 
-<form id="createGroupForm" asp-action="Create" asp-controller="Group" method="post">
+<form id="createGroupForm" asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
     <div class="form-group">
-        <label for="Name">Group Name</label>
-        <input type="text" class="form-control" id="Name" name="Name" required autocomplete="off">
+        <label asp-for="AddGroupData.Name">Group Name</label>
+        <input asp-for="AddGroupData.Name" type="text" class="form-control" name="Name" required autocomplete="off">
+        <span asp-validation-for="AddGroupData.Name" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label for="Icon">Select Icon</label>
+        <label asp-for="AddGroupData.Icon">Select Icon</label>
         <select class="form-control iconSelector" id="Icon" name="Icon">
             @foreach (var icon in Model.Icons)
             {
@@ -22,7 +25,7 @@
     </div>
 
     <div class="form-group">
-        <label for="Users">Select Users</label>
+        <label asp-for="AddGroupData.UsersIds">Select Users</label>
         <input type="text" class="form-control" id="UserSearch" placeholder="Enter a username" autocomplete="off">
         <div id="usersSection" style="display: none">
             @foreach (var user in Model.AllUsers)
@@ -31,15 +34,16 @@
                     <input type="checkbox" name="UsersIds" value="@user.Id" data-id="@user.Id">
                     @user.Username
                 </label>
-                <br />
+                <br/>
             }
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary" id="createGroupButton" disabled>Create Group</button>
+    <button type="submit" class="btn btn-primary mt-2" id="createGroupButton" disabled>Create Group</button>
 </form>
 
 <input type="hidden" id="UserList" name="GroupData.UsersIds" data-users="@Html.Raw(Json.Serialize(Model.AddGroupData.UsersIds))">
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

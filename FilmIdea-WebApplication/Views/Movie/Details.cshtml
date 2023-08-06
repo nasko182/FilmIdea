@@ -152,20 +152,20 @@
 
                 <div id="addReviewForm" style="display: none;">
                     <form asp-action="AddReview" id="reviewForm" method="post">
-                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="mb-3">
-                            <label asp-for="@Model.AddReview.Title" class="form-label-add-edit">Title</label>
                             <input type="text" asp-for="@Model.AddReview.Title" name="Title" class="form-control" aria-required="true" />
+                            <label asp-for="@Model.AddReview.Title" class="form-label-add-edit">Title</label>
                             <span asp-validation-for="@Model.AddReview.Title" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
-                            <label asp-for="@Model.AddReview.Rating" class="form-label-add-edit">Rating</label>
                             <input type="number" asp-for="@Model.AddReview.Rating" name="Rating" class="form-control" aria-required="true" />
+                            <label asp-for="@Model.AddReview.Rating" class="form-label-add-edit">Rating</label>
                             <span asp-validation-for="@Model.AddReview.Rating" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
-                            <label asp-for="@Model.AddReview.Content" class="form-label-add-edit">Content</label>
                             <textarea asp-for="@Model.AddReview.Content" name="Content" class="form-control" aria-required="true" rows="3"></textarea>
+                            <label asp-for="@Model.AddReview.Content" class="form-label-add-edit">Content</label>
                             <span asp-validation-for="@Model.AddReview.Content" class="text-danger"></span>
                         </div>
                         <input type="number" asp-for="@Model.MovieDetails.Id" name="movieId" style="display: none" />
@@ -311,8 +311,6 @@
             </div>
         </div>
     </div>
-
-</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

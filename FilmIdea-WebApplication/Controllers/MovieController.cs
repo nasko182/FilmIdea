@@ -36,7 +36,6 @@ public class MovieController : BaseController
     //TODO: Make manage button to be size of the username
     //TODO: Edit views to be more beautiful
     //TODO: Edit Swipe View Add Link to details on movie pic in swipe
-    //TODO: Change All forms to asp to add validations(critic,new group.....)
 
     private readonly IMovieService _movieService;
 

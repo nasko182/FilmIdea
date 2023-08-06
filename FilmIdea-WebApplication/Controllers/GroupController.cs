@@ -76,7 +76,10 @@ public class GroupController : BaseController
             }
         }
 
-        return this.RedirectToAction("All");
+        var model = await this._groupService.CreateGroupModelAsync(this.GetUserId());
+        model.AddGroupData = viewModel;
+
+        return this.View(model);
     }
 
     public async Task<IActionResult> Edit(string icon, string name, string userIds,string groupId)

@@ -234,7 +234,7 @@ public class GroupService : FilmIdeaService, IGroupService
             .Select(u => new UserViewModel()
             {
                 Id = u.Id.ToString(),
-                Username = u.Email.Substring(0, u.Email.IndexOf("@"))
+                Username = u.UserName
             })
             .ToListAsync();
     }
