@@ -1,5 +1,6 @@
 ﻿namespace FilmIdea.Web.Controllers;
 
+using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +9,10 @@ public class HomeController : BaseController
     [AllowAnonymous]
     public IActionResult Index()
     {
+        if (User.IsAdmin())
+        {
+            return this.RedirectToAction("Index", "Home", new { Area = "Admin" });
+        }
         if (this.IsAuthenticated())
         {
             return this.RedirectToAction("Swipe","Swipe");

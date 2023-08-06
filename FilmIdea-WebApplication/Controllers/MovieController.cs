@@ -3,12 +3,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
+using Infrastructure.Extensions;
 using Services.Data.Models.Movies;
 using Services.Data.Interfaces;
 using ViewModels.Comment;
 using ViewModels.Movie;
 using ViewModels.Review;
-using Infrastructure.Extensions;
 
 
 using static Common.NotificationMessageConstants;
@@ -23,7 +23,7 @@ public class MovieController : BaseController
     //TODO: Check all views and js for more todo
     //TODO: Check all using
     //TODO: Check all collections if empty message?
-    //TODO: Check site like user,critic and un logged if btn don't work add asp-area="" 
+    //TODO: Check site like user,critic,admin and un logged if btn don't work add asp-area="" 
     //TODO: Check if admin work when get project from github with new db
     //TODO: Check for buttons to hide from users that don't need to see them
     //TODO: unit tests
@@ -35,6 +35,7 @@ public class MovieController : BaseController
     //TODO: Make manage button to be size of the username
     //TODO: Edit views to be more beautiful
     //TODO: Edit Swipe View Add Link to details on movie pic in swipe
+    //TODO: Edit admin navbar
 
     private readonly IMovieService _movieService;
 

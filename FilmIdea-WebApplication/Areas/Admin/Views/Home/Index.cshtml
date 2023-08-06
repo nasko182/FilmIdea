@@ -1,0 +1,29 @@
+﻿@using FilmIdea.Web.Infrastructure.Extensions
+@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="mt-4 p-5 bg-light text-center">
+    <h2 class="display-4">Hello, @User.GetName()!</h2>
+    <p class="lead mb-1 mt-3">
+        This is your administrator area - you can <b>read</b>, <b>create</b>,
+        <b>delete</b> and <b>edit</b> movies, actors and directors.
+    </p>
+    <p class="lead mt-1">
+        You can also see <b>all users and agents</b> and <b>are they logged</b> in the
+        system.
+    </p>
+    <hr class="my-4">
+    <a asp-area="" asp-controller="Movie" asp-action="All"
+       class="btn btn-primary btn-lg">Movies</a>
+    <a asp-area="Admin" asp-controller="Movie" asp-action="Add"
+       class="btn btn-primary btn-lg">Add Movie</a>
+    <span> | </span>
+    <a asp-area="Admin" asp-controller="Actor" asp-action="Add"
+       class="btn btn-primary btn-lg"> Add Actor</a>
+    <span> | </span>
+    <a asp-area="Admin" asp-controller="Director" asp-action="Add"
+       class="btn btn-primary btn-lg">Add Director</a>
+
+    <a asp-area="Admin" asp-controller="User" asp-action="All"
+       class="btn btn-primary btn-lg">All Users</a>
+</div>
