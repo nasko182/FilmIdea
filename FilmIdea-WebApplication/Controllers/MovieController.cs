@@ -28,6 +28,7 @@ public class MovieController : BaseController
     //TODO: Check site like user,critic,admin and un logged if btn don't work add asp-area=""
     //TODO: Check if admin work when get project from github with new db
     //TODO: Check for buttons to hide from users that don't need to see them
+    //TODO: Add cache is need somewhere(adding something, displayCollections)
     //TODO: Edit movie detail footer
     //TODO: In Admin add logic for adding actors and genres to movies 
     //TODO: In Admin add logic for adding photos and videos to movies actors and directors

@@ -9,6 +9,9 @@ public static class GeneralApplicationConstants
     public const string AdminRoleName = "Administrator";
     public const string DevelopmentAdminEmail = "admin@admin.com";
 
+    public const string UserCacheKey = "UsersCache";
+    public const int UserCacheKeyExpirationMinutes = 5;
+
     public const string OnlineUsersCookieName = "IsOnline";
     public const int LastActivityBeforeOfflineMinutes = 10;
 }

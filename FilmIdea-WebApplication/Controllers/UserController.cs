@@ -3,26 +3,32 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.AspNetCore.Authentication;
+
+using Griesoft.AspNetCore.ReCaptcha;
 
 using Data.Models;
-using Microsoft.AspNetCore.Authentication;
 using ViewModels.User;
 
 using static Common.NotificationMessageConstants;
+using static Common.GeneralApplicationConstants;
 using static Common.ExceptionMessages;
-using Griesoft.AspNetCore.ReCaptcha;
 
 public class UserController : BaseController
 {
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IMemoryCache _memoryCache;
 
     public UserController(
         SignInManager<ApplicationUser> signInManager,
-        UserManager<ApplicationUser> userManager)
+        UserManager<ApplicationUser> userManager,
+        IMemoryCache memoryCache)
     {
         this._userManager = userManager;
         this._signInManager = signInManager;
+        this._memoryCache = memoryCache;
     }
     [HttpGet]
     [AllowAnonymous]
@@ -59,6 +65,8 @@ public class UserController : BaseController
         }
 
         await this._signInManager.SignInAsync(user, false);
+
+        this._memoryCache.Remove(UserCacheKey);
 
         return this.RedirectToAction("Swipe", "Swipe");
 

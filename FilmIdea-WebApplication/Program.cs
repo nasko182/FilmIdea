@@ -51,6 +51,8 @@ public class Program
 
         builder.Services.AddRecaptchaService();
 
+        builder.Services.AddMemoryCache();
+
         builder.Services.ConfigureApplicationCookie(cfg =>
         {
             cfg.LoginPath = "/User/Login";
