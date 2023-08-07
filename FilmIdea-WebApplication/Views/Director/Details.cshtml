@@ -1,18 +1,36 @@
-﻿@model DirectorDetailsViewModel
+﻿@using FilmIdea.Web.Infrastructure.Extensions
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model DirectorDetailsViewModel
 @{
-    ViewBag.Title = $"{@Model.Name} - FilmIdea";
+    ViewBag.Title = $"{Model.Name} - FilmIdea";
 }
 
 <div class="container actor-details">
-    <h2 class="actor-name">@Model.Name</h2>
-    <p class="actor-birthdate">Born @Model.DateOfBirth</p>
-
+    <div class="d-flex justify-content-between">
+        <div>
+            <h2 class="actor-name">@Model.Name</h2>
+            <p class="actor-birthdate">Born @Model.DateOfBirth</p>
+        </div>
+        @if (User.IsAdmin())
+        {
+            <div class="d-flex justify-content-between">
+                <button class="btn btn-warning" style="height: 41.5px;margin-right: 4px">
+                    <a asp-area="Admin" asp-controller="Director" asp-action="Edit" asp-route-id="@Model.Id" style="text-decoration: none;color: black">Edit</a>
+                </button>
+                <p>@Model.Id</p>
+                <form class="input-group-sm" asp-area="Admin" asp-controller="Director" asp-action="Delete" asp-route-id="@Model.Id">
+                    <input type="submit" value="Delete" class="fs-6 btn btn-danger mb-3 p-2" />
+                </form>
+            </div>
+        }
+    </div>
     <div class="row">
         <div class="col-md-3" style="padding-right: 4px;">
             <div class="actor-profile">
                 <img src="@Model.ProfileImageUrl" alt="@Model.Name" class="actor-image" />
             </div>
         </div>
+
         <div class="col-md-6" style="padding: 0; width: 54%;">
             @if (Model.Videos.Any())
             {
@@ -98,7 +116,7 @@
     </div>
     <div class="row">
         <div class="actor-movies">
-            <h3 class="title">Genres</h3>
+            <h3 class="title">Movies</h3>
             @if (Model.Movies.Any())
             {
                 <partial name="_MoviesPartial" model="Model.Movies" />

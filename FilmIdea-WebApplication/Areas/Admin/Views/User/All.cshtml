@@ -1,4 +1,5 @@
-﻿@model IEnumerable<FullUserViewModel>
+﻿@using FilmIdea.Web.Infrastructure.Middlewares;
+@model IEnumerable<FullUserViewModel>
 @{
     ViewBag.Title = "All Users";
 }
@@ -6,31 +7,42 @@
 <hr />
 <table class="table table-striped">
     <thead>
-    <tr>
-        <th><label>Email</label></th>
-        <th><label>Username</label></th>
-        <th><label>Full Name</label></th>
-        <th><label>Is Critic</label></th>
-    </tr>
+        <tr>
+            <th><label>Email</label></th>
+            <th><label>Username</label></th>
+            <th><label>Full Name</label></th>
+            <th><label>Is Critic</label></th>
+            <th><label>Is Online</label></th>
+        </tr>
     </thead>
     <tbody>
-    @foreach (var user in Model)
-    {
-        <tr>
-            <td><label>@user.Email</label></td>
-            <td><label>@user.UserName</label></td>
-            <td><label>@user.Name</label></td>
-            <td>
-                @if (user.Name != string.Empty)
-                {
-                    <label>✔</label>
-                }
-                else
-                {
-                    <label class="text-center">❌</label>
-                }
-            </td>
-        </tr>
-    }
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td><label>@user.Email</label></td>
+                <td><label>@user.UserName</label></td>
+                <td><label>@user.Name</label></td>
+                <td>
+                    @if (user.Name != string.Empty)
+                    {
+                        <label>✔</label>
+                    }
+                    else
+                    {
+                        <label class="text-center">❌</label>
+                    }
+                </td>
+                <td>
+                    @if (OnlineUsersMiddleware.CheckIfUserIsOnline(user.Id))
+                    {
+                        <label>✔</label>
+                    }
+                    else
+                    {
+                        <label class="text-center">❌</label>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

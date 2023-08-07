@@ -6,7 +6,7 @@ using AspNetCore.Builder;
 using AspNetCore.Identity;
 
 using FilmIdea.Data.Models;
-
+using FilmIdea.Web.Infrastructure.Middlewares;
 using static FilmIdea.Common.GeneralApplicationConstants;
 
 public static class WebApplicationBuilderExtensions
@@ -77,5 +77,10 @@ public static class WebApplicationBuilderExtensions
             .GetResult();
 
         return app;
+    }
+
+    public static IApplicationBuilder EnableOnlineUsersCheck(this IApplicationBuilder app)
+    {
+        return app.UseMiddleware<OnlineUsersMiddleware>();
     }
 }

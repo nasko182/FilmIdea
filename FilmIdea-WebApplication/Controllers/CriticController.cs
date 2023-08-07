@@ -13,10 +13,12 @@ using static Common.ExceptionMessages;
 public class CriticController : BaseController
 {
     private readonly ICriticService _criticService;
+    private readonly IDropboxService _dropboxService;
 
-    public CriticController(ICriticService criticService)
+    public CriticController(ICriticService criticService, IDropboxService dropboxService)
     {
         this._criticService = criticService;
+        this._dropboxService = dropboxService;
     }
     public async Task<IActionResult> Become()
     {
@@ -46,12 +48,6 @@ public class CriticController : BaseController
             return this.RedirectToAction("Become");
         }
 
-        if (model.ProfileImage == null)
-        {
-            TempData[ErrorMessage] = InvalidInputErrorMessage("picture");
-
-            return this.RedirectToAction("Become");
-        }
         string mimeType;
         new FileExtensionContentTypeProvider().TryGetContentType(model.ProfileImage.FileName, out mimeType!);
 
@@ -63,15 +59,17 @@ public class CriticController : BaseController
 
             return this.RedirectToAction("Become");
         }
+        var fileName = this.GetUserName() + "_ProfileImage.jpg";
 
-        string photoUrl = String.Empty;
+        string photoUrl;
         try
         {
-            photoUrl = await this._criticService.UploadPhotoAsync(model.ProfileImage, this.GetUserName());
+            photoUrl = await this._dropboxService.UploadFileAsync(model.ProfileImage, "ImagesDb/Critics", fileName);
         }
         catch
         {
             TempData[ErrorMessage] = InvalidToken;
+            return this.RedirectToAction("All", "Movie");
         }
 
         await this._criticService.CreateCriticAsync(this.GetUserId(), model, photoUrl);

@@ -1,4 +1,6 @@
-﻿@model List<MovieViewModel>
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+
+@model List<MovieViewModel>
 <style>
     .movie-card .btn-hide {
         opacity: 0;
@@ -100,7 +102,8 @@
     var addToUserWatchlistUrl = '@Url.Action("AddToUserWatchlist", "Movie")';
     var removeFromUserWatchlistUrl = '@Url.Action("RemoveFromUserWatchlist", "Movie")';
     var addRatingUrl = '@Url.Action("AddRating", "Movie")';
-
+    
+    var csrfToken = '@Antiforgery.GetAndStoreTokens(Context).RequestToken';
     $(".movie-card").hover(
         function () {
             $(this).find(".card-footer").fadeIn(200);

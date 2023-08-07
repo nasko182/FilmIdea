@@ -49,18 +49,9 @@
             </div>
         </div>
         <div class="col-md-6" style="padding: 0; width: 54%;">
-            @if (Model.MovieDetails.Videos.Any())
-            {
-                <div class="embed-responsive embed-responsive-16by9" style="height: 93%;">
-                    <iframe class="embed-responsive-item" style="width: 100%;height: 100%;" src="@Model.MovieDetails.Videos.First()" frameborder="0" allowfullscreen></iframe>
+            <div class="embed-responsive embed-responsive-16by9" style="height: 93%;">
+                    <iframe class="embed-responsive-item" style="width: 100%;height: 100%;" src="@Model.MovieDetails.TrailerUrl" frameborder="0" allowfullscreen></iframe>
                 </div>
-            }
-            else
-            {
-                <div class="empty">
-                    <p class="no-content-msg" style="margin-top: 29%;">No videos found for this actor.</p>
-                </div>
-            }
         </div>
         <div class="col-md-2" style="padding-left: 4px; width: 21%;">
             <div class="content-button">
@@ -123,7 +114,7 @@
 }
 <hr/>
 <div class="row">
-    <p>Director: </p><a asp-area="" asp-controller="Director" asp-action="Details" asp-route-actorId="@Model.MovieDetails.Director.Id">@Model.MovieDetails.Director.Name</a>
+    <p>Director: </p><a asp-area="" asp-controller="Director" asp-action="Details" asp-route-directorId="@Model.MovieDetails.Director.Id">@Model.MovieDetails.Director.Name</a>
 </div>
 <hr/>
 <div class="row">

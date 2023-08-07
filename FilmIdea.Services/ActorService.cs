@@ -4,6 +4,7 @@ using FilmIdea.Data;
 using FilmIdea.Data.Models;
 using Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Web.ViewModels.Actor;
 using Web.ViewModels.Movie;
 
@@ -16,15 +17,15 @@ public class ActorService : FilmIdeaService, IActorService
         this._dbContext = dbContext;
     }
 
-    public async Task<ActorDetailsViewModel?> GetActorDetailsAsync(int actorId,string? userId)
+    public async Task<ActorDetailsViewModel?> GetActorDetailsAsync(int actorId, string? userId)
     {
         if (userId == null)
         {
             return await this._dbContext.Actors
                 .Where(a => a.Id == actorId)
                 .Include(a => a.Movies)
-                .ThenInclude(ma=>ma.Movie)
-                .ThenInclude(m=>m.Ratings)
+                .ThenInclude(ma => ma.Movie)
+                .ThenInclude(m => m.Ratings)
                 .Select(a => new ActorDetailsViewModel()
                 {
                     Id = a.Id,
@@ -59,9 +60,9 @@ public class ActorService : FilmIdeaService, IActorService
 
             return await this._dbContext.Actors
                 .Where(a => a.Id == actorId)
-                .Include(a=>a.Movies)
-                .ThenInclude(ma=>ma.Movie)
-                .ThenInclude(m=>m.Ratings)
+                .Include(a => a.Movies)
+                .ThenInclude(ma => ma.Movie)
+                .ThenInclude(m => m.Ratings)
                 .Include(a => a.Movies)
                 .ThenInclude(ma => ma.Movie)
                 .ThenInclude(m => m.UsersWatchlists)
@@ -82,7 +83,7 @@ public class ActorService : FilmIdeaService, IActorService
                         CoverPhotoUrl = ma.Movie.CoverImageUrl,
                         Duration = ma.Movie.Duration,
                         ReleaseYear = ma.Movie.ReleaseDate.Year,
-                        HasMovieInWatchlist = HasMovieInUserWatchlist(userId,ma.Movie),
+                        HasMovieInWatchlist = HasMovieInUserWatchlist(userId, ma.Movie),
                         UserRating = GetRating(userRatings, ma.MovieId)
 
                     }).ToList()
@@ -91,5 +92,74 @@ public class ActorService : FilmIdeaService, IActorService
         }
     }
 
-    
+    public async Task<int> Create(AddActorViewModel model, string photoUrl)
+    {
+        var actor = new Actor
+        {
+            Name = model.Name,
+            Bio = model.Bio,
+            ProfileImageUrl = photoUrl,
+            DateOfBirth = model.DateOfBirth
+        };
+
+        await this._dbContext.Actors.AddAsync(actor);
+
+        try
+        {
+            await this._dbContext.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            throw new InvalidOperationException(e.Message);
+        }
+
+        return actor.Id;
+    }
+
+    public async Task<EditActorViewModel> GetActorForEditByIdAsync(int id)
+    {
+        var actor = await this._dbContext.Actors
+            .Where(a => a.Id == id)
+            .FirstAsync();
+
+        return new EditActorViewModel
+        {
+            Name = actor.Name,
+            Bio = actor.Bio,
+            DateOfBirth = actor.DateOfBirth,
+            ProfileImageUrl = actor.ProfileImageUrl
+        };
+    }
+
+    public async Task EditActorByIdAndModelAsync(int id, EditActorViewModel model)
+    {
+        var actor = await this._dbContext.Actors
+            .Where(a => a.Id == id)
+            .FirstAsync();
+
+        actor.Name = model.Name;
+        actor.Bio = model.Bio;
+        actor.DateOfBirth = model.DateOfBirth;
+        actor.ProfileImageUrl = model.ProfileImageUrl;
+
+        try
+        {
+            await this._dbContext.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            throw new InvalidOperationException();
+        }
+    }
+
+    public async Task DeleteActorByIdAsync(int id)
+    {
+        var actor = await _dbContext
+            .Actors
+            .FirstAsync(a=>a.Id==id);
+
+        _dbContext.Remove(actor);
+
+        await _dbContext.SaveChangesAsync();
+    }
 }

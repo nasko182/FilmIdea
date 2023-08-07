@@ -692,6 +692,33 @@ public class MovieService : FilmIdeaService, IMovieService
         return review!.MovieId;
     }
 
+    public async Task<int> Create(AddMovieViewModel model, string photoUrl, string videoUrl)
+    {
+        var movie = new Movie
+        {
+            Title = model.Title,
+            Description = model.Description,
+            ReleaseDate = model.ReleaseDate,
+            Duration = model.Duration,
+            CoverImageUrl = photoUrl,
+            TrailerUrl = videoUrl,
+            DirectorId = model.DirectorId,
+        };
+
+        await this._dbContext.Movies.AddAsync(movie);
+
+        try
+        {
+            await this._dbContext.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            throw new InvalidOperationException(e.Message);
+        }
+
+        return movie.Id;
+    }
+
 
 
 

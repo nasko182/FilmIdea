@@ -12,4 +12,8 @@ public static class SuccessMessages
 
     public static string DeleteCommentSuccess => "Comment deleted successfully!";
 
+    public static string DeleteSuccess => "Successfully deleted!";
+
+
+
 }

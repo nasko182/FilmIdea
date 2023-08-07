@@ -6,14 +6,17 @@ using Web.ViewModels.Director;
 using Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Web.ViewModels.Movie;
+using FilmIdea.Web.ViewModels.Actor;
 
 public class DirectorService : FilmIdeaService, IDirectorService
 {
     private readonly FilmIdeaDbContext _dbContext;
+    private readonly IMovieService _movieService;
 
-    public DirectorService(FilmIdeaDbContext dbContext)
+    public DirectorService(FilmIdeaDbContext dbContext, IMovieService movieService)
     {
         this._dbContext = dbContext;
+        this._movieService = movieService;
     }
 
     public async Task<DirectorDetailsViewModel?> GetDirectorDetailsAsync(int directorId,string? userId)
@@ -24,16 +27,16 @@ public class DirectorService : FilmIdeaService, IDirectorService
                 .Where(a => a.Id == directorId)
                 .Include(d=>d.Movies)
                 .ThenInclude(m=>m.Ratings)
-                .Select(a => new DirectorDetailsViewModel()
+                .Select(d => new DirectorDetailsViewModel()
                 {
-                    Id = a.Id,
-                    Bio = a.Bio,
-                    DateOfBirth = a.DateOfBirth.ToString("MMMM dd,yyyy"),
-                    Name = a.Name,
-                    ProfileImageUrl = a.ProfileImageUrl,
-                    Photos = a.Photos.Select(p => p.Url).ToList(),
-                    Videos = a.Videos.Select(v => v.Url).ToList(),
-                    Movies = a.Movies.Select(m => new MovieViewModel()
+                    Id = d.Id,
+                    Bio = d.Bio,
+                    DateOfBirth = d.DateOfBirth.ToString("MMMM dd,yyyy"),
+                    Name = d.Name,
+                    ProfileImageUrl = d.ProfileImageUrl,
+                    Photos = d.Photos.Select(p => p.Url).ToList(),
+                    Videos = d.Videos.Select(v => v.Url).ToList(),
+                    Movies = d.Movies.Select(m => new MovieViewModel()
                     {
                         Id = m.Id,
                         Title = m.Title,
@@ -62,16 +65,16 @@ public class DirectorService : FilmIdeaService, IDirectorService
                 .ThenInclude(m=>m.Ratings)
                 .Include(a => a.Movies)
                 .ThenInclude(m => m.UsersWatchlists)
-                .Select(a => new DirectorDetailsViewModel()
+                .Select(d => new DirectorDetailsViewModel()
                 {
-                    Id = a.Id,
-                    Bio = a.Bio,
-                    DateOfBirth = a.DateOfBirth.ToString("MMMM dd,yyyy"),
-                    Name = a.Name,
-                    ProfileImageUrl = a.ProfileImageUrl,
-                    Photos = a.Photos.Select(p => p.Url).ToList(),
-                    Videos = a.Videos.Select(v => v.Url).ToList(),
-                    Movies = a.Movies.Select(ma => new MovieViewModel()
+                    Id = d.Id,
+                    Bio = d.Bio,
+                    DateOfBirth = d.DateOfBirth.ToString("MMMM dd,yyyy"),
+                    Name = d.Name,
+                    ProfileImageUrl = d.ProfileImageUrl,
+                    Photos = d.Photos.Select(p => p.Url).ToList(),
+                    Videos = d.Videos.Select(v => v.Url).ToList(),
+                    Movies = d.Movies.Select(ma => new MovieViewModel()
                     {
                         Id = ma.Id,
                         Title = ma.Title,
@@ -88,5 +91,92 @@ public class DirectorService : FilmIdeaService, IDirectorService
         }
     }
 
-    
+    public async Task<int> Create(AddDirectorViewModel model, string photoUrl)
+    {
+        var director = new Director()
+        {
+            Name = model.Name,
+            Bio = model.Bio,
+            ProfileImageUrl = photoUrl,
+            DateOfBirth = model.DateOfBirth
+        };
+
+        await this._dbContext.Directors.AddAsync(director);
+
+        try
+        {
+            await this._dbContext.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            throw new InvalidOperationException(e.Message);
+        }
+
+        return director.Id;
+    }
+
+    public async Task<EditDirectorViewModel> GetDirectorForEditByIdAsync(int id)
+    {
+        var director = await this._dbContext.Directors
+            .Where(d => d.Id == id)
+            .FirstAsync();
+
+        return new EditDirectorViewModel()
+        {
+            Name = director.Name,
+            Bio = director.Bio,
+            DateOfBirth = director.DateOfBirth,
+            ProfileImageUrl = director.ProfileImageUrl
+        };
+    }
+
+    public async Task EditDirectorByIdAndModelAsync(int id, EditDirectorViewModel model)
+    {
+        var director = await this._dbContext.Directors
+            .Where(d => d.Id == id)
+            .FirstAsync();
+
+        director.Name = model.Name;
+        director.Bio = model.Bio;
+        director.DateOfBirth = model.DateOfBirth;
+        director.ProfileImageUrl = model.ProfileImageUrl;
+
+        try
+        {
+            await this._dbContext.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            throw new InvalidOperationException();
+        }
+    }
+
+    public async Task DeleteDirectorByIdAsync(int id)
+    {
+        var director = await _dbContext
+            .Directors
+            .FirstAsync(d => d.Id == id);
+
+        //TODO: Remove Movies first!
+
+        try
+        {
+            _dbContext.Directors.Remove(director);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            throw;
+        }
+
+        try
+        {
+            await _dbContext.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            throw;
+        }
+    }
 }

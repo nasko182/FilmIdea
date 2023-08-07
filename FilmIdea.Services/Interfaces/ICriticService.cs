@@ -1,6 +1,5 @@
 ﻿namespace FilmIdea.Services.Data.Interfaces;
 
-using Microsoft.AspNetCore.Http;
 using Web.ViewModels.Critic;
 
 public interface ICriticService 
@@ -8,8 +7,6 @@ public interface ICriticService
     Task<bool> CriticExistByUserIdAsync(string? userId);
 
     Task<string?> GetCriticIdAsync(string userid);
-
-    Task<string> UploadPhotoAsync(IFormFile imageFile, string userName);
 
     Task CreateCriticAsync(string userId, BecomeCriticViewModel model,string photoUrl);
 }

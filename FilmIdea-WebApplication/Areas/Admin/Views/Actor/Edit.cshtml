@@ -1,7 +1,8 @@
-﻿@model BecomeCriticViewModel
+﻿@model EditActorViewModel
 @{
-    ViewBag.Title = "Become Critic";
+    ViewBag.Title = "Edit Actor";
 }
+
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
 <div class="row">
@@ -11,11 +12,11 @@
                 <div class="mb-3">
                     <label asp-for="Name"></label>
                     <input asp-for="Name" class="form-control" placeholder="First and last name">
-                    <span asp-validation-for="@Model.Name" class="small text-danger"></span>
+                    <span asp-validation-for="Name" class="small text-danger"></span>
                 </div>
                 <div class="mb-3">
                     <label asp-for="Bio"></label>
-                    <textarea asp-for="Bio" class="form-control" aria-required="true" rows="5" placeholder="Write your biography here..."></textarea>
+                    <textarea asp-for="Bio" class="form-control" aria-required="true" rows="5" placeholder="Write actor biography here..."></textarea>
                     <span asp-validation-for="Bio" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
@@ -24,11 +25,12 @@
                     <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="ProfileImage"></label>
-                    <input asp-for="ProfileImage" class="form-control" type="file" name="ProfileImage" accept="image/*" />
+                    <label asp-for="ProfileImageUrl"></label>
+                    <input asp-for="ProfileImageUrl" class="form-control">
+                    <span asp-validation-for="ProfileImageUrl" class="small text-danger"></span>
                 </div>
             </div>
-            <input class="btn btn-primary mt-3" type="submit" value="Become Critic" />
+            <input class="btn btn-primary mt-3" type="submit" value="Submit" />
         </form>
     </div>
 </div>

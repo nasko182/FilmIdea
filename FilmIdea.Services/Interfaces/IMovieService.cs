@@ -56,6 +56,8 @@ public interface IMovieService
 
     Task<bool> IsUserOwnerOfComment(string? userId, string? commentId);
 
+    Task<int> Create(AddMovieViewModel model, string photoUrl, string videoUrl);
+
     Task<int> GetMovieIdByReviewId(string? reviewId);
 
 }

@@ -8,7 +8,8 @@ public class UserController : BaseAdminController
 {
     private readonly IUserService _userService;
 
-    public UserController(IUserService userService)
+    public UserController(IUserService userService,IDropboxService dropboxService)
+    :base(dropboxService)
     {
         this._userService = userService;
     }

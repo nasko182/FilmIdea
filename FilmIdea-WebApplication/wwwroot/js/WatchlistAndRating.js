@@ -21,29 +21,41 @@
     $('.watchlist-button').on('click', function (e) {
         e.preventDefault();
         var movieId = $(this).data('movie');
-
-        $.post(addToUserWatchlistUrl, {
-            movieId: movieId,
-        })
-            .done(function (data) {
+        $.ajax({
+            url: addToUserWatchlistUrl,
+            type: 'POST',
+            data: {
+                movieId: movieId,
+            },
+            headers: {
+                RequestVerificationToken: csrfToken,
+            },
+            success: function (data) {
                 $('#rateModal').modal('hide');
                 location.reload();
-            });
+            },
+        });
     });
 
     $('.added-button').on('click', function (e) {
         e.preventDefault();
         var movieId = $(this).data('movie');
-
-        $.post(removeFromUserWatchlistUrl, {
-            movieId: movieId,
-        })
-            .done(function (data) {
+        $.ajax({
+            url: removeFromUserWatchlistUrl,
+            type: 'POST',
+            data: {
+                movieId: movieId,
+            },
+            headers: {
+                RequestVerificationToken: csrfToken,
+            },
+            success: function (data) {
                 $('#rateModal').modal('hide');
                 hasMovieInWatchlist = false;
                 $(this).data('has-movie-in-watchlist', hasMovieInWatchlist);
                 location.reload();
-            });
+            },
+        });
     });
 
     $('#submitRating').on('click', function (e) {
@@ -52,18 +64,23 @@
         var ratingValue = parseInt($('#ratingValue').val());
         var movieId = parseInt($('#movieId').val());
 
-        $.post(addRatingUrl, {
-            movieId: movieId,
-            ratingValue: ratingValue,
-        })
-            .done(function (data) {
+        $.ajax({
+            url: addRatingUrl,
+            type: 'POST',
+            data: {
+                movieId: movieId,
+                ratingValue: ratingValue,
+            },
+            headers: {
+                RequestVerificationToken: csrfToken,
+            },
+            success: function (data) {
                 var ratingButton = $('.rate-button[data-movie="' + movieId + '"]');
                 ratingButton.html('<span>★ ' + ratingValue + '/10</span>');
                 $('#rateModal').modal('hide');
-            })
-            .fail(function (error) {
-                alert(error.message);
-            });
+            },
+        });
+
     });
 
     $('#closeModal').on('click', function (e) {

@@ -73,6 +73,7 @@ public class CriticService : FilmIdeaService, ICriticService
 
     public async Task CreateCriticAsync(string userId, BecomeCriticViewModel model, string photoUrl)
     {
+
         var critic = new Critic()
         {
             Name = model.Name,

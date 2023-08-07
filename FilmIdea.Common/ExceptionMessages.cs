@@ -16,6 +16,8 @@ public static class ExceptionMessages
 
     public static string UsersDoNotExistErrorMessage => "One or more users don't exist.";
 
+    public static string InvalidUpdate => "Unexpected error occurred while trying to update";
+
     public static string InvalidLogin =>
         "There was an error while logging you in! Please try again later or contact administrator!";
 

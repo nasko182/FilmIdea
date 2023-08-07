@@ -94,7 +94,7 @@
             type: 'POST',
             url: addRemoveLike,
             headers: {
-                'RequestVerificationToken': csrfToken
+                RequestVerificationToken: csrfToken
             },
             data: {
                 reviewId: reviewId,
@@ -112,7 +112,7 @@
             type: 'POST',
             url: addRemoveDislike,
             headers: {
-                'RequestVerificationToken': csrfToken
+                RequestVerificationToken: csrfToken
             },
             data: {
                 reviewId: reviewId,

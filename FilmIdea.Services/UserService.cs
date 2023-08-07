@@ -14,18 +14,6 @@ public class UserService : IUserService
     {
         this._dbContext = dbContext;
     }
-    public async Task<string> GetUserNameByIdAsync(string userId)
-    {
-        var user = await this._dbContext
-            .Users.FirstOrDefaultAsync(u => u.Id.ToString() == userId);
-
-        if (user == null)
-        {
-            return string.Empty;
-        }
-
-        return user.UserName;
-    }
 
     public async Task<IEnumerable<FullUserViewModel>> AllAsync()
     {
@@ -36,6 +24,7 @@ public class UserService : IUserService
             .Include(c=>c.User)
             .Select(c => new FullUserViewModel()
             {
+                Id = c.UserId.ToString(),
                 UserName = c.User.UserName,
                 Name = c.Name,
                 Email = c.User.Email
@@ -49,6 +38,7 @@ public class UserService : IUserService
             .Where(u => !this._dbContext.Critics.Any(cr => cr.UserId == u.Id))
             .Select(u => new FullUserViewModel()
             {
+                Id = u.Id.ToString(),
                 UserName = u.UserName,
                 Email = u.Email,
                 Name = string.Empty

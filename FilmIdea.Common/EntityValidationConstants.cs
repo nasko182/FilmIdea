@@ -8,6 +8,7 @@ public static class EntityValidationConstants
         public const int TitleMinLength = 3;
 
         public const int DescriptionMaxLength = 1000;
+        public const int DescriptionMinLength = 10;
 
         public const int CoverImageUrlMaxLength = 2048;
 
@@ -17,8 +18,10 @@ public static class EntityValidationConstants
     public static class ActorValidations
     {
         public const int NameMaxLength = 105;
+        public const int NameMinLength = 5;
 
         public const int BioMaxLength = 10000;
+        public const int BioMinLength = 10;
 
         public const int ProfileImageUrlMaxLength = 2048;
 
@@ -27,8 +30,10 @@ public static class EntityValidationConstants
     public static class DirectorValidations
     {
         public const int NameMaxLength = 105;
+        public const int NameMinLength = 5;
 
         public const int BioMaxLength = 10000;
+        public const int BioMinLength = 10;
 
         public const int ProfileImageUrlMaxLength = 2048;
 
@@ -48,6 +53,7 @@ public static class EntityValidationConstants
     public static class GenreValidations
     {
         public const int NameMaxLength = 30;
+        public const int NameMinLength = 3;
     }
 
     public static class GroupValidations
