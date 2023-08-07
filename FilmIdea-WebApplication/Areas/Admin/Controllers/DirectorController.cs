@@ -1,6 +1,5 @@
 ﻿namespace FilmIdea.Web.Areas.Admin.Controllers;
 
-using FilmIdea.Web.ViewModels.Actor;
 using Microsoft.AspNetCore.Mvc;
 
 using Services.Data.Interfaces;

@@ -155,9 +155,32 @@ public class DirectorService : FilmIdeaService, IDirectorService
     {
         var director = await _dbContext
             .Directors
+            .Include(d=>d.Movies)
+            .ThenInclude(m => m.Reviews)
+            .ThenInclude(r => r.Comments)
+            .Include(d=>d.Movies)
+            .ThenInclude(m => m.Actors)
+            .Include(d=>d.Movies)
+            .ThenInclude(m => m.Genres)
+            .Include(d=>d.Movies)
+            .ThenInclude(m => m.PassedUsers)
+            .Include(d=>d.Movies)
+            .ThenInclude(m => m.Ratings)
+            .Include(d=>d.Movies)
+            .ThenInclude(m => m.UsersWatchlists)
+            .Include(d=>d.Movies)
+            .ThenInclude(m => m.Photos)
+            .Include(d=>d.Movies)
+            .ThenInclude(m => m.Videos)
             .FirstAsync(d => d.Id == id);
 
-        //TODO: Remove Movies first!
+        foreach (var movie in director.Movies)
+        {
+            await this._movieService.DeleteMovieByIdAsync(movie.Id);
+        }
+
+        this._dbContext.Photos.RemoveRange(director.Photos);
+        this._dbContext.Videos.RemoveRange(director.Videos);
 
         try
         {
@@ -173,10 +196,9 @@ public class DirectorService : FilmIdeaService, IDirectorService
         {
             await _dbContext.SaveChangesAsync();
         }
-        catch (Exception e)
+        catch
         {
-            Console.WriteLine(e.Message);
-            throw;
+            throw new InvalidOperationException();
         }
     }
 }

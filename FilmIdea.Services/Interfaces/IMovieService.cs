@@ -5,6 +5,7 @@ using Web.ViewModels.Comment;
 using Web.ViewModels.Genre;
 using Web.ViewModels.Movie;
 using Web.ViewModels.Review;
+using static Dropbox.Api.Files.ListRevisionsMode;
 
 public interface IMovieService
 {
@@ -57,6 +58,12 @@ public interface IMovieService
     Task<bool> IsUserOwnerOfComment(string? userId, string? commentId);
 
     Task<int> Create(AddMovieViewModel model, string photoUrl, string videoUrl);
+
+    Task<EditMovieViewModel> GetMovieForEditByIdAsync(int id);
+
+    Task EditMovieByIdAndModelAsync(int id,EditMovieViewModel model);
+
+    Task DeleteMovieByIdAsync(int id);
 
     Task<int> GetMovieIdByReviewId(string? reviewId);
 

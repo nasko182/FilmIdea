@@ -20,10 +20,24 @@
 }
 
 <div class="container actor-details">
+    <div class="d-flex justify-content-end">
+        
+        @if (User.IsAdmin())
+        {
+            <div class="d-flex justify-content-between">
+                <button class="btn btn-warning" style="height: 41.5px;margin-right: 4px">
+                    <a asp-area="Admin" asp-controller="Movie" asp-action="Edit" asp-route-id="@Model.MovieDetails.Id" style="text-decoration: none;color: black">Edit</a>
+                </button>
+                <form class="input-group-sm" asp-area="Admin" asp-controller="Movie" asp-action="Delete" asp-route-id="@Model.MovieDetails.Id">
+                    <input type="submit" value="Delete" class="fs-6 btn btn-danger mb-3 p-2" />
+                </form>
+            </div>
+        }
+    </div>
     <h2 class="actor-name">@Model.MovieDetails.Title</h2>
     <div class="d-flex justify-content-between">
-        <p  class="actor-birthdate">@Model.MovieDetails.ReleaseYear · @hours @minutes</p>
-        
+        <p class="actor-birthdate">@Model.MovieDetails.ReleaseYear · @hours @minutes</p>
+
         <div class="d-flex justify-content-end">
 
             <div>FILMIDEA RATING</div>
@@ -45,13 +59,13 @@
     <div class="row">
         <div class="col-md-3" style="padding-right: 4px;">
             <div class="actor-profile">
-                <img src="@Model.MovieDetails.CoverImageUrl" alt="@Model.MovieDetails.Title" class="actor-image" />
+                <img src="@Model.MovieDetails.CoverImageUrl" alt="@Model.MovieDetails.Title" class="actor-image"/>
             </div>
         </div>
         <div class="col-md-6" style="padding: 0; width: 54%;">
             <div class="embed-responsive embed-responsive-16by9" style="height: 93%;">
-                    <iframe class="embed-responsive-item" style="width: 100%;height: 100%;" src="@Model.MovieDetails.TrailerUrl" frameborder="0" allowfullscreen></iframe>
-                </div>
+                <iframe class="embed-responsive-item" style="width: 100%; height: 100%;" src="@Model.MovieDetails.TrailerUrl" frameborder="0" allowfullscreen></iframe>
+            </div>
         </div>
         <div class="col-md-2" style="padding-left: 4px; width: 21%;">
             <div class="content-button">
@@ -145,18 +159,18 @@
                     <form asp-action="AddReview" id="reviewForm" method="post">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="mb-3">
-                            <input type="text" asp-for="@Model.AddReview.Title" name="Title" class="form-control" aria-required="true" />
                             <label asp-for="@Model.AddReview.Title" class="form-label-add-edit">Title</label>
+                            <input type="text" asp-for="@Model.AddReview.Title" name="Title" class="form-control" aria-required="true" />
                             <span asp-validation-for="@Model.AddReview.Title" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
-                            <input type="number" asp-for="@Model.AddReview.Rating" name="Rating" class="form-control" aria-required="true" />
                             <label asp-for="@Model.AddReview.Rating" class="form-label-add-edit">Rating</label>
+                            <input type="number" asp-for="@Model.AddReview.Rating" name="Rating" class="form-control" aria-required="true" />
                             <span asp-validation-for="@Model.AddReview.Rating" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
-                            <textarea asp-for="@Model.AddReview.Content" name="Content" class="form-control" aria-required="true" rows="3"></textarea>
                             <label asp-for="@Model.AddReview.Content" class="form-label-add-edit">Content</label>
+                            <textarea asp-for="@Model.AddReview.Content" name="Content" class="form-control" aria-required="true" rows="3"></textarea>
                             <span asp-validation-for="@Model.AddReview.Content" class="text-danger"></span>
                         </div>
                         <input type="number" asp-for="@Model.MovieDetails.Id" name="movieId" style="display: none" />

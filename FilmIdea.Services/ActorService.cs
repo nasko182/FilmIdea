@@ -5,6 +5,7 @@ using FilmIdea.Data.Models;
 using Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.IO;
 using Web.ViewModels.Actor;
 using Web.ViewModels.Movie;
 
@@ -146,7 +147,7 @@ public class ActorService : FilmIdeaService, IActorService
         {
             await this._dbContext.SaveChangesAsync();
         }
-        catch (Exception e)
+        catch
         {
             throw new InvalidOperationException();
         }
@@ -157,6 +158,10 @@ public class ActorService : FilmIdeaService, IActorService
         var actor = await _dbContext
             .Actors
             .FirstAsync(a=>a.Id==id);
+
+        this._dbContext.MoviesActors.RemoveRange(actor.Movies);
+        this._dbContext.Photos.RemoveRange(actor.Photos);
+        this._dbContext.Videos.RemoveRange(actor.Videos);
 
         _dbContext.Remove(actor);
 

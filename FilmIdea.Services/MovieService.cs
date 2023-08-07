@@ -608,12 +608,8 @@ public class MovieService : FilmIdeaService, IMovieService
             .Where(r => r.Id.ToString() == reviewId)
             .FirstAsync();
 
-        var comments = await this._dbContext.Comments
-            .Where(c => c.ReviewId.ToString() == reviewId)
-            .ToListAsync();
-
-        this._dbContext.Comments.RemoveRange(comments);
-        this._dbContext.Reviews.Remove(review); ;
+        this._dbContext.Comments.RemoveRange(review.Comments);
+        this._dbContext.Reviews.Remove(review);
 
         try
         {
@@ -678,6 +674,89 @@ public class MovieService : FilmIdeaService, IMovieService
         }
 
         return comment.WriterId.ToString() == userId;
+    }
+
+    public async Task<EditMovieViewModel> GetMovieForEditByIdAsync(int id)
+    {
+        var movie = await this._dbContext.Movies
+            .Where(m => m.Id == id)
+            .FirstAsync();
+
+        return new EditMovieViewModel
+        {
+            Title = movie.Title,
+            Description = movie.Description,
+            ReleaseDate = movie.ReleaseDate,
+            Duration = movie.Duration,
+            CoverImageUrl = movie.CoverImageUrl,
+            TrailerUrl = movie.TrailerUrl,
+            DirectorId = movie.DirectorId
+        };
+    }
+
+    public async Task EditMovieByIdAndModelAsync(int id, EditMovieViewModel model)
+    {
+        var movie = await this._dbContext.Movies
+            .Where(m => m.Id == id)
+            .FirstAsync();
+
+        movie.Title = model.Title;
+        movie.Description = model.Description;
+        movie.ReleaseDate = model.ReleaseDate;
+        movie.Duration = model.Duration;
+        movie.CoverImageUrl = model.CoverImageUrl;
+        movie.TrailerUrl = model.TrailerUrl;
+        movie.DirectorId = model.DirectorId;
+
+        try
+        {
+            await this._dbContext.SaveChangesAsync();
+        }
+        catch 
+        {
+            throw new InvalidOperationException();
+        }
+    }
+
+    public async Task DeleteMovieByIdAsync(int id)
+    {
+        var movie = await _dbContext
+            .Movies
+            .Include(m => m.Reviews)
+            .ThenInclude(r => r.Comments)
+            .Include(m=>m.Actors)
+            .Include(m=>m.Genres)
+            .Include(m=>m.PassedUsers)
+            .Include(m=>m.Ratings)
+            .Include(m=>m.UsersWatchlists)
+            .Include(m=>m.Photos)
+            .Include(m=>m.Videos)
+            .FirstAsync(m => m.Id == id);
+
+        foreach (var review in movie.Reviews)
+        {
+            this._dbContext.Comments.RemoveRange(review.Comments);
+        }
+
+        this._dbContext.Reviews.RemoveRange(movie.Reviews);
+
+        this._dbContext.MoviesActors.RemoveRange(movie.Actors);
+
+        this._dbContext.MoviesGenres.RemoveRange(movie.Genres);
+
+        this._dbContext.UserRatings.RemoveRange(movie.Ratings);
+
+        this._dbContext.UsersMovies.RemoveRange(movie.UsersWatchlists);
+
+        this._dbContext.PassedMovies.RemoveRange(movie.PassedUsers);
+
+        this._dbContext.Photos.RemoveRange(movie.Photos);
+
+        this._dbContext.Videos.RemoveRange(movie.Videos);
+
+        _dbContext.Remove(movie);
+
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task<int> GetMovieIdByReviewId(string? reviewId)

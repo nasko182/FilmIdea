@@ -1,6 +1,6 @@
 ﻿@model EditDirectorViewModel
 @{
-    ViewBag.Title = "Edit Actor";
+    ViewBag.Title = "Edit Director";
 }
 
 <h2 class="text-center">@ViewBag.Title</h2>
@@ -16,7 +16,7 @@
                 </div>
                 <div class="mb-3">
                     <label asp-for="Bio"></label>
-                    <textarea asp-for="Bio" class="form-control" aria-required="true" rows="5" placeholder="Write actor biography here..."></textarea>
+                    <textarea asp-for="Bio" class="form-control" aria-required="true" rows="5" placeholder="Write director biography here..."></textarea>
                     <span asp-validation-for="Bio" class="text-danger"></span>
                 </div>
                 <div class="mb-3">

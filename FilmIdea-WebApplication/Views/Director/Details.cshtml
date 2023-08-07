@@ -17,7 +17,6 @@
                 <button class="btn btn-warning" style="height: 41.5px;margin-right: 4px">
                     <a asp-area="Admin" asp-controller="Director" asp-action="Edit" asp-route-id="@Model.Id" style="text-decoration: none;color: black">Edit</a>
                 </button>
-                <p>@Model.Id</p>
                 <form class="input-group-sm" asp-area="Admin" asp-controller="Director" asp-action="Delete" asp-route-id="@Model.Id">
                     <input type="submit" value="Delete" class="fs-6 btn btn-danger mb-3 p-2" />
                 </form>

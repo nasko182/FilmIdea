@@ -1,11 +1,14 @@
 ﻿namespace FilmIdea.Web.Areas.Admin.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
+
 using Services.Data.Interfaces;
-using ViewModels.Actor;
 using ViewModels.Movie;
 
 using static Common.NotificationMessageConstants;
+using static Common.ExceptionMessages;
+using static Common.SuccessMessages;
+using FilmIdea.Web.ViewModels.Actor;
 
 public class MovieController : BaseAdminController
 {
@@ -71,19 +74,59 @@ public class MovieController : BaseAdminController
         return RedirectToAction("Details", "Movie", new { Area = "", movieId });
     }
 
-    //[HttpGet]
-    //public async Task<IActionResult> Edit(int id)
-    //{
-    //    try
-    //    {
-    //         EditActorViewModel model = await this._movieService
-    //            .GetActorForEditByIdAsync(id);
+    [HttpGet]
+    public async Task<IActionResult> Edit(int id)
+    {
+        try
+        {
+            EditMovieViewModel model = await this._movieService
+               .GetMovieForEditByIdAsync(id);
 
-    //        return View(model);
-    //    }
-    //    catch 
-    //    {
-    //        return GeneralError();
-    //    }
-    //}
+            return View(model);
+        }
+        catch
+        {
+            return GeneralError();
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Edit(int id, EditMovieViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        try
+        {
+            await this._movieService.EditMovieByIdAndModelAsync(id, model);
+        }
+        catch
+        {
+            ModelState.AddModelError(string.Empty, InvalidUpdate);
+
+            return View(model);
+        }
+        TempData[SuccessMessage] = "Movie was edited successfully!";
+
+        return RedirectToAction("Details", "Movie", new { Area = "", movieId = id });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Delete(int id)
+    {
+        try
+        {
+            await this._movieService.DeleteMovieByIdAsync(id);
+
+            TempData[SuccessMessage] = DeleteSuccess;
+
+            return RedirectToAction("Index", "Home", new { Area = "Admin" });
+        }
+        catch (Exception)
+        {
+            return GeneralError();
+        }
+    }
 }

@@ -1,6 +1,6 @@
-﻿@model AddMovieViewModel
+﻿@model EditMovieViewModel
 @{
-    ViewBag.Title = "Add Movie";
+    ViewBag.Title = "Edit Movie";
 }
 
 <h2 class="text-center">@ViewBag.Title</h2>
@@ -33,12 +33,14 @@
                     <input asp-for="DirectorId" class="form-control" type="number">
                 </div>
                 <div class="mb-3">
-                    <label asp-for="CoverImage"></label>
-                    <input asp-for="CoverImage" class="form-control" type="file" name="CoverImage" accept="image/*" />
+                    <label asp-for="CoverImageUrl"></label>
+                    <input asp-for="CoverImageUrl" class="form-control" >
+                    <span asp-validation-for="CoverImageUrl" class="small text-danger"></span>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="Trailer"></label>
-                    <input asp-for="Trailer" class="form-control" type="file" name="Trailer" accept="video/mp4" />
+                    <label asp-for="TrailerUrl"></label>
+                    <input asp-for="TrailerUrl" class="form-control" >
+                    <span asp-validation-for="TrailerUrl" class="small text-danger"></span>
                 </div>
             </div>
             <input class="btn btn-primary mt-3" type="submit" value="Submit" />
