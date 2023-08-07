@@ -29,8 +29,9 @@ public class MovieController : BaseController
     //TODO: Check if admin work when get project from github with new db
     //TODO: Check for buttons to hide from users that don't need to see them
     //TODO: Edit movie detail footer
+    //TODO: In Admin add logic for adding actors and genres to movies 
+    //TODO: In Admin add logic for adding photos and videos to movies actors and directors
     //TODO: Add view for photos and videos
-    //TODO: unit tests
     //TODO: Everywhere where Critic is Write something use criticName in blue,  Everywhere where user write something use UserName in green, to be clear that this is critic
     //TODO: Add security from parameter tampering for int-s(Security (1:10m), and XXS (edit program.cs endpoints)
     //TODO: Implement receiving messages with SignalR
@@ -39,9 +40,10 @@ public class MovieController : BaseController
     //TODO: Make manage button to be size of the username
     //TODO: Edit views to be more beautiful
     //TODO: Edit Swipe View Add Link to details on movie pic in swipe
+    //TODO: In Critic add logic for editing critic info
     //TODO: Add view for critic details
+    //TODO: unit tests
     //TODO: Edit admin navbar
-    //TODO: Remove director
 
     private readonly IMovieService _movieService;
 
