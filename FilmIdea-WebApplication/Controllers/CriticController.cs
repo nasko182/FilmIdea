@@ -20,6 +20,7 @@ public class CriticController : BaseController
         this._criticService = criticService;
         this._dropboxService = dropboxService;
     }
+
     public async Task<IActionResult> Become()
     {
         if (await this._criticService.CriticExistByUserIdAsync(this.GetUserId()))
@@ -77,6 +78,24 @@ public class CriticController : BaseController
         TempData[SuccessMessage] = BecomeCriticSuccess;
 
         return this.RedirectToAction("All", "Movie");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Details()
+    {
+        var isCritic =await  this._criticService.CriticExistByUserIdAsync(this.GetUserId());
+        if (!isCritic)
+        {
+            TempData[ErrorMessage] = UnauthorizedAccessErrorMessage;
+
+            return this.RedirectToAction("Become");
+        }
+
+        var criticId =await this._criticService.GetCriticIdAsync(this.GetUserId());
+
+        var model =await this._criticService.GetCriticDetailsByIdAsync(criticId!);
+
+        return this.View(model);
     }
 
 }

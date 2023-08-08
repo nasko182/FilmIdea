@@ -17,35 +17,34 @@ using static Common.SuccessMessages;
 
 public class MovieController : BaseController
 {
-    //TODO: Add [HttpGet] on every action
-    //TODO:Remove all un used classes and methods Like databaseSeeder
-    //TODO: Check IServices for unused methods(IMovieService last)
-    //TODO: Add not authenticated where redirect to login
+    //TODO: Add not authenticated where redirect to login ??
     //TODO: View component
-    //TODO: Add button for becoming admin in user all
-    //TODO: Check all views and js for more todo
     //TODO: Check all using
-    //TODO: Check all collections if empty message?
+    //TODO: Check all collections if empty (message?)
     //TODO: Check site like user,critic,admin and un logged if btn don't work add asp-area=""
     //TODO: Check if admin work when get project from github with new db
+    //TODO: Check IServices for unused methods(IMovieService last)
+    //TODO: Check all views and js for more todo
     //TODO: Check for buttons to hide from users that don't need to see them
-    //TODO: Add cache is need somewhere(adding something, displayCollections), also remove cache is update(last(1:30))
+    //TODO: Add [HttpGet] on every action
+    //TODO: Remove all un used classes and methods Like databaseSeeder
+    //TODO: Add button for becoming admin in user all
     //TODO: Edit movie detail footer
+    //TODO: Edit views to be more beautiful
+    //TODO: Everywhere where Critic is Write something use criticName in blue,  Everywhere where user write something use UserName in green, to be clear that this is critic
+    //TODO: Edit Swipe View and Add Link to details on movie pic in swipe
+    //TODO: Add cache is need somewhere(adding something, displayCollections), also remove cache is update(last(1:30))
     //TODO: In Admin add logic for adding actors and genres to movies 
     //TODO: In Admin add logic for adding photos and videos to movies actors and directors
-    //TODO: Add view for photos and videos
-    //TODO: Everywhere where Critic is Write something use criticName in blue,  Everywhere where user write something use UserName in green, to be clear that this is critic
-    //TODO: Add security from parameter tampering for int-s(Security (1:10m), and XXS (edit program.cs endpoints)
     //TODO: Implement receiving messages with SignalR
+
     //TODO: Fix bug with likes and dislikes Web API or delete them
     //TODO: Fix bug with reload page in details Deleting Edit Like don't reload properly 
+    //TODO: Add security from parameter tampering for int-s(Security (1:10m), and XXS (edit program.cs endpoints)
     //TODO: Make manage button to be size of the username
-    //TODO: Edit views to be more beautiful
-    //TODO: Edit Swipe View Add Link to details on movie pic in swipe
+    //TODO: Add view for photos and videos
     //TODO: In Critic add logic for editing critic info
     //TODO: Add view for critic details
-    //TODO: unit tests
-    //TODO: Edit admin navbar
 
     private readonly IMovieService _movieService;
 

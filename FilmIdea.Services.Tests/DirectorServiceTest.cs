@@ -1,16 +1,11 @@
 namespace FilmIdea.Services.Tests;
 
-using System.Runtime.CompilerServices;
-using Data;
 using Microsoft.EntityFrameworkCore;
 
+using Data;
 using FilmIdea.Data;
 using Data.Interfaces;
-using FilmIdea.Data.Models;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.ObjectModel;
 using Web.ViewModels.Director;
-using Web.ViewModels.Director;
-using static DatabaseSeeder;
 
 [TestFixture]
 public class DirectorServiceTest

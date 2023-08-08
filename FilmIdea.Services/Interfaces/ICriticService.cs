@@ -6,7 +6,11 @@ public interface ICriticService
 {
     Task<bool> CriticExistByUserIdAsync(string? userId);
 
-    Task<string?> GetCriticIdAsync(string userid);
+    Task<string?> GetCriticIdAsync(string? userid);
 
     Task CreateCriticAsync(string userId, BecomeCriticViewModel model,string photoUrl);
+
+    Task<string?> GetCriticName(string userId);
+
+    Task<CriticDetailsViewModel> GetCriticDetailsByIdAsync(string criticId);
 }

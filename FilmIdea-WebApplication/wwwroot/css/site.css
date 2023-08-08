@@ -8,9 +8,34 @@ html {
     }
 }
 
-html {
-    position: relative;
-    min-height: 100%;
+.dropdown-menu {
+    position: absolute;
+    z-index: 1000;
+    display: none;
+    min-width: 10rem;
+    padding: 0.5rem 0;
+    margin: 0;
+    font-size: 1rem;
+    color: #212529;
+    text-align: left;
+    list-style: none;
+    background-color: blue;
+    background-clip: padding-box;
+    border: 0 !important;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-left-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+navbar-light .navbar-nav .nav-link:active {
+    color: rgba(0,0,0,.7);
+}
+
+.dropdown-item:hover {
+    background-color: #404345 !important;
+    margin-left: 10px;
+    width: 95%;
 }
 
 #toast-container {
@@ -18,11 +43,21 @@ html {
     right: 15px;
 }
 
+.btn-check:focus + .btn, .btn:focus {
+    outline: 0;
+    box-shadow: none !important;
+    background-color: #404345 !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
 .nav-text-white {
     color: white !important;
     font-size: 161%;
     margin-top: 19px;
 }
+
+
 
 .nav-text-black {
     color: #9f9f9f !important;
@@ -103,6 +138,7 @@ img.logo {
     text-decoration: unset;
     font-size: 55px;
 }
+
 button.btn-login {
     width: 122px;
     background-color: white !important;

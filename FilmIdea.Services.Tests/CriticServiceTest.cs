@@ -6,8 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using FilmIdea.Data;
 using Data.Interfaces;
 
-using static DatabaseSeeder;
-
 [TestFixture]
 public class CriticServiceTest
 {
@@ -106,9 +104,7 @@ public class CriticServiceTest
     [Test]
     public async Task GetCriticIdAsyncShouldReturnNullWhenUserIdIsNull()
     {
-        string? userId = null;
-
-        var result = await this._criticService.GetCriticIdAsync(userId);
+        var result = await this._criticService.GetCriticIdAsync(null);
 
         Assert.That(result, Is.Null);
     }

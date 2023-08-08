@@ -145,7 +145,7 @@ public class DirectorService : FilmIdeaService, IDirectorService
         {
             await this._dbContext.SaveChangesAsync();
         }
-        catch (Exception e)
+        catch
         {
             throw new InvalidOperationException();
         }

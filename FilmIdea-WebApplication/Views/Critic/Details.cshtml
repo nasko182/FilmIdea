@@ -1,0 +1,59 @@
+﻿@model CriticDetailsViewModel
+@{
+    ViewBag.Title = $"{Model.Name} - FilmIdea";
+}
+<style>
+    .profile-container {
+        max-width: 600px;
+        background-color: #f5f5f5;
+        border-radius: 15px;
+        margin: 50px auto;
+        padding: 30px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .img-round {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+        font-size: 28px;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    p {
+        font-size: 18px;
+        color: #777;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }
+
+    .info-label {
+        font-size: 16px;
+        color: #999;
+        margin-bottom: 5px;
+    }
+
+    .info-value {
+        font-size: 18px;
+        color: #333;
+    }
+</style>
+<div class="profile-container">
+    <img class="img-round" src="@Model.ProfileImageUrl" alt="Profile Image" />
+    <h1>@Model.Name</h1>
+    <div class="info-label">Date of Birth:</div>
+    <div class="info-value">@Model.DateOfBirth</div>
+    <div class="info-label">Biography:</div>
+    <p>@Model.Bio</p>
+</div>

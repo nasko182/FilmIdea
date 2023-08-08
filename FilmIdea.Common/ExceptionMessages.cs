@@ -6,7 +6,7 @@ public static class ExceptionMessages
 
     public static string GeneralErrorMessage => "Unexpected error occurred! Please try again later or contact administrator";
 
-    public static string UnauthorizedAccessErrorMessage => "You must become an critic in order to add new review";
+    public static string UnauthorizedAccessErrorMessage => "You must become an critic first";
 
     public static string NotAuthenticated => "Please login first";
 

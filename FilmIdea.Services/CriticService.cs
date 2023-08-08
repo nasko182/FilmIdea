@@ -56,4 +56,28 @@ public class CriticService : FilmIdeaService, ICriticService
             Console.WriteLine(e);
         }
     }
+
+    public async Task<string?> GetCriticName(string userId)
+    {
+        var critic = await this._dbContext.Critics
+            .Where(c => c.UserId.ToString() == userId)
+            .FirstOrDefaultAsync();
+
+        return critic?.Name;
+    }
+
+    public async Task<CriticDetailsViewModel> GetCriticDetailsByIdAsync(string criticId)
+    {
+        var critic = await this._dbContext.Critics
+            .FirstAsync(c => c.Id.ToString() == criticId);
+
+        return new CriticDetailsViewModel
+        {
+            Id = critic.Id.ToString(),
+            Name = critic.Name,
+            Bio = critic.Bio,
+            ProfileImageUrl = critic.ProfileImageUrl,
+            DateOfBirth = critic.DateOfBirth.ToString("MMMM dd,yyyy")
+        };
+    }
 }
