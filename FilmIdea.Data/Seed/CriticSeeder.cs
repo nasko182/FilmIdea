@@ -16,7 +16,8 @@ public class CriticSeeder
                 ProfileImageUrl = "https://dl.dropboxusercontent.com/scl/fi/aolsn1cqh30yds8e6fj66/CriticTestov_ProfileImage.jpg",
                 DateOfBirth = new DateTime(2023,08,05),
                 UserId = Guid.Parse("15EB7825-840B-4528-71CC-08DB8C333233")
-            },new Critic
+            },
+            new Critic
             {
                 Id = Guid.Parse("93372a0a-b9f4-4bc5-8f53-e8da0bce2bfe"),
                 Name = "Administrator",

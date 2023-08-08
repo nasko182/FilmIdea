@@ -55,7 +55,7 @@ public class BaseAdminController : Controller
     protected async Task<string> UploadVideo(IFormFile file, string folderName, string videoName)
     {
         string mimeType;
-        new FileExtensionContentTypeProvider().TryGetContentType(file.FileName, out mimeType);
+        new FileExtensionContentTypeProvider().TryGetContentType(file.FileName, out mimeType!);
 
         List<string> allowedMimeTypes = new List<string> { "video/mp4", "video/webm", "video/ogg", "video/x-msvideo", "video/quicktime", "video/mpeg", "video/3gpp", "video/x-matroska" };
 

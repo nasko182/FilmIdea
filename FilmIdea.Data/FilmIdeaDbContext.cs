@@ -1,9 +1,11 @@
 ﻿namespace FilmIdea.Data;
 
 using System.Reflection;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+
 using Models;
 using Models.Join_Tables;
 
@@ -66,7 +68,8 @@ public class FilmIdeaDbContext : IdentityDbContext<ApplicationUser, IdentityRole
         var configurationAssembly = Assembly.GetAssembly(typeof(FilmIdeaDbContext)) ??
                                     Assembly.GetExecutingAssembly();
 
-        builder.ApplyConfigurationsFromAssembly(configurationAssembly);
+            builder.ApplyConfigurationsFromAssembly(configurationAssembly);
+        
 
         base.OnModelCreating(builder);
     }

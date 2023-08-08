@@ -1,26 +1,20 @@
 ﻿namespace FilmIdea.Services.Data;
 
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 using FilmIdea.Data;
 using Interfaces;
 using Web.ViewModels.Critic;
-using Dropbox.Api.Files;
-using Dropbox.Api;
 using FilmIdea.Data.Models;
 
 public class CriticService : FilmIdeaService, ICriticService
 {
     private readonly FilmIdeaDbContext _dbContext;
 
-    private DropboxClient _dropboxClient;
-
     public CriticService(FilmIdeaDbContext dbContext)
     {
         this._dbContext = dbContext;
 
-        this._dropboxClient = new DropboxClient("Insert Dropbox Token here");
     }
     public async Task<bool> CriticExistByUserIdAsync(string? userId)
     {
@@ -38,38 +32,6 @@ public class CriticService : FilmIdeaService, ICriticService
         return critic?.Id.ToString();
     }
 
-    public async Task<string> UploadPhotoAsync(IFormFile imageFile, string userName)
-    {
-        var fileName = userName + "_ProfileImage.jpg";
-        var path = "/Critics/" + fileName;
-
-        try
-        {
-            await using (var stream = imageFile.OpenReadStream())
-            {
-                 await _dropboxClient.Files.UploadAsync(path, WriteMode.Overwrite.Instance, body: stream);
-            }
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-
-        var sharedLink = await _dropboxClient.Sharing.CreateSharedLinkWithSettingsAsync(path);
-
-        var imageUrl = sharedLink.Url;
-
-        Uri dropboxUri = new Uri(imageUrl);
-
-        string baseUrl = dropboxUri.GetLeftPart(UriPartial.Path);
-
-        string modifiedUrl = baseUrl.Replace("www.dropbox.com", "dl.dropboxusercontent.com");
-
-        modifiedUrl = modifiedUrl.Split('?')[0];
-
-        return modifiedUrl;
-    }
 
     public async Task CreateCriticAsync(string userId, BecomeCriticViewModel model, string photoUrl)
     {

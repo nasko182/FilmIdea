@@ -6,7 +6,7 @@ public interface IDirectorService
 {
     Task<DirectorDetailsViewModel?> GetDirectorDetailsAsync(int directorId,string? userId);
 
-    Task<int> Create(AddDirectorViewModel model, string photoUrl);
+    Task<int> CreateAsync(AddDirectorViewModel model, string photoUrl);
 
     Task<EditDirectorViewModel> GetDirectorForEditByIdAsync(int id);
 

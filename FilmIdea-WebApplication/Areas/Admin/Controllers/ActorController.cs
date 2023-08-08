@@ -50,7 +50,7 @@ public class ActorController : BaseAdminController
         int actorId;
         try
         {
-            actorId = await this._actorService.Create(model,photoUrl);
+            actorId = await this._actorService.CreateAsync(model,photoUrl);
         }
         catch (Exception)
         {

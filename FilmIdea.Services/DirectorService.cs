@@ -91,7 +91,7 @@ public class DirectorService : FilmIdeaService, IDirectorService
         }
     }
 
-    public async Task<int> Create(AddDirectorViewModel model, string photoUrl)
+    public async Task<int> CreateAsync(AddDirectorViewModel model, string photoUrl)
     {
         var director = new Director()
         {

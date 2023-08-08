@@ -50,7 +50,7 @@ public class DirectorController : BaseAdminController
         int directorId;
         try
         {
-            directorId = await this._directorService.Create(model,photoUrl);
+            directorId = await this._directorService.CreateAsync(model,photoUrl);
         }
         catch (Exception)
         {

@@ -93,7 +93,7 @@ public class ActorService : FilmIdeaService, IActorService
         }
     }
 
-    public async Task<int> Create(AddActorViewModel model, string photoUrl)
+    public async Task<int> CreateAsync(AddActorViewModel model, string photoUrl)
     {
         var actor = new Actor
         {
