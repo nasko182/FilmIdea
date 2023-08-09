@@ -218,6 +218,16 @@ button.btn-register {
     border-bottom-right-radius: 0;
 }
 
+.menu-elemet {
+    position: relative;
+    display: inline-block;
+    padding: 0;
+    cursor: pointer;
+    border-radius: 4px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
 
 .menu-section {
     display: none;

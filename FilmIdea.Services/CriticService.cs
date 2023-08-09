@@ -1,5 +1,6 @@
 ﻿namespace FilmIdea.Services.Data;
 
+using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 
 using FilmIdea.Data;
@@ -77,7 +78,42 @@ public class CriticService : FilmIdeaService, ICriticService
             Name = critic.Name,
             Bio = critic.Bio,
             ProfileImageUrl = critic.ProfileImageUrl,
-            DateOfBirth = critic.DateOfBirth.ToString("MMMM dd,yyyy")
+            DateOfBirth = critic.DateOfBirth.ToString("MMMM dd,yyyy",CultureInfo.InvariantCulture)
         };
+    }
+
+    public async Task<EditCriticViewModel> GetCriticForEditByIdAsync(string id)
+    {
+        var critic = await this._dbContext.Critics
+            .Select(c => new EditCriticViewModel
+            {
+                Name = c.Name,
+                Bio = c.Bio,
+                DateOfBirth = c.DateOfBirth,
+                ProfileImageUrl = c.ProfileImageUrl
+            })
+            .FirstAsync();
+
+        return critic;
+    }
+
+    public async Task EditCriticByIdAndModelAsync(string criticId, EditCriticViewModel model)
+    {
+        var critic = await this._dbContext.Critics
+            .FirstAsync(c => c.Id.ToString() == criticId);
+
+        critic.Name = model.Name;
+        critic.Bio = model.Bio;
+        critic.DateOfBirth = model.DateOfBirth;
+        critic.ProfileImageUrl = model.ProfileImageUrl;
+
+        try
+        {
+            await this._dbContext.SaveChangesAsync();
+        }
+        catch
+        {
+            throw new InvalidOperationException();
+        }
     }
 }

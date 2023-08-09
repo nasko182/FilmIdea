@@ -9,6 +9,7 @@ using ViewModels.Critic;
 using static Common.NotificationMessageConstants;
 using static Common.SuccessMessages;
 using static Common.ExceptionMessages;
+using FilmIdea.Web.ViewModels.Actor;
 
 public class CriticController : BaseController
 {
@@ -96,6 +97,64 @@ public class CriticController : BaseController
         var model =await this._criticService.GetCriticDetailsByIdAsync(criticId!);
 
         return this.View(model);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Edit()
+    {
+        var isCritic = await this._criticService.CriticExistByUserIdAsync(this.GetUserId());
+        if (!isCritic)
+        {
+            TempData[ErrorMessage] = UnauthorizedAccessErrorMessage;
+
+            return this.RedirectToAction("Become");
+        }
+
+        var criticId = await this._criticService.GetCriticIdAsync(this.GetUserId());
+        try
+        {
+            EditCriticViewModel model = await this._criticService
+                .GetCriticForEditByIdAsync(criticId!);
+
+            return View(model);
+        }
+        catch
+        {
+            return GeneralError();
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Edit(EditCriticViewModel model)
+    {
+        var isCritic = await this._criticService.CriticExistByUserIdAsync(this.GetUserId());
+        if (!isCritic)
+        {
+            TempData[ErrorMessage] = UnauthorizedAccessErrorMessage;
+
+            return this.RedirectToAction("Become");
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        var criticId = await this._criticService.GetCriticIdAsync(this.GetUserId());
+
+
+        try
+        {
+            await this._criticService.EditCriticByIdAndModelAsync(criticId, model);
+        }
+        catch
+        {
+            ModelState.AddModelError(string.Empty, InvalidUpdate);
+
+            return View(model);
+        }
+        TempData[SuccessMessage] = "Critic was edited successfully!";
+        return RedirectToAction("Details", "Critic", new { Area = ""});
     }
 
 }

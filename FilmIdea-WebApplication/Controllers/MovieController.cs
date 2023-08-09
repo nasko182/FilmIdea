@@ -17,6 +17,7 @@ using static Common.SuccessMessages;
 
 public class MovieController : BaseController
 {
+    //TODO: Add Update Picture on all EDIT pages
     //TODO: Add not authenticated where redirect to login ??
     //TODO: View component
     //TODO: Check all using
@@ -36,6 +37,7 @@ public class MovieController : BaseController
     //TODO: Add cache is need somewhere(adding something, displayCollections), also remove cache is update(last(1:30))
     //TODO: In Admin add logic for adding actors and genres to movies 
     //TODO: In Admin add logic for adding photos and videos to movies actors and directors
+    //TODO: Set cultureInfo.Invariant to every date
     //TODO: Implement receiving messages with SignalR
 
     //TODO: Fix bug with likes and dislikes Web API or delete them
@@ -45,6 +47,7 @@ public class MovieController : BaseController
     //TODO: Add view for photos and videos
     //TODO: In Critic add logic for editing critic info
     //TODO: Add view for critic details
+    //TODO: EDIT critic name button and edit and delete buttons in critic view
 
     private readonly IMovieService _movieService;
 

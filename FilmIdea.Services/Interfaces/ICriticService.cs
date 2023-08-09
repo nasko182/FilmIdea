@@ -1,6 +1,8 @@
 ﻿namespace FilmIdea.Services.Data.Interfaces;
 
+using FilmIdea.Data.Models;
 using Web.ViewModels.Critic;
+using static Dropbox.Api.Files.ListRevisionsMode;
 
 public interface ICriticService 
 {
@@ -13,4 +15,8 @@ public interface ICriticService
     Task<string?> GetCriticName(string userId);
 
     Task<CriticDetailsViewModel> GetCriticDetailsByIdAsync(string criticId);
+
+    Task<EditCriticViewModel> GetCriticForEditByIdAsync(string id);
+
+    Task EditCriticByIdAndModelAsync(string criticId,EditCriticViewModel model);
 }
