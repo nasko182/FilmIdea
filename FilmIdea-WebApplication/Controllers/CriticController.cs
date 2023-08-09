@@ -9,17 +9,20 @@ using ViewModels.Critic;
 using static Common.NotificationMessageConstants;
 using static Common.SuccessMessages;
 using static Common.ExceptionMessages;
-using FilmIdea.Web.ViewModels.Actor;
+using Ganss.Xss;
 
 public class CriticController : BaseController
 {
     private readonly ICriticService _criticService;
     private readonly IDropboxService _dropboxService;
+    private readonly IHtmlSanitizer _sanitizer;
+
 
     public CriticController(ICriticService criticService, IDropboxService dropboxService)
     {
         this._criticService = criticService;
         this._dropboxService = dropboxService;
+        this._sanitizer = new HtmlSanitizer();
     }
 
     public async Task<IActionResult> Become()
@@ -50,6 +53,14 @@ public class CriticController : BaseController
             return this.RedirectToAction("Become");
         }
 
+        var sanitizedModel = new BecomeCriticViewModel
+        {
+            Name = this._sanitizer.Sanitize(model.Name),
+            Bio = this._sanitizer.Sanitize(model.Bio),
+            DateOfBirth = model.DateOfBirth,
+            ProfileImage = model.ProfileImage
+        };
+
         string mimeType;
         new FileExtensionContentTypeProvider().TryGetContentType(model.ProfileImage.FileName, out mimeType!);
 
@@ -74,7 +85,7 @@ public class CriticController : BaseController
             return this.RedirectToAction("All", "Movie");
         }
 
-        await this._criticService.CreateCriticAsync(this.GetUserId(), model, photoUrl);
+        await this._criticService.CreateCriticAsync(this.GetUserId(), sanitizedModel, photoUrl);
 
         TempData[SuccessMessage] = BecomeCriticSuccess;
 
@@ -115,8 +126,14 @@ public class CriticController : BaseController
         {
             EditCriticViewModel model = await this._criticService
                 .GetCriticForEditByIdAsync(criticId!);
-
-            return View(model);
+            var sanitizedModel = new EditCriticViewModel
+            {
+                Name = this._sanitizer.Sanitize(model.Name),
+                Bio = this._sanitizer.Sanitize(model.Name),
+                DateOfBirth = model.DateOfBirth,
+                ProfileImageUrl = model.ProfileImageUrl
+            };
+            return View(sanitizedModel);
         }
         catch
         {
@@ -134,10 +151,17 @@ public class CriticController : BaseController
 
             return this.RedirectToAction("Become");
         }
+        var sanitizedModel = new EditCriticViewModel
+        {
+            Name = this._sanitizer.Sanitize(model.Name),
+            Bio = this._sanitizer.Sanitize(model.Name),
+            DateOfBirth = model.DateOfBirth,
+            ProfileImageUrl = model.ProfileImageUrl
+        };
 
         if (!ModelState.IsValid)
         {
-            return View(model);
+            return View(sanitizedModel);
         }
 
         var criticId = await this._criticService.GetCriticIdAsync(this.GetUserId());
@@ -145,13 +169,13 @@ public class CriticController : BaseController
 
         try
         {
-            await this._criticService.EditCriticByIdAndModelAsync(criticId!, model);
+            await this._criticService.EditCriticByIdAndModelAsync(criticId!, sanitizedModel);
         }
         catch
         {
             ModelState.AddModelError(string.Empty, InvalidUpdate);
 
-            return View(model);
+            return View(sanitizedModel);
         }
         TempData[SuccessMessage] = "Critic was edited successfully!";
         return RedirectToAction("Details", "Critic", new { Area = ""});

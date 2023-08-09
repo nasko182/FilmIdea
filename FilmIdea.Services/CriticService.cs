@@ -101,7 +101,7 @@ public class CriticService : FilmIdeaService, ICriticService
     {
         var critic = await this._dbContext.Critics
             .FirstAsync(c => c.Id.ToString() == criticId);
-
+        
         critic.Name = model.Name;
         critic.Bio = model.Bio;
         critic.DateOfBirth = model.DateOfBirth;

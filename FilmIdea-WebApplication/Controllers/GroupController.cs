@@ -1,5 +1,6 @@
 ﻿namespace FilmIdea.Web.Controllers;
 
+using Ganss.Xss;
 using Microsoft.AspNetCore.Mvc;
 using Services.Data.Interfaces;
 using ViewModels.Group;
@@ -10,10 +11,12 @@ using static Common.ExceptionMessages;
 public class GroupController : BaseController
 {
     private readonly IGroupService _groupService;
+    private readonly IHtmlSanitizer _sanitizer;
 
     public GroupController(IGroupService groupService)
     {
         this._groupService = groupService;
+        this._sanitizer = new HtmlSanitizer();
     }
     public async Task<IActionResult> All()
     {
@@ -62,13 +65,19 @@ public class GroupController : BaseController
     [HttpPost]
     public async Task<IActionResult> Create(AddGroupViewModel viewModel)
     {
+        var sanitizedModel = new AddGroupViewModel
+        {
+            Name = this._sanitizer.Sanitize(viewModel.Name),
+            Icon = this._sanitizer.Sanitize(viewModel.Icon),
+            UsersIds = viewModel.UsersIds.Select(uId => this._sanitizer.Sanitize(uId)).ToArray()
+        };
         if (ModelState.IsValid)
         {
             try
             {
-               var groupId =  await this._groupService.CreateGroupAsync(viewModel, this.GetUserId());
+                var groupId = await this._groupService.CreateGroupAsync(sanitizedModel, this.GetUserId());
 
-                return RedirectToAction("Details",new{groupId});
+                return RedirectToAction("Details", new { groupId });
             }
             catch (Exception)
             {
@@ -77,35 +86,40 @@ public class GroupController : BaseController
         }
 
         var model = await this._groupService.CreateGroupModelAsync(this.GetUserId());
-        model.AddGroupData = viewModel;
+        model.AddGroupData = sanitizedModel;
 
         return this.View(model);
     }
 
-    public async Task<IActionResult> Edit(string icon, string name, string userIds,string groupId)
+    public async Task<IActionResult> Edit(string icon, string name, string userIds, string groupId)
     {
-        
         List<string> userIdList = userIds.Split(",").ToList();
 
-        var viewModel = new EditGroupViewModel
+        var sanitizedViewModel = new EditGroupViewModel
         {
-            Icon = icon,
-            Name = name,
-            UsersIds = userIdList,
+            Name = this._sanitizer.Sanitize(name),
+            Icon = this._sanitizer.Sanitize(icon),
+            UsersIds = userIdList.Select(uId => this._sanitizer.Sanitize(uId)).ToArray()
         };
-        var model = await this._groupService.CreateEditGroupModelAsync(this.GetUserId(),viewModel,groupId);
+        var model = await this._groupService.CreateEditGroupModelAsync(this.GetUserId(), sanitizedViewModel, groupId);
 
         return View(model);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(EditGroupViewModel viewModel,string groupId)
+    public async Task<IActionResult> Edit(EditGroupViewModel viewModel, string groupId)
     {
+        var sanitizedModel = new EditGroupViewModel()
+        {
+            Name = this._sanitizer.Sanitize(viewModel.Name),
+            Icon = this._sanitizer.Sanitize(viewModel.Icon),
+            UsersIds = viewModel.UsersIds.Select(uId => this._sanitizer.Sanitize(uId)).ToArray()
+        };
         if (ModelState.IsValid)
         {
             try
             {
-                await this._groupService.EditGroupAsync(viewModel, this.GetUserId(), groupId);
+                await this._groupService.EditGroupAsync(sanitizedModel, this.GetUserId(), groupId);
             }
             catch (Exception)
             {
@@ -119,11 +133,12 @@ public class GroupController : BaseController
     [HttpPost]
     public async Task<IActionResult> SendMessage(string content, string groupId)
     {
+        var sanitizedContent = this._sanitizer.Sanitize(content);
         if (ModelState.IsValid)
         {
             try
             {
-                await this._groupService.SendMessageAsync(content, groupId, this.GetUserId());
+                await this._groupService.SendMessageAsync(sanitizedContent, groupId, this.GetUserId());
             }
             catch (Exception)
             {

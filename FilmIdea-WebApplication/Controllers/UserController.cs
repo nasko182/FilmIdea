@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication;
 using Griesoft.AspNetCore.ReCaptcha;
 
 using Data.Models;
+using Ganss.Xss;
 using ViewModels.User;
 
 using static Common.NotificationMessageConstants;
@@ -20,6 +21,7 @@ public class UserController : BaseController
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IMemoryCache _memoryCache;
+    private readonly IHtmlSanitizer _sanitizer;
 
     public UserController(
         SignInManager<ApplicationUser> signInManager,
@@ -29,6 +31,7 @@ public class UserController : BaseController
         this._userManager = userManager;
         this._signInManager = signInManager;
         this._memoryCache = memoryCache;
+        this._sanitizer = new HtmlSanitizer();
     }
     [HttpGet]
     [AllowAnonymous]
@@ -43,16 +46,23 @@ public class UserController : BaseController
         ValidationFailedAction = ValidationFailedAction.ContinueRequest)]
     public async Task<IActionResult> Register(RegisterFormModel model)
     {
+        var sanitizedModel = new RegisterFormModel
+        {
+            Email = this._sanitizer.Sanitize(model.Email),
+            Password = this._sanitizer.Sanitize(model.Password),
+            ConfirmPassword = this._sanitizer.Sanitize(model.ConfirmPassword),
+            Username = this._sanitizer.Sanitize(model.Username)
+        };
         if (!this.ModelState.IsValid)
         {
-            return this.View(model);
+            return this.View(sanitizedModel);
         }
         var user = new ApplicationUser();
 
-        await this._userManager.SetEmailAsync(user, model.Email);
-        await this._userManager.SetUserNameAsync(user, model.Username);
+        await this._userManager.SetEmailAsync(user, sanitizedModel.Email);
+        await this._userManager.SetUserNameAsync(user, sanitizedModel.Username);
 
-        var result = await this._userManager.CreateAsync(user, model.Password);
+        var result = await this._userManager.CreateAsync(user, sanitizedModel.Password);
 
         if (!result.Succeeded)
         {
@@ -61,7 +71,7 @@ public class UserController : BaseController
                 ModelState.AddModelError(String.Empty, error.Description);
             }
 
-            return this.View(model);
+            return this.View(sanitizedModel);
         }
 
         await this._signInManager.SignInAsync(user, false);
@@ -89,12 +99,17 @@ public class UserController : BaseController
     [AllowAnonymous]
     public async Task<IActionResult> Login(LoginFormModel model)
     {
+        var sanitizedModel = new LoginFormModel()
+        {
+            Password = this._sanitizer.Sanitize(model.Password),
+            Username = this._sanitizer.Sanitize(model.Username)
+        };
         if (!ModelState.IsValid)
         {
-            return this.View(model);
+            return this.View(sanitizedModel);
         }
 
-        var result = await this._signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
+        var result = await this._signInManager.PasswordSignInAsync(sanitizedModel.Username, sanitizedModel.Password, model.RememberMe, false);
 
         if (!result.Succeeded)
         {

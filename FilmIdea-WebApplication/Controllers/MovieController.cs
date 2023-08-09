@@ -1,5 +1,6 @@
 ﻿namespace FilmIdea.Web.Controllers;
 
+using Ganss.Xss;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
@@ -48,13 +49,15 @@ public class MovieController : BaseController
     //TODO: Add security from  XXS
 
     private readonly IMovieService _movieService;
-
     private readonly ICriticService _criticService;
+
+    private readonly IHtmlSanitizer _sanitizer;
 
     public MovieController(IMovieService movieService, ICriticService criticService)
     {
         this._movieService = movieService;
         this._criticService = criticService;
+        this._sanitizer = new HtmlSanitizer();
     }
 
     [AllowAnonymous]
@@ -194,7 +197,7 @@ public class MovieController : BaseController
 
         if (movie == null || movie.GetUrlInformation()!=information)
         {
-            return this.RedirectToAction("All");
+            return this.NotFound();
         }
 
         var isCriticExist = await this._criticService.CriticExistByUserIdAsync(this.GetUserId());
@@ -251,6 +254,12 @@ public class MovieController : BaseController
         bool isCritic =
             await this._criticService.CriticExistByUserIdAsync(this.GetUserId());
 
+        var sanitizedModel = new AddReviewViewModel
+        {
+            Title = this._sanitizer.Sanitize(model.Title),
+            Rating = 0,
+            Content = this._sanitizer.Sanitize(model.Content)
+        };
         if (this.ModelState.IsValid)
         {
             if (!isCritic)
@@ -263,7 +272,7 @@ public class MovieController : BaseController
             try
             {
                 var criticId = await this._criticService.GetCriticIdAsync(this.GetUserId());
-                await this._movieService.AddReviewAsync(model, movieId, criticId!);
+                await this._movieService.AddReviewAsync(sanitizedModel, movieId, criticId!);
             }
             catch
             {
@@ -277,7 +286,11 @@ public class MovieController : BaseController
     [HttpPost]
     public async Task<IActionResult> AddComment(AddCommentViewModel model, int movieId)
     {
-
+        var sanitizedModel = new AddCommentViewModel
+        {
+            ReviewId = this._sanitizer.Sanitize(model.ReviewId),
+            Content = this._sanitizer.Sanitize(model.Content)
+        };
         if (this.ModelState.IsValid)
         {
             if (!this.IsAuthenticated())
@@ -289,7 +302,7 @@ public class MovieController : BaseController
             }
             try
             {
-                await this._movieService.AddCommentAsync(model, this.GetUserId());
+                await this._movieService.AddCommentAsync(sanitizedModel, this.GetUserId());
             }
             catch
             {
@@ -325,6 +338,7 @@ public class MovieController : BaseController
     }
 
     [HttpPost]
+    [Route("/Movie/AddToUserWatchlist")]
     public async Task<IActionResult> AddToUserWatchlist(int movieId)
     {
         if (!this.IsAuthenticated())
@@ -348,6 +362,8 @@ public class MovieController : BaseController
     }
 
     [HttpPost]
+    [Route("/Movie/RemoveFromUserWatchlist")]
+
     public async Task<IActionResult> RemoveFromUserWatchlist(int movieId)
     {
         if (!this.IsAuthenticated())
@@ -424,12 +440,19 @@ public class MovieController : BaseController
             return this.RedirectToAction("Login", "User");
 
         }
+        var sanitizedModel = new EditReviewViewModel
+        {
+            ReviewId = this._sanitizer.Sanitize(model.ReviewId),
+            Title = this._sanitizer.Sanitize(model.Title),
+            Rating = 0,
+            Content = this._sanitizer.Sanitize(model.Content),
+        };
         try
         {
             var criticId = await this._criticService.GetCriticIdAsync(this.GetUserId());
             if (criticId != null)
             {
-                await this._movieService.EditReviewAsync(model, criticId);
+                await this._movieService.EditReviewAsync(sanitizedModel, criticId);
             }
         }
         catch
@@ -474,9 +497,15 @@ public class MovieController : BaseController
     [HttpPost]
     public async Task<IActionResult> EditComment(EditCommentViewModel model, int movieId)
     {
+        var sanitizedModel = new EditCommentViewModel
+        {
+            CommentId = this._sanitizer.Sanitize(model.CommentId),
+            MovieId = 0,
+            Content = this._sanitizer.Sanitize(model.Content),
+        };
         try
         {
-            await this._movieService.EditCommentAsync(model, this.GetUserId());
+            await this._movieService.EditCommentAsync(sanitizedModel, this.GetUserId());
         }
         catch
         {
