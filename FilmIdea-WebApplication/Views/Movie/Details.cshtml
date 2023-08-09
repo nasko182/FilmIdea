@@ -24,7 +24,7 @@
 
 <div class="container actor-details">
     <div class="d-flex justify-content-end">
-        
+
         @if (User.IsAdmin())
         {
             <div class="d-flex justify-content-between">
@@ -62,7 +62,7 @@
     <div class="row">
         <div class="col-md-3" style="padding-right: 4px;">
             <div class="actor-profile">
-                <img src="@Model.MovieDetails.CoverImageUrl" alt="@Model.MovieDetails.Title" class="actor-image"/>
+                <img src="@Model.MovieDetails.CoverImageUrl" alt="@Model.MovieDetails.Title" class="actor-image" />
             </div>
         </div>
         <div class="col-md-6" style="padding: 0; width: 54%;">
@@ -133,7 +133,7 @@
     <div class="actor-bio">
         <h3 class="title">Biography</h3>
         <p>
-            @if (Model.MovieDetails.Description.Length<600)
+            @if (Model.MovieDetails.Description.Length < 600)
             {
                 @Model.MovieDetails.Description
             }
@@ -151,199 +151,199 @@
 @foreach (var genre in Model.MovieDetails.Genres)
 {
     <button class="btn-login rounded-pill" style="width: 163px;height: 29px;">
-        <a class="nav-link text-white login-btn" style="padding-top: 0;padding-bottom: 10px;" asp-area="" asp-controller="Movie" asp-action="ByGenre" asp-route-genreId="@genre.Id" ><strong style="color: black !important; font-size: 17px">@genre.Name</strong></a>
+        <a class="nav-link text-white login-btn" style="padding-top: 0;padding-bottom: 10px;" asp-area="" asp-controller="Movie" asp-action="ByGenre" asp-route-genreId="@genre.Id"><strong style="color: black !important; font-size: 17px">@genre.Name</strong></a>
     </button>
 }
-<hr/>
+<hr />
 <div class="row">
-    <p>Director: </p><a asp-area="" asp-controller="Director" asp-action="Details" asp-route-directorId="@Model.MovieDetails.Director.Id" asp-route-information="@Model.MovieDetails.Director.GetUrlInformation()">@Model.MovieDetails.Director.Name</a>
+    <p>Director: </p><a asp-area="" asp-controller="Director" asp-action="Details" asp-route-directorId="@Model.MovieDetails.Director.Id" >@Model.MovieDetails.Director.Name</a>
 </div>
-<hr/>
+<hr />
 <div class="row">
     <p>Actors: </p>
     @foreach (var actor in Model.MovieDetails.Actors.Take(3))
     {
-        <a asp-area="" asp-controller="Actor" asp-action="Details" asp-route-actorId="@actor.Id" asp-route-information="@actor.GetUrlInformation()">@actor.Name</a>
+        <a asp-area="" asp-controller="Actor" asp-action="Details">@actor.Name</a>
     }
 </div>
 <hr />
-   
-    <div class="container mt-5">
 
-        <div class="row mt-4">
-            <div class="col-md-12">
-                <div class="d-flex justify-content-between" style="width: 80%;">
-                    <h3>Reviews</h3>
-                    @if (isCritic)
-                    {
-                        <button id="addReviewButton" class="btn">
-                            <strong style="color: #2776ff; font-size: 17px;">+ Review</strong>
-                        </button>
-                    }
-                </div>
+<div class="container mt-5">
 
-
-                <div id="addReviewForm" style="display: none;">
-                    <form asp-action="AddReview" id="reviewForm" method="post">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="mb-3">
-                            <label asp-for="@Model.AddReview.Title" class="form-label-add-edit">Title</label>
-                            <input type="text" asp-for="@Model.AddReview.Title" name="Title" class="form-control" aria-required="true" />
-                            <span asp-validation-for="@Model.AddReview.Title" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="@Model.AddReview.Rating" class="form-label-add-edit">Rating</label>
-                            <input type="number" asp-for="@Model.AddReview.Rating" name="Rating" class="form-control" aria-required="true" />
-                            <span asp-validation-for="@Model.AddReview.Rating" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="@Model.AddReview.Content" class="form-label-add-edit">Content</label>
-                            <textarea asp-for="@Model.AddReview.Content" name="Content" class="form-control" aria-required="true" rows="3"></textarea>
-                            <span asp-validation-for="@Model.AddReview.Content" class="text-danger"></span>
-                        </div>
-                        <input type="number" asp-for="@Model.MovieDetails.Id" name="movieId" style="display: none" />
-
-                        <button type="submit" class="btn btn-primary mt-3 mb-3">Add Review</button>
-                    </form>
-                </div>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between" style="width: 80%;">
+                <h3>Reviews</h3>
+                @if (isCritic)
+                {
+                    <button id="addReviewButton" class="btn">
+                        <strong style="color: #2776ff; font-size: 17px;">+ Review</strong>
+                    </button>
+                }
+            </div>
 
 
-                <div class="card-columns">
-                    @foreach (var review in Model.MovieDetails.Reviews)
-                    {
+            <div id="addReviewForm" style="display: none;">
+                <form asp-action="AddReview" id="reviewForm" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="mb-3">
+                        <label asp-for="@Model.AddReview.Title" class="form-label-add-edit">Title</label>
+                        <input type="text" asp-for="@Model.AddReview.Title" name="Title" class="form-control" aria-required="true" />
+                        <span asp-validation-for="@Model.AddReview.Title" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="@Model.AddReview.Rating" class="form-label-add-edit">Rating</label>
+                        <input type="number" asp-for="@Model.AddReview.Rating" name="Rating" class="form-control" aria-required="true" />
+                        <span asp-validation-for="@Model.AddReview.Rating" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="@Model.AddReview.Content" class="form-label-add-edit">Content</label>
+                        <textarea asp-for="@Model.AddReview.Content" name="Content" class="form-control" aria-required="true" rows="3"></textarea>
+                        <span asp-validation-for="@Model.AddReview.Content" class="text-danger"></span>
+                    </div>
+                    <input type="number" asp-for="@Model.MovieDetails.Id" name="movieId" style="display: none" />
 
-                        var isCriticOwner = await MovieService.IsCriticOwnerOfReview(criticId, review.Id);
+                    <button type="submit" class="btn btn-primary mt-3 mb-3">Add Review</button>
+                </form>
+            </div>
 
-                        <div class="card mb-2" style="width: 80%">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <p class="justify-content-start"><strong>@review.CriticName</strong> - @review.ReviewDate</p>
-                                    @if (isCriticOwner)
-                                    {
-                                        <button class="btn justify-content-end editReviewButton" data-review-id="@review.Id">Edit ✎</button>
-                                    }
-                                </div>
-                                <div class="editReviewForm" data-review-id="@review.Id"
-                                     style="display: none;">
-                                    <form asp-action="EditReview" method="post">
-                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                        <div class="mb-3">
-                                            <label asp-for="@Model.AddReview.Title" class="form-label-add-edit">Title</label>
-                                            <input type="text" asp-for="@Model.AddReview.Title" name="Title" class="form-control" value="@review.Title" aria-required="true" />
-                                            <span asp-validation-for="@Model.AddReview.Title" class="text-danger"></span>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label asp-for="@Model.AddReview.Rating" class="form-label-add-edit">Rating</label>
-                                            <input type="number" asp-for="@Model.AddReview.Rating" name="Rating" class="form-control" aria-required="true" value="@review.Rating" />
-                                            <span asp-validation-for="@Model.AddReview.Rating" class="text-danger"></span>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label asp-for="@Model.AddReview.Content" class="form-label-add-edit">Content</label>
-                                            <textarea asp-for="@review.Content" name="Content" class="form-control" aria-required="true" rows="3"></textarea>
-                                            <span asp-validation-for="@Model.AddReview.Content" class="text-danger"></span>
-                                        </div>
-                                        <input type="hidden" asp-for="@Model.MovieDetails.Id" name="movieId" />
-                                        <input type="hidden" asp-for="@review.Id" name="ReviewId" />
 
-                                        <button type="submit" class="btn btn-primary mt-3 mb-3">Edit</button>
-                                    </form>
-                                </div>
-                                <hr class="mt-1" />
-                                <div class="d-flex justify-content-between">
-                                    <p class="card-title-font">@review.Title</p>
-                                    <p style="font-size: 20px">⭐ @review.Rating/10</p>
-                                </div>
-                                <p class="card-font">@review.Content</p>
+            <div class="card-columns">
+                @foreach (var review in Model.MovieDetails.Reviews)
+                {
 
-                                <div class="d-flex">
+                    var isCriticOwner = await MovieService.IsCriticOwnerOfReview(criticId, review.Id);
 
-                                    @if (User.Identity!.IsAuthenticated)
-                                    {
-                                        <div id="movieId" data-movie='@Html.Raw(Model.MovieDetails.Id)'></div>
-                                        <div id="reviewId" data-review='@Html.Raw(review.Id)'></div>
-                                        <button id="addLikeButton">👍</button>
-                                        <p>@review.Likes</p>
-
-                                        <button id="addDislikeButton">👎</button>
-                                        <p>@review.Dislikes</p>
-
-                                        <button class="btn btn-sm btn-success d-flex justify-content-end addCommentButton" data-review-id="@review.Id">Add Comment</button>
-
-                                    }
-
-                                    <div class=" d-flex justify-content-end">
-                                        @if (isCriticOwner || User.IsAdmin())
-                                        {
-                                            <button class="btn btn-sm btn-danger deleteReviewButton" data-review-id="@review.Id">Delete</button>
-                                        }
+                    <div class="card mb-2" style="width: 80%">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <p class="justify-content-start"><strong>@review.CriticName</strong> - @review.ReviewDate</p>
+                                @if (isCriticOwner)
+                                {
+                                    <button class="btn justify-content-end editReviewButton" data-review-id="@review.Id">Edit ✎</button>
+                                }
+                            </div>
+                            <div class="editReviewForm" data-review-id="@review.Id"
+                                 style="display: none;">
+                                <form asp-action="EditReview" method="post">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="mb-3">
+                                        <label asp-for="@Model.AddReview.Title" class="form-label-add-edit">Title</label>
+                                        <input type="text" asp-for="@Model.AddReview.Title" name="Title" class="form-control" value="@review.Title" aria-required="true" />
+                                        <span asp-validation-for="@Model.AddReview.Title" class="text-danger"></span>
                                     </div>
-                                </div>
+                                    <div class="mb-3">
+                                        <label asp-for="@Model.AddReview.Rating" class="form-label-add-edit">Rating</label>
+                                        <input type="number" asp-for="@Model.AddReview.Rating" name="Rating" class="form-control" aria-required="true" value="@review.Rating" />
+                                        <span asp-validation-for="@Model.AddReview.Rating" class="text-danger"></span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label asp-for="@Model.AddReview.Content" class="form-label-add-edit">Content</label>
+                                        <textarea asp-for="@review.Content" name="Content" class="form-control" aria-required="true" rows="3"></textarea>
+                                        <span asp-validation-for="@Model.AddReview.Content" class="text-danger"></span>
+                                    </div>
+                                    <input type="hidden" asp-for="@Model.MovieDetails.Id" name="movieId" />
+                                    <input type="hidden" asp-for="@review.Id" name="ReviewId" />
 
-                                <div class="addCommentForm" data-review-id="@review.Id" style="display: none;">
-                                    <form asp-action="AddComment" method="post">
-                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <button type="submit" class="btn btn-primary mt-3 mb-3">Edit</button>
+                                </form>
+                            </div>
+                            <hr class="mt-1" />
+                            <div class="d-flex justify-content-between">
+                                <p class="card-title-font">@review.Title</p>
+                                <p style="font-size: 20px">⭐ @review.Rating/10</p>
+                            </div>
+                            <p class="card-font">@review.Content</p>
 
-                                        <input type="hidden" asp-for="@review.Id" name="ReviewId" />
-                                        <input type="hidden" asp-for="@Model.MovieDetails.Id" name="movieId" />
+                            <div class="d-flex">
 
-                                        <div class="form-group">
-                                            <label asp-for="@Model.AddComment.Content">Comment</label>
-                                            <textarea class="form-control" name="Content" asp-for="@Model.AddComment.Content" rows="2"></textarea>
-                                            <span asp-validation-for="@Model.AddComment.Content" class="text-danger"></span>
-                                        </div>
+                                @if (User.Identity!.IsAuthenticated)
+                                {
+                                    <div id="reviewId" data-review='@Html.Raw(review.Id)'></div>
 
-                                        <button type="submit" class="btn btn-primary btn-sm mt-2">Submit Comment</button>
-                                    </form>
-                                </div>
+                                    <button class="addLikeButton" data-review-id="@review.Id">👍</button>
+                                    <p class="likes" data-reviewid="@review.Id">@review.Likes</p>
 
-                                <div class="comments mt-3">
-                                    @foreach (var comment in review.Comments)
+                                    <button class="addDislikeButton" data-review-id="@review.Id">👎</button>
+                                    <p class="dislikes" data-reviewid="@review.Id">@review.Dislikes</p>
+
+                                    <button class="btn btn-sm btn-success d-flex justify-content-end addCommentButton" data-review-id="@review.Id">Add Comment</button>
+
+                                }
+
+                                <div class=" d-flex justify-content-end">
+                                    @if (isCriticOwner || User.IsAdmin())
                                     {
-                                        var isUserOwner = await MovieService.IsUserOwnerOfComment(userId, comment.Id);
-                                        <div class="card bg-light mb-2">
-                                            <div class="card-body">
-                                                <div class="d-flex justify-content-between">
-                                                    <p class="small mb-0 text-muted justify-content-start"><strong>@comment.WriterName</strong> - @comment.CommentDate</p>
-                                                    @if (isUserOwner)
-                                                    {
-                                                        <button class="btn justify-content-end editCommentButton" data-comment-id="@comment.Id">Edit ✎</button>
-                                                    }
-                                                </div>
-                                                <div class="editCommentForm" data-comment-id="@comment.Id" style="display: none;">
-                                                    <form asp-action="EditComment" method="post">
-                                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-                                                        <input type="hidden" asp-for="@comment.Id" name="CommentId" />
-                                                        <input type="hidden" asp-for="@Model.MovieDetails.Id" name="MovieId" />
-
-
-                                                        <div class="form-group">
-                                                            <label asp-for="@comment.Content">Comment</label>
-                                                            <textarea class="form-control" name="Content" asp-for="@comment.Content" rows="2"></textarea>
-                                                            <span asp-validation-for="@Model.AddComment.Content" class="text-danger"></span>
-                                                        </div>
-
-                                                        <button type="submit" class="btn btn-primary btn-sm mt-2">Edit</button>
-                                                    </form>
-                                                </div>
-                                                <hr />
-                                                <p class="card-text d-flex justify-content-start">@comment.Content</p>
-                                                @if (isUserOwner || User.IsAdmin())
-                                                {
-                                                    <div id="commentId" data-comment='@Html.Raw(comment.Id)'></div>
-                                                    <button type="submit" class="btn btn-danger d-flex justify-content-end] deleteCommentButton" data-comment-id="@comment.Id">Delete</button>
-                                                }
-                                            </div>
-                                        </div>
+                                        <button class="btn btn-sm btn-danger deleteReviewButton" data-review-id="@review.Id">Delete</button>
                                     }
                                 </div>
                             </div>
+
+                            <div class="addCommentForm" data-review-id="@review.Id" style="display: none;">
+                                <form asp-action="AddComment" method="post">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                    <input type="hidden" asp-for="@review.Id" name="ReviewId" />
+                                    <input type="hidden" asp-for="@Model.MovieDetails.Id" name="movieId" />
+
+                                    <div class="form-group">
+                                        <label asp-for="@Model.AddComment.Content">Comment</label>
+                                        <textarea class="form-control" name="Content" asp-for="@Model.AddComment.Content" rows="2"></textarea>
+                                        <span asp-validation-for="@Model.AddComment.Content" class="text-danger"></span>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary btn-sm mt-2">Submit Comment</button>
+                                </form>
+                            </div>
+
+                            <div class="comments mt-3">
+                                @foreach (var comment in review.Comments)
+                                {
+                                    var isUserOwner = await MovieService.IsUserOwnerOfComment(userId, comment.Id);
+                                    <div class="card bg-light mb-2">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between">
+                                                <p class="small mb-0 text-muted justify-content-start"><strong>@comment.WriterName</strong> - @comment.CommentDate</p>
+                                                @if (isUserOwner)
+                                                {
+                                                    <button class="btn justify-content-end editCommentButton" data-comment-id="@comment.Id">Edit ✎</button>
+                                                }
+                                            </div>
+                                            <div class="editCommentForm" data-comment-id="@comment.Id" style="display: none;">
+                                                <form asp-action="EditComment" method="post">
+                                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                                    <input type="hidden" asp-for="@comment.Id" name="CommentId" />
+                                                    <input type="hidden" asp-for="@Model.MovieDetails.Id" name="MovieId" />
+
+
+                                                    <div class="form-group">
+                                                        <label asp-for="@comment.Content">Comment</label>
+                                                        <textarea class="form-control" name="Content" asp-for="@comment.Content" rows="2"></textarea>
+                                                        <span asp-validation-for="@Model.AddComment.Content" class="text-danger"></span>
+                                                    </div>
+
+                                                    <button type="submit" class="btn btn-primary btn-sm mt-2">Edit</button>
+                                                </form>
+                                            </div>
+                                            <hr />
+                                            <p class="card-text d-flex justify-content-start">@comment.Content</p>
+                                            @if (isUserOwner || User.IsAdmin())
+                                            {
+                                                <div id="commentId" data-comment='@Html.Raw(comment.Id)'></div>
+                                                <button type="submit" class="btn btn-danger d-flex justify-content-end] deleteCommentButton" data-comment-id="@comment.Id">Delete</button>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
                         </div>
-                    }
-                </div>
+                    </div>
+                }
             </div>
         </div>
     </div>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
@@ -355,6 +355,7 @@
 
         var csrfToken = '@Antiforgery.GetAndStoreTokens(Context).RequestToken';
     </script>
-    <script src="~/js/movieDetails.js"></script>
 
+
+    <script src="~/js/movieDetails.js"></script>
 }

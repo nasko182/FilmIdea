@@ -11,14 +11,12 @@ using ViewModels.Comment;
 using ViewModels.Movie;
 using ViewModels.Review;
 
-
 using static Common.NotificationMessageConstants;
 using static Common.ExceptionMessages;
 using static Common.SuccessMessages;
 
 public class MovieController : BaseController
 {
-    //TODO: Add Update Picture on all EDIT pages
     //TODO: Add not authenticated where redirect to login ??
     //TODO: View component
     //TODO: Check all using
@@ -30,22 +28,22 @@ public class MovieController : BaseController
     //TODO: Check for buttons to hide from users that don't need to see them
     //TODO: Add [HttpGet] on every action
     //TODO: Remove all un used classes and methods Like databaseSeeder
-    //TODO: Add button for becoming admin in user all
+    //TODO: Move all js in files
+
+    //TODO: Add Update Picture on all EDIT pages
+    //TODO: Add cache is need somewhere(adding something, displayCollections), also remove cache is update(last(1:30))
     //TODO: Edit movie detail footer
     //TODO: Edit views to be more beautiful
     //TODO: Everywhere where Critic is Write something use criticName in blue,  Everywhere where user write something use UserName in green, to be clear that this is critic
     //TODO: Edit Swipe View and Add Link to details on movie pic in swipe
-    //TODO: Add cache is need somewhere(adding something, displayCollections), also remove cache is update(last(1:30))
-    //TODO: In Admin add logic for adding actors and genres to movies 
-    //TODO: In Admin add logic for adding photos and videos to movies actors and directors
-    //TODO: Move all js in files
     //TODO: Set cultureInfo.Invariant to every date
     //TODO: Fix bug with reload page in details Deleting Edit Like don't reload properly 
+    //TODO: Add button for becoming admin in user all
+    //TODO: In Admin add logic for adding photos and videos to movies actors and directors
+    //TODO: In Admin add logic for adding actors and genres to movies 
     //TODO: Add buttons for adding actors and Genres to movie
-    //TODO: Implement receiving messages with SignalR
 
-    //TODO: Fix bug with likes and dislikes Web API or delete them
-    //Todo: Add Movie details description
+    //TODO: Implement receiving messages with SignalR
 
     private readonly IMovieService _movieService;
     private readonly ICriticService _criticService;
@@ -180,7 +178,7 @@ public class MovieController : BaseController
 
     [AllowAnonymous]
     [HttpGet]
-    public async Task<IActionResult> Details(int movieId,string information)
+    public async Task<IActionResult> Details(int movieId)
     {
         MovieDetailsViewModel? movie;
         try
@@ -194,12 +192,10 @@ public class MovieController : BaseController
             return this.RedirectToAction("Index", "Home");
         }
 
-        if (movie == null || movie.GetUrlInformation()!=information)
+        if (movie == null)
         {
             return this.NotFound();
         }
-
-        var isCriticExist = await this._criticService.CriticExistByUserIdAsync(this.GetUserId());
 
         var model = new MovieAndReviewViewModel()
         {
@@ -386,7 +382,7 @@ public class MovieController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddRemoveLike(string reviewId, int movieId)
+    public async Task<IActionResult> AddRemoveLike(string reviewId)
     {
         if (!this.IsAuthenticated())
         {
@@ -397,9 +393,9 @@ public class MovieController : BaseController
         }
         try
         {
-            await this._movieService.AddRemoveLikeAsync(reviewId, this.GetUserId());
+            var likes = await this._movieService.AddRemoveLikeAsync(reviewId, this.GetUserId());
 
-            return this.RedirectToAction("Details", "Movie", new { movieId });
+            return Json(new { success = true, likes });
         }
         catch
         {
@@ -408,7 +404,7 @@ public class MovieController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddRemoveDislike(string reviewId, int movieId)
+    public async Task<IActionResult> AddRemoveDislike(string reviewId)
     {
         if (!this.IsAuthenticated())
         {
@@ -419,9 +415,9 @@ public class MovieController : BaseController
         }
         try
         {
-            await this._movieService.AddRemoveDislikeAsync(reviewId, this.GetUserId());
+            var dislikes = await this._movieService.AddRemoveDislikeAsync(reviewId, this.GetUserId());
 
-            return this.RedirectToAction("Details", "Movie", new { movieId });
+            return Json(new { success = true, likes = dislikes });
         }
         catch
         {

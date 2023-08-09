@@ -9,10 +9,12 @@
     const addCommentForm = $(".addCommentForm");
     const editCommentButton = $(".editCommentButton");
     const editCommentForm = $(".editCommentForm");
-    const addLikeButton = $("#addLikeButton");
-    const addDislikeButton = $("#addDislikeButton");
+    const addLikeButton = $(".addLikeButton");
+    const addDislikeButton = $(".addDislikeButton");
     const deleteReviewButton = $(".deleteReviewButton");
     const deleteCommentButton = $(".deleteCommentButton");
+    const showMore = document.getElementById("showMore");
+    const showLess = document.getElementById("showLess");
 
 
 
@@ -86,51 +88,65 @@
         }
     });
 
-    addLikeButton.click(function (e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
 
-        $.ajax({
-            type: 'POST',
-            url: addRemoveLike,
+
+    addLikeButton.click(function () {
+        var reviewId = $(this).data("review-id");
+        var likes = document.querySelector(`.likes[data-reviewid="${reviewId}"]`);
+
+        fetch('/Movie/AddRemoveLike?reviewId=' + encodeURIComponent(reviewId), {
+            method: 'POST',
             headers: {
+                'Content-Type': 'application/json',
                 RequestVerificationToken: csrfToken
             },
-            data: {
-                reviewId: reviewId,
-                movieId: movieId
-            }
-        });
-        location.reload();
+            body: reviewId
+            
+        })
+            .then(response => response.json())
+            .then(data => {
+                likes.textContent = data.likes;
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
     });
 
-    addDislikeButton.click(function (e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
+    addDislikeButton.click(function () {
+        var reviewId = $(this).data("review-id");
+        var dislikes = document.querySelector(`.likes[data-reviewid="${reviewId}"]`);
 
-        $.ajax({
-            type: 'POST',
-            url: addRemoveDislike,
+        fetch('/Movie/AddRemoveDislike?reviewId=' + encodeURIComponent(reviewId), {
+            method: 'POST',
             headers: {
+                'Content-Type': 'application/json',
                 RequestVerificationToken: csrfToken
             },
-            data: {
-                reviewId: reviewId,
-                movieId: movieId
-            }
+            body: reviewId
+
+        })
+            .then(response => response.json())
+            .then(data => {
+                dislikes.textContent = data.dislikes;
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+    });
+
+    if (showMore != null) {
+        showMore.click(function () {
+            document.getElementById("bioMore").style.display = "inline";
+            document.getElementById("showMore").style.display = "none";
+            document.getElementById("showLess").style.display = "inline";
         });
-        location.reload();
-    });
 
-    document.getElementById("showMore").addEventListener("click", function () {
-        document.getElementById("bioMore").style.display = "inline";
-        document.getElementById("showMore").style.display = "none";
-        document.getElementById("showLess").style.display = "inline";
-    });
-
-    document.getElementById("showLess").addEventListener("click", function () {
-        document.getElementById("bioMore").style.display = "none";
-        document.getElementById("showMore").style.display = "inline";
-        document.getElementById("showLess").style.display = "none";
-    });
+        showLess.click(function () {
+            document.getElementById("bioMore").style.display = "none";
+            document.getElementById("showMore").style.display = "inline";
+            document.getElementById("showLess").style.display = "none";
+        });
+    }
 });

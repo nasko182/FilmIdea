@@ -5,7 +5,6 @@ using Web.ViewModels.Comment;
 using Web.ViewModels.Genre;
 using Web.ViewModels.Movie;
 using Web.ViewModels.Review;
-using static Dropbox.Api.Files.ListRevisionsMode;
 
 public interface IMovieService
 {
@@ -45,9 +44,9 @@ public interface IMovieService
 
     Task RemoveFromUserWatchlistAsync(string userId, int movieId);
 
-    Task AddRemoveLikeAsync(string reviewId, string userId);
+    Task<int> AddRemoveLikeAsync(string reviewId, string userId);
 
-    Task AddRemoveDislikeAsync(string reviewId, string userId);
+    Task<int> AddRemoveDislikeAsync(string reviewId, string userId);
 
     Task DeleteReviewAsync(string reviewId);
 

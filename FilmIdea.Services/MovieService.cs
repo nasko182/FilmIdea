@@ -531,7 +531,7 @@ public class MovieService : FilmIdeaService, IMovieService
         }
     }
 
-    public async Task AddRemoveLikeAsync(string reviewId, string userId)
+    public async Task<int> AddRemoveLikeAsync(string reviewId, string userId)
     {
         var like = await this._dbContext.Likes
             .FirstOrDefaultAsync(l => l.UserId.ToString() == userId && l.ReviewId.ToString() == reviewId);
@@ -565,9 +565,14 @@ public class MovieService : FilmIdeaService, IMovieService
             Console.WriteLine(e);
             throw;
         }
+
+        var likes = await this._dbContext.Likes
+            .CountAsync(l => l.ReviewId.ToString() == reviewId);
+
+        return likes;
     }
 
-    public async Task AddRemoveDislikeAsync(string reviewId, string userId)
+    public async Task<int> AddRemoveDislikeAsync(string reviewId, string userId)
     {
         var dislike = await this._dbContext.Dislikes
             .FirstOrDefaultAsync(dl => dl.UserId.ToString() == userId && dl.ReviewId.ToString() == reviewId);
@@ -601,6 +606,11 @@ public class MovieService : FilmIdeaService, IMovieService
             Console.WriteLine(e);
             throw;
         }
+
+        var dislikes = await this._dbContext.Dislikes
+            .CountAsync(l => l.ReviewId.ToString() == reviewId);
+
+        return dislikes;
     }
 
     public async Task DeleteReviewAsync(string reviewId)

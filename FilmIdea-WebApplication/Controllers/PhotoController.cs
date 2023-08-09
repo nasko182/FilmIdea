@@ -1,7 +1,7 @@
 ﻿namespace FilmIdea.Web.Controllers;
 
-using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
+
 using Microsoft.AspNetCore.Mvc;
 
 public class PhotoController : BaseController

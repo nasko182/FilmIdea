@@ -3,10 +3,9 @@
 using Actor;
 using Director;
 using Genre;
-using Interfaces;
 using Review;
 
-public class MovieDetailsViewModel : IMovieDetailsModel
+public class MovieDetailsViewModel 
 {
     public MovieDetailsViewModel()
     {

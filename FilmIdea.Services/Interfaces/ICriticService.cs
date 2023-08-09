@@ -1,8 +1,6 @@
 ﻿namespace FilmIdea.Services.Data.Interfaces;
 
-using FilmIdea.Data.Models;
 using Web.ViewModels.Critic;
-using static Dropbox.Api.Files.ListRevisionsMode;
 
 public interface ICriticService 
 {

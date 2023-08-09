@@ -1,9 +1,8 @@
 ﻿namespace FilmIdea.Web.ViewModels.Actor;
 
-using Interfaces;
 using Movie;
 
-public class ActorDetailsViewModel : IActorDetailsModel
+public class ActorDetailsViewModel 
 {
     public ActorDetailsViewModel()
     {

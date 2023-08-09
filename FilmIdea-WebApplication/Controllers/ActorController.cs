@@ -1,8 +1,8 @@
 ﻿namespace FilmIdea.Web.Controllers;
 
-using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using Services.Data.Interfaces;
 
 public class ActorController : BaseController
@@ -21,7 +21,7 @@ public class ActorController : BaseController
         {
             var actor = await this._actorService.GetActorDetailsAsync(actorId, this.GetUserId());
 
-            if (actor == null || actor.GetUrlInformation()!=information)
+            if (actor == null )
             {
                 return this.NotFound();
             }

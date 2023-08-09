@@ -1,9 +1,6 @@
 ﻿namespace FilmIdea.Web.ViewModels.Critic;
 
 using System.ComponentModel.DataAnnotations;
-
-using Microsoft.AspNetCore.Http;
-
 using static Common.EntityValidationConstants.CriticValidations;
 public class EditCriticViewModel
 {

@@ -1,7 +1,5 @@
 ﻿namespace FilmIdea.Web.ViewModels.Actor;
 
-using Microsoft.AspNetCore.Http;
-
 using System.ComponentModel.DataAnnotations;
 
 using static Common.EntityValidationConstants.ActorValidations;

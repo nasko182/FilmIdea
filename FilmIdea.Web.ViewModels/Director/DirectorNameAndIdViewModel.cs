@@ -1,8 +1,6 @@
 ﻿namespace FilmIdea.Web.ViewModels.Director;
 
-using Interfaces;
-
-public class DirectorNameAndIdViewModel : IDirectorDetailsModel
+public class DirectorNameAndIdViewModel
 {
     public int Id { get; set; }
 

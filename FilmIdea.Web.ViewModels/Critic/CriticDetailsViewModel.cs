@@ -1,7 +1,5 @@
 ﻿namespace FilmIdea.Web.ViewModels.Critic;
 
-using Review;
-
 public class CriticDetailsViewModel
 {
     public string Id { get; set; } = null!;

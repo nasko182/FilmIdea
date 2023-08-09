@@ -6,7 +6,6 @@ using Web.ViewModels.Director;
 using Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Web.ViewModels.Movie;
-using FilmIdea.Web.ViewModels.Actor;
 
 public class DirectorService : FilmIdeaService, IDirectorService
 {
