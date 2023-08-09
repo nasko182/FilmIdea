@@ -96,21 +96,14 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-}
+    <script>
+        var addToUserWatchlistUrl = '@Url.Action("AddToUserWatchlist", "Movie")';
+        var removeFromUserWatchlistUrl = '@Url.Action("RemoveFromUserWatchlist", "Movie")';
+        var addRatingUrl = '@Url.Action("AddRating", "Movie")';
 
-<script>
-    var addToUserWatchlistUrl = '@Url.Action("AddToUserWatchlist", "Movie")';
-    var removeFromUserWatchlistUrl = '@Url.Action("RemoveFromUserWatchlist", "Movie")';
-    var addRatingUrl = '@Url.Action("AddRating", "Movie")';
+        var csrfToken = '@Antiforgery.GetAndStoreTokens(Context).RequestToken';
+    </script>
     
-    var csrfToken = '@Antiforgery.GetAndStoreTokens(Context).RequestToken';
-    $(".movie-card").hover(
-        function () {
-            $(this).find(".card-footer").fadeIn(200);
-        },
-        function () {
-            $(this).find(".card-footer").fadeOut(200);
-        }
-    );
-</script>
-<script src="~/js/WatchlistAndRating.js"></script>
+}
+    <script src="~/js/watchlistAndRating.js"></script>
+

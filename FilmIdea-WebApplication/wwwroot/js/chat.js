@@ -35,12 +35,12 @@ function scrollToBottom() {
 }
 
 
-//function leaveGroup() {
-//    var groupInput = document.getElementById("groupId");
-//    var groupId = groupInput.value.trim();
+function leaveGroup() {
+    var groupInput = document.getElementById("groupId");
+    var groupId = groupInput.value.trim();
 
-//    $.post(leaveGroupUrl, { groupId})
-//}
+    $.post(leaveGroupUrl, { groupId})
+}
 document.getElementById("sendMessageButton").addEventListener("click", function () {
     sendMessage();
 });

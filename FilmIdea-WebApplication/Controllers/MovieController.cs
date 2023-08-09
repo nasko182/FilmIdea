@@ -37,6 +37,7 @@ public class MovieController : BaseController
     //TODO: Add cache is need somewhere(adding something, displayCollections), also remove cache is update(last(1:30))
     //TODO: In Admin add logic for adding actors and genres to movies 
     //TODO: In Admin add logic for adding photos and videos to movies actors and directors
+    //TODO: Move all js in files
     //TODO: Set cultureInfo.Invariant to every date
     //TODO: Implement receiving messages with SignalR
 
@@ -45,9 +46,8 @@ public class MovieController : BaseController
     //TODO: Add security from parameter tampering for int-s(Security (1:10m), and XXS (edit program.cs endpoints)
     //TODO: Make manage button to be size of the username
     //TODO: Add view for photos and videos
-    //TODO: In Critic add logic for editing critic info
-    //TODO: Add view for critic details
-    //TODO: EDIT critic name button and edit and delete buttons in critic view
+    //TODO: In Critic add logic for deleting critic info
+    
 
     private readonly IMovieService _movieService;
 

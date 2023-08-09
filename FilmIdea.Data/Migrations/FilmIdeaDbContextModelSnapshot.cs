@@ -1112,7 +1112,7 @@ namespace FilmIdea.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("FilmIdea.Data.Models.ApplicationUser", "User")
-                        .WithMany("DisLikes")
+                        .WithMany("Dislikes")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1416,7 +1416,7 @@ namespace FilmIdea.Data.Migrations
                 {
                     b.Navigation("Comments");
 
-                    b.Navigation("DisLikes");
+                    b.Navigation("Dislikes");
 
                     b.Navigation("Groups");
 

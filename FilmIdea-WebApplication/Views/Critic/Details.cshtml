@@ -82,7 +82,10 @@
 
 <div class="btn-container">
     <a asp-area="" asp-controller="Critic" asp-action="Edit" class="btn btn-edit">Edit</a>
-    <a href="#" class="btn btn-delete">Delete</a>
+    <a asp-area="" asp-controller="Critic" asp-action="Delete"
+       class="btn btn-delete"
+       onclick="return showDeleteConfirmation()">
+        Delete</a>
 </div>
 
 <div class="profile-container">
@@ -93,3 +96,12 @@
     <div class="info-label">Biography:</div>
     <p>@Model.Bio</p>
 </div>
+
+@section scripts {
+    <script src="~/js/delete.js"></script>
+}
+
+
+
+
+

@@ -103,4 +103,11 @@ public class UserController : BaseController
 
         return Redirect(model.ReturnUrl ?? "/Home/Index");
     }
+
+    [HttpGet]
+    public async Task<IActionResult> Logout()
+    {
+        await _signInManager.SignOutAsync();
+        return RedirectToAction("Index", "Home");
+    }
 }

@@ -20,7 +20,7 @@ namespace FilmIdea.Data.Migrations
                 keyValue: new Guid("428bd710-7a98-4c58-aed5-d69df62e342f"));
 
             migrationBuilder.AddColumn<int>(
-                name: "DisLikes",
+                name: "Dislikes",
                 table: "Reviews",
                 type: "int",
                 nullable: false,
@@ -35,7 +35,7 @@ namespace FilmIdea.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Reviews",
-                columns: new[] { "Id", "Content", "CriticId", "DisLikes", "Likes", "MovieId", "Rating", "ReviewDate", "Title" },
+                columns: new[] { "Id", "Content", "CriticId", "Dislikes", "Likes", "MovieId", "Rating", "ReviewDate", "Title" },
                 values: new object[] { new Guid("62b7bfac-44bd-4055-ab9b-3d9a802f8162"), "I like the movie", new Guid("bcc5c503-128b-4ba6-a736-6efbeda1ee34"), 0, 0, 2, 9, new DateTime(2023, 8, 2, 7, 56, 25, 338, DateTimeKind.Utc).AddTicks(5507), "About the movie" });
 
             migrationBuilder.InsertData(
@@ -58,7 +58,7 @@ namespace FilmIdea.Data.Migrations
                 keyValue: new Guid("62b7bfac-44bd-4055-ab9b-3d9a802f8162"));
 
             migrationBuilder.DropColumn(
-                name: "DisLikes",
+                name: "Dislikes",
                 table: "Reviews");
 
             migrationBuilder.DropColumn(

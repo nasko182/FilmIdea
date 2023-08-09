@@ -22,7 +22,7 @@ public class ApplicationUser: IdentityUser<Guid>
         this.Messages = new HashSet<Message>();
         this.PassedMovies = new HashSet<PassedMovie>();
         this.Likes = new HashSet<Like>();
-        this.DisLikes = new HashSet<Dislike>();
+        this.Dislikes = new HashSet<Dislike>();
     }
 
     [Required]
@@ -47,5 +47,5 @@ public class ApplicationUser: IdentityUser<Guid>
 
     public ICollection<Like> Likes { get; set; }
 
-    public ICollection<Dislike> DisLikes { get; set; }
+    public ICollection<Dislike> Dislikes { get; set; }
 }

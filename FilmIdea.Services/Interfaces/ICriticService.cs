@@ -19,4 +19,6 @@ public interface ICriticService
     Task<EditCriticViewModel> GetCriticForEditByIdAsync(string id);
 
     Task EditCriticByIdAndModelAsync(string criticId,EditCriticViewModel model);
+
+    Task DeleteCriticAsync(string criticId);
 }

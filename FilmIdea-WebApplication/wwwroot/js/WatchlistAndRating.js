@@ -87,4 +87,13 @@
         $('#rateModal').modal('hide');
     });
 
+    $(".movie-card").hover(
+        function () {
+            $(this).find(".card-footer").fadeIn(200);
+        },
+        function () {
+            $(this).find(".card-footer").fadeOut(200);
+        }
+    );
+
 });

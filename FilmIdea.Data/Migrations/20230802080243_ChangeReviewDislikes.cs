@@ -11,7 +11,7 @@ namespace FilmIdea.Data.Migrations
         {
 
             migrationBuilder.RenameColumn(
-                name: "DisLikes",
+                name: "Dislikes",
                 table: "Reviews",
                 newName: "Dislikes");
 
@@ -24,7 +24,7 @@ namespace FilmIdea.Data.Migrations
             migrationBuilder.RenameColumn(
                 name: "Dislikes",
                 table: "Reviews",
-                newName: "DisLikes");
+                newName: "Dislikes");
 
            
         }

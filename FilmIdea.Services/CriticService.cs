@@ -116,4 +116,39 @@ public class CriticService : FilmIdeaService, ICriticService
             throw new InvalidOperationException();
         }
     }
+
+    public async Task DeleteCriticAsync(string criticId)
+    {
+        var critic = await this._dbContext.Critics
+            .FirstAsync(c=>c.Id.ToString()==criticId);
+
+        var user1 = this._dbContext.ApplicationUsers
+            .Include(u=>u.Ratings)
+            .Include(u=>u.Groups)
+            .Include(u=>u.Comments)
+            .Include(c=>c.Messages)
+            .Include(u=>u.Likes)
+            .Include(u=>u.Dislikes)
+            .Include(u=>u.PassedMovies)
+            .Include(c=>c.Watchlist);
+
+           var user = await user1.FirstAsync(u => u.Id == critic.UserId);
+
+
+        this._dbContext.UserRatings.RemoveRange(user.Ratings);
+        this._dbContext.GroupsUsers.RemoveRange(user.Groups);
+        this._dbContext.Comments.RemoveRange(user.Comments);
+        this._dbContext.Messages.RemoveRange(user.Messages);
+        this._dbContext.Likes.RemoveRange(user.Likes);
+        this._dbContext.Dislikes.RemoveRange(user.Dislikes);
+        this._dbContext.UsersMovies.RemoveRange(user.Watchlist);
+        this._dbContext.PassedMovies.RemoveRange(user.PassedMovies);
+
+        this._dbContext.Reviews.RemoveRange(critic.Reviews);
+
+        this._dbContext.Critics.Remove(critic);
+        this._dbContext.Users.Remove(user);
+
+        await _dbContext.SaveChangesAsync();
+    }
 }

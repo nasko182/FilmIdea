@@ -61,7 +61,7 @@ public class CriticController : BaseController
 
             return this.RedirectToAction("Become");
         }
-        var fileName = this.GetUserName() + "_ProfileImage.jpg";
+        var fileName = Guid.NewGuid()+this.GetUserName() + "_ProfileImage.jpg";
 
         string photoUrl;
         try
@@ -157,4 +157,32 @@ public class CriticController : BaseController
         return RedirectToAction("Details", "Critic", new { Area = ""});
     }
 
+    [HttpGet]
+    public async Task<IActionResult> Delete()
+    {
+        var isCritic = await this._criticService.CriticExistByUserIdAsync(this.GetUserId());
+        if (!isCritic)
+        {
+            TempData[ErrorMessage] = UnauthorizedAccessErrorMessage;
+
+            return this.RedirectToAction("Become");
+        }
+
+        var criticId = await this._criticService.GetCriticIdAsync(this.GetUserId());
+
+        try
+        {
+            await this._criticService.DeleteCriticAsync(criticId!);
+        }
+        catch
+        {
+            TempData[ErrorMessage] =  InvalidUpdate;
+
+            return this.RedirectToAction("Details");
+        }
+
+        TempData[SuccessMessage] = "Critic was deleted successfully!";
+
+        return RedirectToAction("Logout", "User", new { Area = "" });
+    }
 }
