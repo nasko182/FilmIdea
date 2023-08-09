@@ -13,9 +13,9 @@ public class ActorDetailsViewModel
     public int Id { get; set; }
 
     public string Name { get; set; } = null!;
-    
+
     public string Bio { get; set; } = null!;
-    
+
     public string ProfileImageUrl { get; set; } = null!;
 
     public string DateOfBirth { get; set; } = null!;

@@ -39,15 +39,12 @@ public class MovieController : BaseController
     //TODO: In Admin add logic for adding photos and videos to movies actors and directors
     //TODO: Move all js in files
     //TODO: Set cultureInfo.Invariant to every date
+    //TODO: Fix bug with reload page in details Deleting Edit Like don't reload properly 
     //TODO: Implement receiving messages with SignalR
 
     //TODO: Fix bug with likes and dislikes Web API or delete them
-    //TODO: Fix bug with reload page in details Deleting Edit Like don't reload properly 
     //TODO: Add security from parameter tampering for int-s(Security (1:10m), and XXS (edit program.cs endpoints)
-    //TODO: Make manage button to be size of the username
-    //TODO: Add view for photos and videos
-    //TODO: In Critic add logic for deleting critic info
-    
+
 
     private readonly IMovieService _movieService;
 

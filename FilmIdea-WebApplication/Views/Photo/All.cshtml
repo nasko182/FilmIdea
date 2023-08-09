@@ -1,0 +1,24 @@
+﻿@model List<string>
+
+@{
+    ViewBag.Title = "All Photos";
+}
+
+
+<title>@ViewBag.Title</title>
+
+<h2>@ViewBag.Title</h2>
+
+<div class="photo-container">
+    @foreach (var photoUrl in Model)
+    {
+        <div class="photo-item">
+            <img src="@photoUrl" alt="Photo" />
+        </div>
+    }
+</div>
+
+@section Scripts
+{
+    <script src="~/js/lightbox.js"></script>
+}

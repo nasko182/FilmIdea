@@ -1,11 +1,10 @@
 ﻿namespace FilmIdea.Services.Data;
 
+using Microsoft.EntityFrameworkCore;
+
 using FilmIdea.Data;
 using FilmIdea.Data.Models;
 using Interfaces;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System.IO;
 using Web.ViewModels.Actor;
 using Web.ViewModels.Movie;
 

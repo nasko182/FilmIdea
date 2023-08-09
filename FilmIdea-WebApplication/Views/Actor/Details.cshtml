@@ -2,6 +2,9 @@
 @model ActorDetailsViewModel
 @{
     ViewBag.Title = $"{Model.Name} - FilmIdea";
+
+    var serializedPhotos = Json.Serialize(Model.Photos);
+    var serializedVideos = Json.Serialize(Model.Videos);
 }
 
 <div class="container actor-details">
@@ -30,7 +33,7 @@
             </div>
         </div>
         <div class="col-md-6" style="padding: 0; width: 54%;">
-            @if (Model.Videos.Any())
+            @if (Model.Videos.Count != 0)
             {
                 <div class="embed-responsive embed-responsive-16by9" style="height: 93%;">
                     <iframe class="embed-responsive-item" style="width: 100%;height: 100%;" src="@Model.Videos.First()" frameborder="0" allowfullscreen></iframe>
@@ -44,62 +47,72 @@
             }
         </div>
         <div class="col-md-2" style="padding-left: 4px; width: 21%;">
-            <div class="content-button">
-                @if (Model.Photos.Count == 0)
-                {
-                    <i class="fa-solid fa-film-slash"></i>
+            @if (Model.Photos.Count > 0)
+            {
+                <a asp-area="" asp-controller="Photo" asp-action="All" asp-route-serializedPhotos="@serializedPhotos" class="content-button-link">
+                    <div class="content-button">
+                        <i class="fa-regular fa-images"></i>
+                        @if (Model.Photos.Count == 1)
+                        {
+                            <p>1 Photo</p>
+                        }
+                        else if (Model.Photos.Count <= 99)
+                        {
+                            <p>@Model.Photos.Count Photos</p>
+                        }
+                        else
+                        {
+                            <p>99+ Photos</p>
+                        }
+                    </div>
+                </a>
+            }
+            else
+
+            {
+                <div class="content-button">
+                    <i class="fa-regular fa-eye-slash"></i>
                     <p>0 Photos</p>
-                }
-                else
-                {
-                    <i class="fa-regular fa-images"></i>
-                    @if (Model.Photos.Count == 1)
-                    {
-                        <p>1 Photo</p>
-                    }
-                    else if (Model.Photos.Count <= 99)
-                    {
-                        <p>@Model.Photos.Count Photos</p>
-
-                    }
-                    else
-                    {
-                        <p>99+ Photos</p>
-                    }
-                }
-            </div>
-            <div class="content-button">
-                @if (Model.Videos.Count == 0)
-                {
-                    <i class="fa-solid fa-film-slash"></i>
+                </div>
+            }
+            @if (Model.Videos.Count > 0)
+            {
+                <a asp-area="" asp-controller="Video" asp-action="All" asp-route-serializedVideos="@serializedVideos" class="content-button-link">
+                    <div class="content-button">
+                        <i class="fa-solid fa-film"></i>
+                        @if (Model.Videos.Count == 1)
+                        {
+                            <p>1 Video</p>
+                        }
+                        else if (Model.Videos.Count <= 99)
+                        {
+                            <p>@Model.Videos.Count Videos</p>
+                        }
+                        else
+                        {
+                            <p>99+ Videos</p>
+                        }
+                    </div>
+                </a>
+            }
+            else
+            {
+                <div class="content-button">
+                    <i class="fa-regular fa-eye-slash"></i>
                     <p>0 Videos</p>
-                }
-                else
-                {
-                    <i class="fa-solid fa-film"></i>
-                    @if (Model.Videos.Count == 1)
-                    {
-                        <p>1 Video</p>
-                    }
-                    else if (Model.Videos.Count <= 99)
-                    {
-                        <p>@Model.Videos.Count Videos</p>
-
-                    }
-                    else
-                    {
-                        <p>99+ Videos</p>
-                    }
-                }
-            </div>
+                </div>
+            }
         </div>
+
     </div>
     <div class="row">
         <div class="actor-bio">
             <h3 class="title">Biography</h3>
-            <p>@Model.Bio.Substring(0, 500) 
+            <p>
+                @Model.Bio.Substring(0, 500)
                 <button id="showMore" class="btn btn-link show-more-btn">...Show More</button>
-                <span id="bioMore" style="display: none;">@Model.Bio.Substring(500)</span></p>
+                <span id="bioMore" style="display: none;">@Model.Bio.Substring(500)</span>
+            </p>
             <button id="showLess" class="btn btn-link" style="display: none;">Show Less</button>
         </div>
     </div>
@@ -108,7 +121,7 @@
             <h3 class="title">Movies</h3>
             @if (Model.Movies.Any())
             {
-                <partial name="_MoviesPartial" model="Model.Movies"/>
+                <partial name="_MoviesPartial" model="Model.Movies" />
             }
             else
             {

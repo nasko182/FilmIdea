@@ -8,6 +8,9 @@
 
 @model MovieAndReviewViewModel
 @{
+    ViewBag.Title = Model.MovieDetails.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
     var userId = User.GetId();
     var isCritic = await CriticService.CriticExistByUserIdAsync(userId);
     var criticId = await CriticService.GetCriticIdAsync(userId!);
@@ -15,9 +18,8 @@
     var hours = $"{totalMinutes / 60}h";
     var minutes = $"{totalMinutes % 60}m";
 
-
-    ViewBag.Title = Model.MovieDetails.Title;
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    var serializedPhotos = Json.Serialize(Model.MovieDetails.Photos);
+    var serializedVideos = Json.Serialize(Model.MovieDetails.Videos);
 }
 
 <div class="container actor-details">
@@ -43,7 +45,7 @@
 
             <div>FILMIDEA RATING</div>
             <p style="font-size: 20px; margin-right: 20px"><strong>⭐</strong> @Model.MovieDetails.Rating/10</p>
-            @if (@Model.MovieDetails.UserRating > 0)
+            @if (Model.MovieDetails.UserRating > 0)
             {
                 <div>YOUR RATING</div>
                 <span style="font-size: 20px;"> &#x2B50; @Model.MovieDetails.UserRating/10</span>
@@ -69,59 +71,66 @@
             </div>
         </div>
         <div class="col-md-2" style="padding-left: 4px; width: 21%;">
-            <div class="content-button">
-                @if (Model.MovieDetails.Photos.Count == 0)
-                {
-                    <i class="fa-solid fa-film-slash"></i>
+            @if (Model.MovieDetails.Photos.Count > 0)
+            {
+                <a asp-area="" asp-controller="Photo" asp-action="All" asp-route-serializedPhotos="@serializedPhotos" class="content-button-link">
+                    <div class="content-button">
+                        <i class="fa-regular fa-images"></i>
+                        @if (Model.MovieDetails.Photos.Count == 1)
+                        {
+                            <p>1 Photo</p>
+                        }
+                        else if (Model.MovieDetails.Photos.Count <= 99)
+                        {
+                            <p>@Model.MovieDetails.Photos.Count Photos</p>
+                        }
+                        else
+                        {
+                            <p>99+ Photos</p>
+                        }
+                    </div>
+                </a>
+            }
+            else
+
+            {
+                <div class="content-button">
+                    <i class="fa-regular fa-eye-slash"></i>
                     <p>0 Photos</p>
-                }
-                else
-                {
-                    <i class="fa-regular fa-images"></i>
-                    @if (Model.MovieDetails.Photos.Count == 1)
-                    {
-                        <p>1 Photo</p>
-                    }
-                    else if (Model.MovieDetails.Photos.Count <= 99)
-                    {
-                        <p>@Model.MovieDetails.Photos.Count Photos</p>
-
-                    }
-                    else
-                    {
-                        <p>99+ Photos</p>
-                    }
-                }
-            </div>
-            <div class="content-button">
-                @if (Model.MovieDetails.Videos.Count == 0)
-                {
-                    <i class="fa-solid fa-film-slash"></i>
+                </div>
+            }
+            @if (Model.MovieDetails.Videos.Count > 0)
+            {
+                <a asp-area="" asp-controller="Video" asp-action="All" asp-route-serializedVideos="@serializedVideos" class="content-button-link">
+                    <div class="content-button">
+                        <i class="fa-solid fa-film"></i>
+                        @if (Model.MovieDetails.Videos.Count == 1)
+                        {
+                            <p>1 Video</p>
+                        }
+                        else if (Model.MovieDetails.Videos.Count <= 99)
+                        {
+                            <p>@Model.MovieDetails.Videos.Count Videos</p>
+                        }
+                        else
+                        {
+                            <p>99+ Videos</p>
+                        }
+                    </div>
+                </a>
+            }
+            else
+            {
+                <div class="content-button">
+                    <i class="fa-regular fa-eye-slash"></i>
                     <p>0 Videos</p>
-                }
-                else
-                {
-                    <i class="fa-solid fa-film"></i>
-                    @if (Model.MovieDetails.Videos.Count == 1)
-                    {
-                        <p>1 Video</p>
-                    }
-                    else if (Model.MovieDetails.Videos.Count <= 99)
-                    {
-                        <p>@Model.MovieDetails.Videos.Count Videos</p>
-
-                    }
-                    else
-                    {
-                        <p>99+ Videos</p>
-                    }
-                }
-            </div>
+                </div>
+            }
         </div>
     </div>
 </div>
 
-@foreach (var genre in @Model.MovieDetails.Genres)
+@foreach (var genre in Model.MovieDetails.Genres)
 {
     <button class="btn-login rounded-pill" style="width: 163px;height: 29px;">
         <a class="nav-link text-white login-btn" style="padding-top: 0;padding-bottom: 10px;" asp-area="" asp-controller="Movie" asp-action="ByGenre" asp-route-genreId="@genre.Id"><strong style="color: black !important; font-size: 17px">@genre.Name</strong></a>
@@ -134,7 +143,7 @@
 <hr/>
 <div class="row">
     <p>Actors: </p>
-    @foreach (var actor in @Model.MovieDetails.Actors.Take(3))
+    @foreach (var actor in Model.MovieDetails.Actors.Take(3))
     {
         <a asp-area="" asp-controller="Actor" asp-action="Details" asp-route-actorId="@actor.Id">@actor.Name</a>
     }
@@ -185,7 +194,7 @@
                     @foreach (var review in Model.MovieDetails.Reviews)
                     {
 
-                        var isCriticOwner = await MovieService.IsCriticOwnerOfReview(criticId, @review.Id);
+                        var isCriticOwner = await MovieService.IsCriticOwnerOfReview(criticId, review.Id);
 
                         <div class="card mb-2" style="width: 80%">
                             <div class="card-body">
@@ -232,8 +241,8 @@
 
                                     @if (User.Identity!.IsAuthenticated)
                                     {
-                                        <div id="movieId" data-movie='@Html.Raw(@Model.MovieDetails.Id)'></div>
-                                        <div id="reviewId" data-review='@Html.Raw(@review.Id)'></div>
+                                        <div id="movieId" data-movie='@Html.Raw(Model.MovieDetails.Id)'></div>
+                                        <div id="reviewId" data-review='@Html.Raw(review.Id)'></div>
                                         <button id="addLikeButton">👍</button>
                                         <p>@review.Likes</p>
 
@@ -303,7 +312,7 @@
                                                 <p class="card-text d-flex justify-content-start">@comment.Content</p>
                                                 @if (isUserOwner || User.IsAdmin())
                                                 {
-                                                    <div id="commentId" data-comment='@Html.Raw(@comment.Id)'></div>
+                                                    <div id="commentId" data-comment='@Html.Raw(comment.Id)'></div>
                                                     <button type="submit" class="btn btn-danger d-flex justify-content-end] deleteCommentButton" data-comment-id="@comment.Id">Delete</button>
                                                 }
                                             </div>

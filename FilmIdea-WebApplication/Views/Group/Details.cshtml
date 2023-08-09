@@ -6,9 +6,9 @@
 
     var viewModel = new EditGroupViewModel()
     {
-        Icon = @Model.Icon,
-        Name = @Model.Name,
-        UsersIds = @Model.Users.Select(u => u.Id).ToList(),
+        Icon = Model.Icon,
+        Name = Model.Name,
+        UsersIds = Model.Users.Select(u => u.Id).ToList(),
     };
 }
 

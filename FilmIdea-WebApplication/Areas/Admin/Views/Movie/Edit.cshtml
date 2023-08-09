@@ -21,7 +21,7 @@
                 </div>
                 <div class="mb-3">
                     <label asp-for="ReleaseDate"></label>
-                    <input asp-for="ReleaseDate" class="form-control" aria-required="true" type="date" value="@DateTime.UtcNow.Date.ToString("yyyy-MM-dd")" />
+                    <input asp-for="ReleaseDate" class="form-control" aria-required="true" type="date" value="@Model.ReleaseDate.ToString("yyyy-MM-dd")" />
                     <span asp-validation-for="ReleaseDate" class="text-danger"></span>
                 </div>
                 <div>

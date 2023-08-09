@@ -1,0 +1,20 @@
+﻿@model List<string>
+
+@{
+    ViewBag.Title = "All Videos";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Assuming you have a layout file
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="video-container">
+    @foreach (var videoUrl in Model)
+    {
+        <div class="video-wrapper">
+            <video controls>
+                <source src="@videoUrl" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    }
+</div>
