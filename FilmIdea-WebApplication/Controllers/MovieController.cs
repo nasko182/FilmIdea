@@ -40,11 +40,12 @@ public class MovieController : BaseController
     //TODO: Move all js in files
     //TODO: Set cultureInfo.Invariant to every date
     //TODO: Fix bug with reload page in details Deleting Edit Like don't reload properly 
+    //TODO: Add buttons for adding actors and Genres to movie
     //TODO: Implement receiving messages with SignalR
 
     //TODO: Fix bug with likes and dislikes Web API or delete them
-    //TODO: Add security from parameter tampering for int-s(Security (1:10m), and XXS (edit program.cs endpoints)
-
+    //Todo: Add Movie details description
+    //TODO: Add security from  XXS
 
     private readonly IMovieService _movieService;
 
@@ -177,7 +178,7 @@ public class MovieController : BaseController
 
     [AllowAnonymous]
     [HttpGet]
-    public async Task<IActionResult> Details(int movieId)
+    public async Task<IActionResult> Details(int movieId,string information)
     {
         MovieDetailsViewModel? movie;
         try
@@ -191,7 +192,7 @@ public class MovieController : BaseController
             return this.RedirectToAction("Index", "Home");
         }
 
-        if (movie == null)
+        if (movie == null || movie.GetUrlInformation()!=information)
         {
             return this.RedirectToAction("All");
         }

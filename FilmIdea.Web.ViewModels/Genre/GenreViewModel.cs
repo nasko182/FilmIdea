@@ -1,6 +1,7 @@
 ﻿namespace FilmIdea.Web.ViewModels.Genre;
 
-public class GenreViewModel
+
+public class GenreViewModel 
 {
     public int Id { get; set; }
 

@@ -145,7 +145,7 @@ public class CriticController : BaseController
 
         try
         {
-            await this._criticService.EditCriticByIdAndModelAsync(criticId, model);
+            await this._criticService.EditCriticByIdAndModelAsync(criticId!, model);
         }
         catch
         {

@@ -1,6 +1,7 @@
 ﻿namespace FilmIdea.Web.Controllers;
 
 using FilmIdea.Services.Data.Interfaces;
+using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,12 +15,16 @@ public class DirectorController : BaseController
     }
 
     [AllowAnonymous]
-    public async Task<IActionResult> Details(int directorId)
+    public async Task<IActionResult> Details(int directorId, string information)
     {
         try
         {
             var director = await this._directorService.GetDirectorDetailsAsync(directorId, this.GetUserId());
 
+            if (director == null || director.GetUrlInformation()!=information)
+            {
+                return this.NotFound();
+            }
             return View(director);
         }
         catch

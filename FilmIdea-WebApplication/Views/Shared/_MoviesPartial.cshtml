@@ -1,5 +1,6 @@
 ﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 
+@using FilmIdea.Web.Infrastructure.Extensions
 @model List<MovieViewModel>
 <style>
     .movie-card .btn-hide {
@@ -17,7 +18,7 @@
         <div class="col-md-3 mb-4 movie-card" style="width: 255px;">
             <div class="card position-relative h-100 border-0">
                 <div style="position: relative; height: 100%;">
-                    <a href="@Url.Action("Details", "Movie", new { movieId = movie.Id })">
+                    <a href="@Url.Action("Details", "Movie", new { movieId = movie.Id,information = movie.GetUrlInformation() })">
                         <img src="@movie.CoverPhotoUrl" class="card-img-top" style="height: 355px" alt="@movie.Title">
                     </a>
                     <button class="btn-hide btn btn-secondary btn-sm position-absolute bottom-0 mt-0 ms-0 duration-button" style="right: 0;background-color: #5454548a; border: none" disabled>

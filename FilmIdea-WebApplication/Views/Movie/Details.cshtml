@@ -133,19 +133,19 @@
 @foreach (var genre in Model.MovieDetails.Genres)
 {
     <button class="btn-login rounded-pill" style="width: 163px;height: 29px;">
-        <a class="nav-link text-white login-btn" style="padding-top: 0;padding-bottom: 10px;" asp-area="" asp-controller="Movie" asp-action="ByGenre" asp-route-genreId="@genre.Id"><strong style="color: black !important; font-size: 17px">@genre.Name</strong></a>
+        <a class="nav-link text-white login-btn" style="padding-top: 0;padding-bottom: 10px;" asp-area="" asp-controller="Movie" asp-action="ByGenre" asp-route-genreId="@genre.Id" ><strong style="color: black !important; font-size: 17px">@genre.Name</strong></a>
     </button>
 }
 <hr/>
 <div class="row">
-    <p>Director: </p><a asp-area="" asp-controller="Director" asp-action="Details" asp-route-directorId="@Model.MovieDetails.Director.Id">@Model.MovieDetails.Director.Name</a>
+    <p>Director: </p><a asp-area="" asp-controller="Director" asp-action="Details" asp-route-directorId="@Model.MovieDetails.Director.Id" asp-route-information="@Model.MovieDetails.Director.GetUrlInformation()">@Model.MovieDetails.Director.Name</a>
 </div>
 <hr/>
 <div class="row">
     <p>Actors: </p>
     @foreach (var actor in Model.MovieDetails.Actors.Take(3))
     {
-        <a asp-area="" asp-controller="Actor" asp-action="Details" asp-route-actorId="@actor.Id">@actor.Name</a>
+        <a asp-area="" asp-controller="Actor" asp-action="Details" asp-route-actorId="@actor.Id" asp-route-information="@actor.GetUrlInformation()">@actor.Name</a>
     }
 </div>
 <hr />

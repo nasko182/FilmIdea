@@ -1,6 +1,8 @@
 ﻿namespace FilmIdea.Web.ViewModels.Actor;
 
-public class ActorNameAndIdViewModel
+using Interfaces;
+
+public class ActorNameAndIdViewModel : IActorDetailsModel
 {
     public int Id { get; set; }
 

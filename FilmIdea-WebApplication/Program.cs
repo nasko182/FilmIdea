@@ -103,10 +103,9 @@ public class Program
                     name: "areas",
                     pattern: "/{area:exists}/{controller=Home}/{action=Index}/{id?}"
                 );
-            //config.MapControllerRoute(
-            //    name: "ProtectingUrlRoute",
-            //    pattern: "/{controller}/{action}/{id}/{information}",
-            //    defaults: new { Controller = "Movie", Action = "Details" });
+            config.MapControllerRoute(
+                name: "ProtectingUrlRoute",
+                pattern: "/{controller}/{action}/{id}/{information}");
 
             config.MapDefaultControllerRoute();
 
