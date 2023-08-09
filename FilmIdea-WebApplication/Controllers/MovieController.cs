@@ -46,7 +46,6 @@ public class MovieController : BaseController
 
     //TODO: Fix bug with likes and dislikes Web API or delete them
     //Todo: Add Movie details description
-    //TODO: Add security from  XXS
 
     private readonly IMovieService _movieService;
     private readonly ICriticService _criticService;

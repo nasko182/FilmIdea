@@ -121,4 +121,16 @@
         });
         location.reload();
     });
+
+    document.getElementById("showMore").addEventListener("click", function () {
+        document.getElementById("bioMore").style.display = "inline";
+        document.getElementById("showMore").style.display = "none";
+        document.getElementById("showLess").style.display = "inline";
+    });
+
+    document.getElementById("showLess").addEventListener("click", function () {
+        document.getElementById("bioMore").style.display = "none";
+        document.getElementById("showMore").style.display = "inline";
+        document.getElementById("showLess").style.display = "none";
+    });
 });

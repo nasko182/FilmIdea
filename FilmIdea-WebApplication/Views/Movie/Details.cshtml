@@ -129,7 +129,25 @@
         </div>
     </div>
 </div>
-
+<div class="row">
+    <div class="actor-bio">
+        <h3 class="title">Biography</h3>
+        <p>
+            @if (Model.MovieDetails.Description.Length<600)
+            {
+                @Model.MovieDetails.Description
+            }
+            else
+            {
+                @Model.MovieDetails.Description.Substring(0, 500)
+                <button id="showMore" class="btn btn-link show-more-btn">...Show More</button>
+                <span id="bioMore" style="display: none;">@Model.MovieDetails.Description.Substring(500)</span>
+            }
+        </p>
+        <button id="showLess" class="btn btn-link" style="display: none;">Show Less</button>
+    </div>
+</div>
+<hr />
 @foreach (var genre in Model.MovieDetails.Genres)
 {
     <button class="btn-login rounded-pill" style="width: 163px;height: 29px;">

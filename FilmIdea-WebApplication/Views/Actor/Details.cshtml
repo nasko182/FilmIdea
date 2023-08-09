@@ -109,9 +109,16 @@
         <div class="actor-bio">
             <h3 class="title">Biography</h3>
             <p>
-                @Model.Bio.Substring(0, 500)
-                <button id="showMore" class="btn btn-link show-more-btn">...Show More</button>
-                <span id="bioMore" style="display: none;">@Model.Bio.Substring(500)</span>
+                @if (Model.Bio.Length < 600)
+                {
+                    @Model.Bio
+                }
+                else
+                {
+                    @Model.Bio.Substring(0, 500)
+                    <button id="showMore" class="btn btn-link show-more-btn">...Show More</button>
+                    <span id="bioMore" style="display: none;">@Model.Bio.Substring(500)</span>
+                }
             </p>
             <button id="showLess" class="btn btn-link" style="display: none;">Show Less</button>
         </div>
