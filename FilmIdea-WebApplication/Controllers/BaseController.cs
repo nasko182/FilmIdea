@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
 using static Common.NotificationMessageConstants;
-using static Common.ExceptionMessages;
+using static Common.ExceptionMessagesConstants;
 
 [Authorize]
 public class BaseController : Controller

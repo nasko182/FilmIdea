@@ -7,8 +7,8 @@ using Services.Data.Interfaces;
 using ViewModels.Critic;
 
 using static Common.NotificationMessageConstants;
-using static Common.SuccessMessages;
-using static Common.ExceptionMessages;
+using static Common.SuccessMessagesConstants;
+using static Common.ExceptionMessagesConstants;
 using Ganss.Xss;
 
 public class CriticController : BaseController

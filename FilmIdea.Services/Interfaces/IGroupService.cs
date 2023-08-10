@@ -4,7 +4,7 @@ using Web.ViewModels.Group;
 
 public interface IGroupService 
 {
-    Task<List<AllGroupViewModel>> GetAllGroupsAsync();
+    Task<List<AllGroupViewModel>> GetAllGroupsAsync(string userId);
 
     Task<string> CreateGroupAsync(AddGroupViewModel model,string userId);
 

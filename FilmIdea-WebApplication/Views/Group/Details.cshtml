@@ -1,15 +1,16 @@
-﻿@using System.Security.Claims
-@model DetailsGroupModel
+﻿@model DetailsGroupModel
 @{
     ViewBag.Title = $"{Model.Name} Details";
     Layout = "_GroupDetailsLayout";
 
+    ViewBag.GroupId = Model.Id;
+
     var viewModel = new EditGroupViewModel()
-    {
-        Icon = Model.Icon,
-        Name = Model.Name,
-        UsersIds = Model.Users.Select(u => u.Id).ToList(),
-    };
+            {
+                Icon = Model.Icon,
+                Name = Model.Name,
+                UsersIds = Model.Users.Select(u => u.Id).ToList(),
+            };
 }
 
 <div>
@@ -17,12 +18,13 @@
         <div class="left-section">
             <div class="row mb-2">
                 <div class="col-md-6 m-0">
-                    <a asp-action="Edit" 
-                       asp-route-groupId="@Model.Id" 
-                       asp-route-icon="@viewModel.Icon" 
-                       asp-route-name="@viewModel.Name" 
-                       asp-route-userIds="@string.Join(",", viewModel.UsersIds)">
-                        <button id="editGroupButton" class="button add-user-button">Edit Group</button>
+                    <a asp-action="Edit"
+                       asp-route-groupId="@Model.Id"
+                       asp-route-icon="@viewModel.Icon"
+                       asp-route-name="@viewModel.Name"
+                       asp-route-userIds="@string.Join(",", viewModel.UsersIds)"
+                       id="editGroupButton" class="button add-user-button">
+                        Edit Group
                     </a>
                 </div>
                 <div class="col-md-6 m-0">
@@ -32,23 +34,7 @@
             <div class="line"></div>
 
             <div class="row mt-2">
-                <div class="chat-box" id="chatBox">
-                    @foreach (var message in Model.Chat.Messages)
-                    {
-                        TimeZoneInfo localTimeZone = TimeZoneInfo.Local;
-                        DateTime localTime = TimeZoneInfo.ConvertTimeFromUtc(message.SendAt, localTimeZone);
-                        <div class="message @(User.FindFirstValue(ClaimTypes.NameIdentifier) == message.SenderId ? "sender" : "receiver")">
-                            <p><strong style="color: #4c4c4c; font-size: 20px">@message.SenderName</strong> @localTime.ToString("dd.MM.yyyy HH:mm")</p>
-                            <div class="message-content-@(User.FindFirstValue(ClaimTypes.NameIdentifier) == message.SenderId ? "sender" : "receiver")">
-                                <div>
-                                    <div class="content">@message.Content</div>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                </div>
-                <input type="text" id="messageInput" class="mt-2 mb-2" placeholder="Enter message..." />
-                <button id="sendMessageButton" disabled>Send</button>
+                <partial name="_CharPartial" model="@Model.Chat.Messages" />
             </div>
         </div>
 
@@ -67,5 +53,4 @@
         var leaveGroupUrl = '@Url.Action("LeaveGroup", "Group")';
         var EditGroupUrl = '@Url.Action("Edit", "Group")';
     </script>
-    <script src="~/js/chat.js"></script>
-}
+    }

@@ -6,8 +6,8 @@ using Services.Data.Interfaces;
 using ViewModels.Movie;
 
 using static Common.NotificationMessageConstants;
-using static Common.ExceptionMessages;
-using static Common.SuccessMessages;
+using static Common.ExceptionMessagesConstants;
+using static Common.SuccessMessagesConstants;
 
 public class MovieController : BaseAdminController
 {

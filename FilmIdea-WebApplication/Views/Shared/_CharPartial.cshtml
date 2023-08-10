@@ -1,0 +1,29 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Security.Claims
+
+@model List<FilmIdea.Web.ViewModels.Message.MessageViewModel>
+
+<div id="groupDetails" data-groupId="@ViewBag.GroupId" display="none"></div>
+<div class="chat-box" id="chatBox">
+
+    @*@foreach (var message in Model)
+    {
+        TimeZoneInfo localTimeZone = TimeZoneInfo.Local;
+        DateTime localTime = TimeZoneInfo.ConvertTimeFromUtc(message.SendAt, localTimeZone);
+        <div class="message @(User.FindFirstValue(ClaimTypes.NameIdentifier) == message.SenderId ? "sender" : "receiver")">
+            <p><strong style="color: #4c4c4c; font-size: 20px">@message.SenderName</strong> @localTime.ToString("dd.MM.yyyy HH:mm")</p>
+            <div class="message-content-@(User.FindFirstValue(ClaimTypes.NameIdentifier) == message.SenderId ? "sender" : "receiver")">
+                <div>
+                    <div class="content">@message.Content</div>
+                </div>
+            </div>
+        </div>
+    }*@
+
+
+</div>
+<input type="text" id="messageInput" class="mt-2 mb-2" placeholder="Enter message..." />
+<button id="sendMessageButton" disabled>Send</button>
+
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/chat.js" asp-append-version="true"></script>

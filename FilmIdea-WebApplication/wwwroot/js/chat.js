@@ -1,27 +1,44 @@
-﻿function sendMessage() {
-    var messageInput = document.getElementById("messageInput");
-    var groupInput = document.getElementById("groupId");
-    var groupId = groupInput.value.trim();
-    var message = messageInput.value.trim();
-    if (message === "") {
-        return;
+﻿// chat.js
+const connection = new signalR.HubConnectionBuilder()
+    .withUrl("/chathub")
+    .build();
+
+connection.start()
+    .then(() => {
+        console.log("Connected to SignalR hub.");
+    })
+    .catch((error) => {
+        console.error("Error connecting to SignalR hub:", error);
+    });
+
+connection.on("ReceiveMessage", (message) => {
+    const messageElement = document.createElement("div");
+    messageElement.textContent = message;
+    document.getElementById("chatBox").appendChild(messageElement);
+});
+
+const sendMessageButton = document.getElementById("sendMessageButton");
+const messageInput = document.getElementById("messageInput");
+const group = document.getElementById("groupDetails");
+const groupId = group.getAttribute("data-groupId");
+
+sendMessageButton.addEventListener("click", () => {
+    const message = messageInput.value;
+    if (message.trim() !== "") {
+        const model = {
+            Content: message,
+            SendAt: new Date()
+        };
+
+        connection.invoke("SendMessageToGroup", model, groupId)
+            .then(() => {
+                messageInput.value = "";
+            })
+            .catch((error) => {
+                console.error("Error sending message:", error);
+            });
     }
-
-    var sendMessageData = {
-        groupId: groupId,
-        content: message
-    };
-
-    $.post(sendMessageUrl, sendMessageData)
-        .done(function (response) {
-            messageInput.value = "";
-            document.getElementById("sendMessageButton").disabled = true;
-            location.reload();
-        })
-        .fail(function (error) {
-            console.error("Failed to send message:", error);
-        });
-}
+});
 
 function updateSendButtonState() {
     var messageInput = document.getElementById("messageInput");
@@ -33,17 +50,6 @@ function scrollToBottom() {
     var chatBox = document.getElementById("chatBox");
     chatBox.scrollTop = chatBox.scrollHeight;
 }
-
-
-function leaveGroup() {
-    var groupInput = document.getElementById("groupId");
-    var groupId = groupInput.value.trim();
-
-    $.post(leaveGroupUrl, { groupId})
-}
-document.getElementById("sendMessageButton").addEventListener("click", function () {
-    sendMessage();
-});
 
 document.getElementById("messageInput").addEventListener("keypress", function (event) {
     if (event.key === "Enter") {
@@ -58,7 +64,3 @@ document.getElementById("messageInput").addEventListener("input", function () {
 window.onload = function () {
     scrollToBottom();
 };
-
-document.getElementById("leaveGroupButton").addEventListener("click", function () {
-    leaveGroup();
-});

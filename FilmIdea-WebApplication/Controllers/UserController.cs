@@ -14,7 +14,7 @@ using ViewModels.User;
 
 using static Common.NotificationMessageConstants;
 using static Common.GeneralApplicationConstants;
-using static Common.ExceptionMessages;
+using static Common.ExceptionMessagesConstants;
 
 public class UserController : BaseController
 {

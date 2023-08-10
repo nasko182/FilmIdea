@@ -19,9 +19,10 @@ public class GroupService : FilmIdeaService, IGroupService
     {
         this._dbContext = dbContext;
     }
-    public async Task<List<AllGroupViewModel>> GetAllGroupsAsync()
+    public async Task<List<AllGroupViewModel>> GetAllGroupsAsync(string userId)
     {
         return await this._dbContext.Groups
+            .Where(g=>g.GroupUsers.Any(gu=>gu.UserId.ToString()==userId))
             .Select(g => new AllGroupViewModel()
             {
                 Id = g.Id,
@@ -226,7 +227,6 @@ public class GroupService : FilmIdeaService, IGroupService
         await this._dbContext.SaveChangesAsync();
     }
 
-
     private async Task<List<UserViewModel>> GetAllUsersAsync(string userId)
     {
         return await this._dbContext.Users
@@ -347,7 +347,4 @@ public class GroupService : FilmIdeaService, IGroupService
 
         return sharedMovies;
     }
-
-
-
 }

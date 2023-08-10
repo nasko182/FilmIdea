@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Services.Data.Interfaces;
 using Data;
 using Data.Models;
-
+using Hubs;
 using static Common.GeneralApplicationConstants;
 
 public class Program
@@ -16,13 +16,13 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-    
-        var connectionString = 
+
+        var connectionString =
             builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
         builder.Services
             .AddDbContext<FilmIdeaDbContext>(options =>
-            options.UseSqlServer(connectionString)); 
+            options.UseSqlServer(connectionString));
 
         builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
             {
@@ -44,7 +44,7 @@ public class Program
 
                 options.User.RequireUniqueEmail = true;
             })
-            .AddRoles<IdentityRole<Guid>>() 
+            .AddRoles<IdentityRole<Guid>>()
             .AddEntityFrameworkStores<FilmIdeaDbContext>();
 
         builder.Services.AddApplicationServices(typeof(IMovieService));
@@ -65,6 +65,8 @@ public class Program
             {
                 option.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
             });
+
+        builder.Services.AddSignalR();
 
         var app = builder.Build();
 
@@ -106,7 +108,10 @@ public class Program
             config.MapDefaultControllerRoute();
 
             config.MapRazorPages();
+
+            config.MapHub<ChatHub>("/chathub");
         });
+
 
         app.Run();
     }

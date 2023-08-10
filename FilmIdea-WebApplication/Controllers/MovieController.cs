@@ -12,8 +12,8 @@ using ViewModels.Movie;
 using ViewModels.Review;
 
 using static Common.NotificationMessageConstants;
-using static Common.ExceptionMessages;
-using static Common.SuccessMessages;
+using static Common.ExceptionMessagesConstants;
+using static Common.SuccessMessagesConstants;
 
 public class MovieController : BaseController
 {
@@ -29,11 +29,13 @@ public class MovieController : BaseController
     //TODO: Add [HttpGet] on every action
     //TODO: Remove all un used classes and methods Like databaseSeeder
     //TODO: Move all js in files
+    //TODO: Add asp-append-version="true" to all scripts that invoke js files
 
     //TODO: Add Update Picture on all EDIT pages
     //TODO: Add cache is need somewhere(adding something, displayCollections), also remove cache is update(last(1:30))
     //TODO: Edit movie detail footer
     //TODO: Edit views to be more beautiful
+    //TODO: like and dislike to not move when dislike
     //TODO: Everywhere where Critic is Write something use criticName in blue,  Everywhere where user write something use UserName in green, to be clear that this is critic
     //TODO: Edit Swipe View and Add Link to details on movie pic in swipe
     //TODO: Set cultureInfo.Invariant to every date

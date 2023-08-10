@@ -1,6 +1,6 @@
 ﻿namespace FilmIdea.Common;
 
-public static class SuccessMessages
+public static class SuccessMessagesConstants
 {
     public static string BecomeCriticSuccess => "Congratulations! You are now a critic. You can start writing reviews.";
 

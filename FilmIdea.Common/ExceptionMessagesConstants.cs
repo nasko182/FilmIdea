@@ -1,6 +1,6 @@
 ﻿namespace FilmIdea.Common;
 
-public static class ExceptionMessages
+public static class ExceptionMessagesConstants
 {
     public static string InvalidInputErrorMessage(string input) => $"Invalid {input}. Please check your data and try again";
 

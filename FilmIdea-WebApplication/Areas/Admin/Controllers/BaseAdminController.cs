@@ -8,7 +8,7 @@ using FilmIdea.Services.Data.Interfaces;
 
 using static Common.GeneralApplicationConstants;
 using static Common.NotificationMessageConstants;
-using static Common.ExceptionMessages;
+using static Common.ExceptionMessagesConstants;
 
 [Area(AdminAreaName)]
 [Authorize(Roles = AdminRoleName)]

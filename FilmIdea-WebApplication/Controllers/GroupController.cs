@@ -6,7 +6,7 @@ using Services.Data.Interfaces;
 using ViewModels.Group;
 
 using static Common.NotificationMessageConstants;
-using static Common.ExceptionMessages;
+using static Common.ExceptionMessagesConstants;
 
 public class GroupController : BaseController
 {
@@ -22,7 +22,7 @@ public class GroupController : BaseController
     {
         try
         {
-            var groups = await this._groupService.GetAllGroupsAsync();
+            var groups = await this._groupService.GetAllGroupsAsync(this.GetUserId());
 
             return View(groups);
         }
