@@ -632,10 +632,11 @@ public class MovieService : FilmIdeaService, IMovieService
         }
     }
 
-    public async Task DeleteCommentAsync(string commentId)
+    public async Task<int> DeleteCommentAsync(string commentId)
     {
         var comment = await this._dbContext.Comments
             .Where(c => c.Id.ToString() == commentId)
+            .Include(c=>c.Review)
             .FirstAsync();
 
         this._dbContext.Comments.Remove(comment);
@@ -648,6 +649,8 @@ public class MovieService : FilmIdeaService, IMovieService
         {
             throw new InvalidOperationException("Something went wrong!");
         }
+
+        return comment.Review.MovieId;
     }
 
     public async Task<bool> IsCriticOwnerOfReview(string? criticId, string? reviewId)

@@ -267,7 +267,7 @@
 
                     var isCriticOwner = await MovieService.IsCriticOwnerOfReview(criticId, review.Id);
 
-                    <div class="card mb-2" style="width: 80%">
+                    <div class="review card mb-2" style="width: 80%">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <p class="justify-content-start"><strong>@review.CriticName</strong> - @review.ReviewDate</p>
@@ -353,7 +353,7 @@
                                 @foreach (var comment in review.Comments)
                                 {
                                     var isUserOwner = await MovieService.IsUserOwnerOfComment(userId, comment.Id);
-                                    <div class="card bg-light mb-2">
+                                    <div class="comment card bg-light mb-2">
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between">
                                                 <p class="small mb-0 text-muted justify-content-start"><strong>@comment.WriterName</strong> - @comment.CommentDate</p>
@@ -411,5 +411,5 @@
 
 
     <script src="~/js/showHide.js" asp-append-version="true"></script>
-    <script src="~/js/movieDetails.js"></script>
+    <script src="~/js/movieDetails.js" asp-append-version="true"></script>
 }

@@ -52,7 +52,7 @@ public interface IMovieService
 
     Task DeleteReviewAsync(string reviewId);
 
-    Task DeleteCommentAsync(string commentId);
+    Task<int> DeleteCommentAsync(string commentId);
 
     Task<bool> IsCriticOwnerOfReview(string? criticId, string? reviewId);
 

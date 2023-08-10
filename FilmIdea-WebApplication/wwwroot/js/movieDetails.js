@@ -13,8 +13,6 @@
     const addDislikeButton = $(".addDislikeButton");
     const deleteReviewButton = $(".deleteReviewButton");
     const deleteCommentButton = $(".deleteCommentButton");
-    const showMore = document.getElementById("showMore");
-    const showLess = document.getElementById("showLess");
 
 
 
@@ -34,7 +32,9 @@
         e.stopImmediatePropagation();
 
         var reviewId = $(this).data("review-id");
-
+        var deletedReview = $(this).closest(".review");
+        deletedReview.addClass("hidden");
+        
         if (confirm("Are you sure you want to delete this review?")) {
             $.ajax({
                 type: 'POST',
@@ -46,7 +46,7 @@
                     reviewId: reviewId
                 }
             });
-            location.reload();
+            
         } else {
 
         }
@@ -70,7 +70,8 @@
         e.preventDefault();
         e.stopImmediatePropagation();
         var commentId = $(this).data("comment-id");
-
+        var deletedComment = $(this).closest(".comment");
+        deletedComment.addClass("hidden");
         if (confirm("Are you sure you want to delete this comment?")) {
             $.ajax({
                 type: 'POST',
@@ -82,7 +83,7 @@
                     commentId: commentId
                 }
             });
-            location.reload();
+            
         }else{
 
         }
@@ -135,18 +136,4 @@
                 console.error('Fetch error:', error);
             });
     });
-
-    if (showMore != null) {
-        showMore.click(function () {
-            document.getElementById("bioMore").style.display = "inline";
-            document.getElementById("showMore").style.display = "none";
-            document.getElementById("showLess").style.display = "inline";
-        });
-
-        showLess.click(function () {
-            document.getElementById("bioMore").style.display = "none";
-            document.getElementById("showMore").style.display = "inline";
-            document.getElementById("showLess").style.display = "none";
-        });
-    }
 });

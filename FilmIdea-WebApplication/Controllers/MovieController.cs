@@ -14,6 +14,7 @@ using ViewModels.Review;
 using static Common.NotificationMessageConstants;
 using static Common.ExceptionMessagesConstants;
 using static Common.SuccessMessagesConstants;
+using FilmIdea.Data.Models;
 
 public class MovieController : BaseController
 {
@@ -39,23 +40,19 @@ public class MovieController : BaseController
     //TODO: Add asp-append-version="true" to all scripts that invoke js files
 
     //TODO: Set cultureInfo.Invariant to every date
-
-
-
-
     //TODO: Everywhere where Critic is Write something use criticName in blue,  Everywhere where user write something use UserName in green, to be clear that this is critic
+    //TODO: Add button for becoming admin in user all
+    //TODO: Add cache is need somewhere(adding something, displayCollections), also remove cache is update(last(1:30))
+
+
+
+
     //TODO: Edit views to be more beautiful
     //TODO: Edit Swipe View and Add Link to details on movie pic in swipe
     //TODO: Like and dislike to not move when dislike
     //TODO: Edit movie detail footer
 
     //TODO: Fix bug with reload page in details Deleting Edit Like don't reload properly 
-
-    //TODO: Add cache is need somewhere(adding something, displayCollections), also remove cache is update(last(1:30))
-
-    //TODO: Add Update Picture on all EDIT pages
-    //TODO: Add button for becoming admin in user all
-    //TODO: In Admin add logic for adding photos and videos to movies actors and directors
 
 
     private readonly IMovieService _movieService;
@@ -318,12 +315,10 @@ public class MovieController : BaseController
             }
 
         }
-
-        return this.RedirectToAction("Details", "Movie", new { movieId });
+        return this.RedirectToAction("Details", new { Area = "", movieId });
     }
 
     [HttpPost]
-    [Route("/Movie/AddRating")]
     public async Task<IActionResult> AddRating(int movieId, int ratingValue)
     {
         if (!this.IsAuthenticated())
@@ -346,7 +341,6 @@ public class MovieController : BaseController
     }
 
     [HttpPost]
-    [Route("/Movie/AddToUserWatchlist")]
     public async Task<IActionResult> AddToUserWatchlist(int movieId)
     {
         if (!this.IsAuthenticated())
@@ -370,7 +364,6 @@ public class MovieController : BaseController
     }
 
     [HttpPost]
-    [Route("/Movie/RemoveFromUserWatchlist")]
 
     public async Task<IActionResult> RemoveFromUserWatchlist(int movieId)
     {
@@ -496,7 +489,6 @@ public class MovieController : BaseController
         {
             return this.GeneralError();
         }
-        TempData[SuccessMessage] = DeleteReviewSuccess;
 
         return this.RedirectToAction(this.TempData["LastAction"]!.ToString(),
             this.TempData["LastController"]!.ToString());
@@ -537,17 +529,15 @@ public class MovieController : BaseController
         try
         {
             var userId = this.User.GetId();
-            var isOwner = await  this._movieService.IsUserOwnerOfComment(userId!, commentId);
+            var isOwner = await this._movieService.IsUserOwnerOfComment(userId!, commentId);
 
+            int movieId = 0;
             if (isOwner || this.User.IsAdmin())
             {
-                await this._movieService.DeleteCommentAsync(commentId); 
+                movieId = await this._movieService.DeleteCommentAsync(commentId);
             }
 
-            TempData[SuccessMessage] = DeleteCommentSuccess;
-
-            return this.RedirectToAction(this.TempData["LastAction"]!.ToString(),
-                this.TempData["LastController"]!.ToString());
+            return this.RedirectToAction("Details", new { id = movieId });
         }
         catch
         {
