@@ -18,10 +18,10 @@
         @if (!isCritic)
         {
             <li class="nav-item">
-                <a class="nav-link nav-text-white nav-element" asp-area="" asp-controller="Critic" asp-action="Become"><strong>Become Critic</strong></a>
+                <a class=" btn nav-link nav-text-white nav-element" asp-area="" asp-controller="Critic" asp-action="Become"><strong>Become Critic</strong></a>
             </li>
-            <li>
-                <span class="nav-text-white" style="margin-top: 14px;">|</span>
+            <li style="margin-top: 14px;">
+                <span class="nav-text-white" >|</span>
             </li>
             <li>
                 <form class="" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
@@ -60,11 +60,11 @@
     else
     {
         <li class="nav-item">
-            <a class="nav-link nav-text-white nav-element" asp-area="" asp-controller="User" asp-action="Login"><strong >Sign In</strong></a>
+            <a class=" btn nav-link nav-text-white nav-element" asp-area="" asp-controller="User" asp-action="Login"><strong >Sign In</strong></a>
         </li>
         <span class="nav-text-white m-" style="margin-top: 14px; margin-right: 0">|</span>
         <li class="nav-item">
-            <a class="nav-link nav-text-white nav-element" asp-area="" asp-controller="User" asp-action="Register"><strong>Register</strong></a>
+            <a class=" btn nav-link nav-text-white nav-element" asp-area="" asp-controller="User" asp-action="Register"><strong>Register</strong></a>
         </li>
     }
 </ul>

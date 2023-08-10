@@ -11,6 +11,7 @@ using Web.ViewModels.Group;
 using Web.ViewModels.Message;
 using Web.ViewModels.Movie;
 using Web.ViewModels.User;
+using static Dropbox.Api.Files.ListRevisionsMode;
 
 public class GroupService : FilmIdeaService, IGroupService
 {
@@ -118,6 +119,13 @@ public class GroupService : FilmIdeaService, IGroupService
             };
             group.GroupUsers.Add(newUser);
         }
+
+        var user = new GroupUser()
+        {
+            UserId = Guid.Parse(userId),
+            GroupId = Guid.Parse(groupId)
+        };
+        group.GroupUsers.Add(user);
 
         _dbContext.GroupsUsers.RemoveRange(usersToRemove);
 

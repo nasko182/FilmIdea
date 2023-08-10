@@ -3,6 +3,8 @@ const messageInput = document.getElementById("messageInput");
 const group = document.getElementById("groupDetails");
 const groupId = group.getAttribute("data-groupId");
 const username = group.getAttribute("data-username");
+const divContainers = document.querySelectorAll(".div-message");
+
 
 
 const connection = new signalR.HubConnectionBuilder()
@@ -10,58 +12,66 @@ const connection = new signalR.HubConnectionBuilder()
     .build();
 
 connection.start()
-    .then(() => {
-        console.log("Connected to SignalR hub.");
-    })
-    .catch((error) => {
-        console.error("Error connecting to SignalR hub:", error);
+        .then(() => {
+            console.log("Connected to SignalR hub.");
+        })
+        .catch((error) => {
+            console.error("Error connecting to SignalR hub:", error);
+        });
+
+    connection.on("ReceiveMessage", (message,chatGroupId) => {
+        const messageParts = message.split(",");
+        const senderName = messageParts[0];
+        const content = messageParts[1];
+        const sendAt = messageParts[2];
+
+        if (groupId === chatGroupId) {
+            const messageElement = document.createElement("div");
+            messageElement.classList.add("message");
+
+            if (senderName === username) {
+                messageElement.classList.add("sender");
+            }
+            else {
+                messageElement.classList.add("receiver");
+            }
+
+            const usernameElement = document.createElement("strong");
+            usernameElement.classList.add("chat-username");
+            usernameElement.textContent = senderName;
+
+            const timestampElement = document.createElement("p");
+            timestampElement.classList.add("hidden");
+            timestampElement.textContent = sendAt;
+
+            const contentContainer = document.createElement("div");
+            contentContainer.classList.add(
+                "message-content-" + (senderName === username ? "sender" : "receiver")
+            );
+
+            const contentDiv = document.createElement("div");
+            contentDiv.classList.add("content");
+            contentDiv.textContent = content;
+
+            contentContainer.appendChild(contentDiv);
+            messageElement.appendChild(timestampElement);
+            messageElement.appendChild(usernameElement);
+            messageElement.appendChild(contentContainer);
+
+            contentContainer.addEventListener("click", () => {
+                timestampElement.classList.toggle("hidden");
+            });
+            document.getElementById("chatBox").appendChild(messageElement);
+            scrollToBottom();
+        }
     });
 
-connection.on("ReceiveMessage", (message) => {
-    const messageParts = message.split(",");
-    const senderName = messageParts[0];
-    const content = messageParts[1];
-    const sendAt = messageParts[2];
-
-    const messageElement = document.createElement("div");
-    messageElement.classList.add("message");
-
-    if (senderName === username) {
-        messageElement.classList.add("sender");
-    }
-    else {
-        messageElement.classList.add("receiver");
-    }
-
-    const usernameElement = document.createElement("strong");
-    usernameElement.classList.add("chat-username");
-    usernameElement.textContent = senderName;
-
-    const timestampElement = document.createElement("p");
-    timestampElement.classList.add("hidden");
-    timestampElement.textContent = sendAt;
-
-    const contentContainer = document.createElement("div");
-    contentContainer.classList.add(
-        "message-content-" + (senderName === username ? "sender" : "receiver")
-    );
-
-    const contentDiv = document.createElement("div");
-    contentDiv.classList.add("content");
-    contentDiv.textContent = content;
-
-    contentContainer.appendChild(contentDiv);
-    messageElement.appendChild(timestampElement);
-    messageElement.appendChild(usernameElement);
-    messageElement.appendChild(contentContainer);
-
-    document.getElementById("chatBox").appendChild(messageElement);
-
-    contentContainer.addEventListener("click", () => {
+divContainers.forEach((container) => {
+    container.addEventListener("click", () => {
+        const timestampElement = container.querySelector("p")
         timestampElement.classList.toggle("hidden");
     });
-
-});
+})
 
 sendMessageButton.addEventListener("click", () => {
     const message = messageInput.value;
@@ -78,6 +88,8 @@ sendMessageButton.addEventListener("click", () => {
             .catch((error) => {
                 console.error("Error sending message:", error);
             });
+
+        scrollToBottom();
     }
 });
 
