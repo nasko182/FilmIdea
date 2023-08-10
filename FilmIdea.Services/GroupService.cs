@@ -227,6 +227,9 @@ public class GroupService : FilmIdeaService, IGroupService
         await this._dbContext.SaveChangesAsync();
     }
 
+
+
+
     private async Task<List<UserViewModel>> GetAllUsersAsync(string userId)
     {
         return await this._dbContext.Users
@@ -308,14 +311,15 @@ public class GroupService : FilmIdeaService, IGroupService
         {
             CreatedAt = group.Chat.CreatedAt,
             Messages = group.Chat.Messages
-                .OrderBy(m => m.SentAt)
                 .Select(m => new MessageViewModel()
                 {
                     Content = m.Content,
-                    SendAt = m.SentAt,
+                    SendAt = m.SentAt.ToLocalTime(),
                     SenderId = m.SenderId.ToString(),
-                    SenderName = m.Sender.Email.Substring(0, m.Sender.Email.IndexOf("@"))
-                }).ToList()
+                    SenderName = m.Sender.UserName
+                })
+                .OrderBy(m => m.SendAt)
+                .ToList()
         };
     }
 

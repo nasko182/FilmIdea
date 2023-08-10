@@ -1,9 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using System.Security.Claims
+@using FilmIdea.Web.Infrastructure.Extensions
 
 @model List<FilmIdea.Web.ViewModels.Message.MessageViewModel>
 
-<div id="groupDetails" data-groupId="@ViewBag.GroupId" display="none"></div>
+<div id="groupDetails" data-groupId="@ViewBag.GroupId" data-username="@User.GetName()" display="none"></div>
 <div class="chat-box" id="chatBox">
 
     @*@foreach (var message in Model)

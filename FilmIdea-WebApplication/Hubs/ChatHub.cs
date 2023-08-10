@@ -32,13 +32,13 @@ public class ChatHub : Hub
             await Groups.AddToGroupAsync(Context.ConnectionId, group.Id.ToString());
             
             var groupDetails = await this._groupService.GetGroupDetailsAsync(group.Id.ToString(),userId);
+
             var oldMessages = groupDetails.Chat.Messages;
+
             foreach (var message in oldMessages)
             {
                 var senderName = message.SenderName;
-
-                var sendAt = TimeZoneInfo.ConvertTimeFromUtc(message.SendAt, TimeZoneInfo.Local)
-                    .ToString("dd.MM.yyyy HH:mm");
+                var sendAt = message.SendAt.ToString("dd.MM.yyyy HH:mm");
                 var messageContent = $"{senderName},{message.Content},{sendAt}";
 
                 await Clients.Group(group.Id.ToString()).SendAsync(ReceiveMessage, messageContent);
