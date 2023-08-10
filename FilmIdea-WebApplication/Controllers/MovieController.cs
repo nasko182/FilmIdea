@@ -46,7 +46,7 @@ public class MovieController : BaseController
     //TODO: Everywhere where Critic is Write something use criticName in blue,  Everywhere where user write something use UserName in green, to be clear that this is critic
     //TODO: Edit views to be more beautiful
     //TODO: Edit Swipe View and Add Link to details on movie pic in swipe
-    //TODO: like and dislike to not move when dislike
+    //TODO: Like and dislike to not move when dislike
     //TODO: Edit movie detail footer
 
     //TODO: Fix bug with reload page in details Deleting Edit Like don't reload properly 
@@ -56,7 +56,6 @@ public class MovieController : BaseController
     //TODO: Add Update Picture on all EDIT pages
     //TODO: Add button for becoming admin in user all
     //TODO: In Admin add logic for adding photos and videos to movies actors and directors
-    //TODO: In Admin add logic for adding actors and genres to movies 
 
 
     private readonly IMovieService _movieService;

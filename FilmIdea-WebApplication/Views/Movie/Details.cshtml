@@ -175,7 +175,7 @@
             <p>Actors: </p>
             @foreach (var actor in Model.MovieDetails.Actors.Take(3))
             {
-                <a asp-area="" asp-controller="Actor" asp-action="Details">@actor.Name</a>
+                <a asp-area="" asp-controller="Actor" asp-action="Details" asp-route-actorId="@actor.Id">@actor.Name</a>
             }
         </div>
         @if (User.IsAdmin())

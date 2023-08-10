@@ -103,26 +103,59 @@
                 </div>
             }
         </div>
+    </div>
+       @if (User.IsAdmin())
+       {
+           <div class="d-flex justify-content-end">
+               <button id="addPhotoBtn" class="btn btn-primary" style="margin-right: 10px;">Add Photo</button>
+            <button id="addVideoBtn" class="btn btn-primary">Add Video</button>
+           </div>
+           <div class=" d-flex justify-content-end">
+               <form id="addPhoto" asp-area="Admin" asp-controller="Actor" asp-action="AddPhoto" method="post" enctype="multipart/form-data" class="w-50 hidden">
+                   <div class="form-group">
+                       <div class="mb-3">
+                           <label a>Image</label>
+                           <input class="form-control" type="file" name="photo" accept="image/*" />
+                       </div>
+                   </div>
+                   <input type="hidden" name="actorId" value="@Model.Id" />
 
-    </div>
-    <div class="row">
-        <div class="actor-bio">
-            <h3 class="title">Biography</h3>
-            <p>
-                @if (Model.Bio.Length < 600)
-                {
-                    @Model.Bio
-                }
-                else
-                {
-                    @Model.Bio.Substring(0, 500)
-                    <button id="showMore" class="btn btn-link show-more-btn">...Show More</button>
-                    <span id="bioMore" style="display: none;">@Model.Bio.Substring(500)</span>
-                }
-            </p>
-            <button id="showLess" class="btn btn-link" style="display: none;">Show Less</button>
-        </div>
-    </div>
+                   <input class="btn btn-primary mt-3" type="submit" value="Submit" />
+               </form>
+           </div>
+           <div class=" d-flex justify-content-end">
+
+            <form id="addVideo" asp-area="Admin" asp-controller="Actor" asp-action="AddVideo" method="post" enctype="multipart/form-data" class="w-50 hidden">
+                <div class="form-group">
+                    <div class="mb-3">
+                        <label a>Video</label>
+                        <input class="form-control" type="file" name="video" accept="video/*" />
+                    </div>
+                </div>
+                <input type="hidden" name="actorId" value="@Model.Id" />
+                   <input class="btn btn-primary mt-3" type="submit" value="Submit" />
+               </form>
+           </div>
+       }
+       <div class="row">
+           <div class="actor-bio">
+               <h3 class="title">Biography</h3>
+               <p>
+                   @if (Model.Bio.Length < 600)
+                   {
+                       @Model.Bio
+                   }
+                   else
+                   {
+                       @Model.Bio.Substring(0, 500)
+                       <button id="showMore" class="btn btn-link show-more-btn">...Show More</button>
+                       <span id="bioMore" style="display: none;">@Model.Bio.Substring(500)</span>
+                   }
+               </p>
+               <button id="showLess" class="btn btn-link" style="display: none;">Show Less</button>
+           </div>
+       </div>
+       <hr/>
     <div class="row">
         <div class="actor-movies">
             <h3 class="title">Movies</h3>
@@ -138,16 +171,7 @@
     </div>
 </div>
 
-<script>
-    document.getElementById("showMore").addEventListener("click", function () {
-        document.getElementById("bioMore").style.display = "inline";
-        document.getElementById("showMore").style.display = "none";
-        document.getElementById("showLess").style.display = "inline";
-    });
-
-    document.getElementById("showLess").addEventListener("click", function () {
-        document.getElementById("bioMore").style.display = "none";
-        document.getElementById("showMore").style.display = "inline";
-        document.getElementById("showLess").style.display = "none";
-    });
-</script>
+@section Scripts
+{
+    <script src="~/js/showHide.js" asp-append-version="true"></script>
+}

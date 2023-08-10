@@ -157,7 +157,7 @@ public class ActorService : FilmIdeaService, IActorService
     {
         var actor = await _dbContext
             .Actors
-            .FirstAsync(a=>a.Id==id);
+            .FirstAsync(a => a.Id == id);
 
         this._dbContext.MoviesActors.RemoveRange(actor.Movies);
         this._dbContext.Photos.RemoveRange(actor.Photos);
@@ -173,9 +173,9 @@ public class ActorService : FilmIdeaService, IActorService
         var actors = new List<EditMovieActors>();
 
         var actorsInMovie = await this._dbContext.Actors
-            .Include(a=>a.Movies)
+            .Include(a => a.Movies)
             .Where(a => a.Movies.Any(m => m.MovieId == movieId))
-            .Select(a=>new EditMovieActors
+            .Select(a => new EditMovieActors
             {
                 Id = a.Id,
                 Name = a.Name,
@@ -206,14 +206,14 @@ public class ActorService : FilmIdeaService, IActorService
     public async Task EditMovieActors(List<int> actorsIds, int movieId)
     {
         var movie = await this._dbContext.Movies
-            .Include(m=>m.Actors)
+            .Include(m => m.Actors)
             .FirstAsync(m => m.Id == movieId);
 
         var actorsToRemove = movie.Actors
             .Where(ma => !actorsIds.Contains(ma.ActorId))
             .ToList();
 
-        var existingUserIds = movie.Actors.Select(ma=>ma.ActorId).ToList();
+        var existingUserIds = movie.Actors.Select(ma => ma.ActorId).ToList();
 
         var newActorIdsToAdd = actorsIds
             .Except(existingUserIds).ToList();
@@ -238,6 +238,43 @@ public class ActorService : FilmIdeaService, IActorService
         catch (Exception e)
         {
             Console.WriteLine(e.ToString());
+        }
+    }
+
+    public async Task AddPhoto(int actorId, string photoUrl)
+    {
+
+        await this._dbContext.Photos.AddAsync(new Photo
+        {
+            Url = photoUrl,
+            ActorId = actorId
+        });
+
+        try
+        {
+            await this._dbContext.SaveChangesAsync();
+        }
+        catch
+        {
+            throw new InvalidOperationException();
+        }
+    }
+
+    public async Task AddVideo(int actorId, string videoUrl)
+    {
+        await this._dbContext.Videos.AddAsync(new Video
+        {
+            Url = videoUrl,
+            ActorId = actorId
+        });
+
+        try
+        {
+            await this._dbContext.SaveChangesAsync();
+        }
+        catch
+        {
+            throw new InvalidOperationException();
         }
     }
 }

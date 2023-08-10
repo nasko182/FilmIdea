@@ -14,7 +14,7 @@ public class DropboxService : IDropboxService
 
     public DropboxService()
     {
-        this._dropboxClient = new DropboxClient("sl.BjypKLbLfICY1W3fWm-KqrAIofDpsrR2kSSql4YaIZbavplxK1eDYBNTfbbI64ilTMo51eC4pB2XPXjfQrJ8byZFcidNrrD3fpqLHnH5BIb3rf_5LT5h8buB8kxZlty_YHjmjFaYJw5d4Q0");
+        this._dropboxClient = new DropboxClient("sl.Bj1UpKbmkFfJq2hp50tptKJU33UWSpBMR58BBp-hOimK4iu_uxqp25aAZ-C7r87yfRiLGMhk48hqbPmBW788BMuX_12DOC86UyLipfTjS0iZug3gwIFof0e_d9gmYLOoZocjafqLjb7XdC0");
     }
     public async Task<string> UploadFileAsync(IFormFile file,string folderName,string fileName)
     {

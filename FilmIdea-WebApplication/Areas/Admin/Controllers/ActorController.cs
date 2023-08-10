@@ -1,6 +1,5 @@
 ﻿namespace FilmIdea.Web.Areas.Admin.Controllers;
 
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 
 using Services.Data.Interfaces;
@@ -9,7 +8,6 @@ using ViewModels.Actor;
 using static Common.NotificationMessageConstants;
 using static Common.ExceptionMessagesConstants;
 using static Common.SuccessMessagesConstants;
-using static Dropbox.Api.Files.ListRevisionsMode;
 
 public class ActorController : BaseAdminController
 {
@@ -133,6 +131,47 @@ public class ActorController : BaseAdminController
         await this._actorService.EditMovieActors(actorsIds,movieId);
 
         return RedirectToAction("Details", "Movie", new { Area = "", movieId });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddPhoto(IFormFile photo,int actorId)
+    {
+        var imageName = photo.Name + "_Image.jpg";
+        var folderName = $"ImagesDb/Actors/Photos/{photo.Name}";
+        string photoUrl = string.Empty;
+        try
+        {
+            photoUrl = await this.UploadPhoto(photo, folderName, imageName);
+        }
+        catch (Exception e)
+        {
+            TempData[ErrorMessage] = e.Message;
+        }
+
+        await this._actorService.AddPhoto(actorId, photoUrl);
+
+        return this.RedirectToAction("Details", "Actor", new { Area = "", actorId });
+
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddVideo(IFormFile video, int actorId)
+    {
+        var videoName = video.Name + "_Video.mp4";
+        var folderName = $"VideosDb/Actors/Videos/{video.Name}";
+        string videoUrl = string.Empty;
+        try
+        {
+            videoUrl = await this.UploadVideo(video, folderName, videoName);
+        }
+        catch (Exception e)
+        {
+            TempData[ErrorMessage] = e.Message;
+        }
+
+        await this._actorService.AddVideo(actorId, videoUrl);
+
+        return this.RedirectToAction("Details", "Actor", new {Area="", actorId });
     }
 
 }

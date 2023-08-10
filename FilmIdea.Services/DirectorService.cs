@@ -200,4 +200,41 @@ public class DirectorService : FilmIdeaService, IDirectorService
             throw new InvalidOperationException();
         }
     }
+
+    public async Task AddPhoto(int directorId, string photoUrl)
+    {
+
+        await this._dbContext.Photos.AddAsync(new Photo
+        {
+            Url = photoUrl,
+            DirectorId = directorId
+        });
+
+        try
+        {
+            await this._dbContext.SaveChangesAsync();
+        }
+        catch
+        {
+            throw new InvalidOperationException();
+        }
+    }
+
+    public async Task AddVideo(int directorId, string videoUrl)
+    {
+        await this._dbContext.Videos.AddAsync(new Video
+        {
+            Url = videoUrl,
+            DirectorId = directorId
+        });
+
+        try
+        {
+            await this._dbContext.SaveChangesAsync();
+        }
+        catch
+        {
+            throw new InvalidOperationException();
+        }
+    }
 }

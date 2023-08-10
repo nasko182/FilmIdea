@@ -13,4 +13,8 @@ public interface IDirectorService
     Task EditDirectorByIdAndModelAsync(int id, EditDirectorViewModel model);
 
     Task DeleteDirectorByIdAsync(int id);
+
+    Task AddPhoto(int directorId, string photoUrl);
+
+    Task AddVideo(int directorId, string videoUrl);
 }

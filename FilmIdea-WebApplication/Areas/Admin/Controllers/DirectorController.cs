@@ -115,4 +115,46 @@ public class DirectorController : BaseAdminController
             return GeneralError();
         }
     }
+
+    [HttpPost]
+    public async Task<IActionResult> AddPhoto(IFormFile photo, int directorId)
+    {
+        var imageName = photo.Name + "_Image.jpg";
+        var folderName = $"ImagesDb/Directors/Photos/{photo.Name}";
+        string photoUrl = string.Empty;
+        try
+        {
+            photoUrl = await this.UploadPhoto(photo, folderName, imageName);
+        }
+        catch (Exception e)
+        {
+            TempData[ErrorMessage] = e.Message;
+        }
+
+        await this._directorService.AddPhoto(directorId, photoUrl);
+
+        return this.RedirectToAction("Details", "Director", new { Area = "", directorId });
+
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddVideo(IFormFile video, int directorId)
+    {
+        var imageName = video.Name + "_Video.mp4";
+        var folderName = $"VideosDb/Directors/Videos/{video.Name}";
+        string videoUrl = string.Empty;
+        try
+        {
+            videoUrl = await this.UploadVideo(video, folderName, imageName);
+        }
+        catch (Exception e)
+        {
+            TempData[ErrorMessage] = e.Message;
+        }
+
+        await this._directorService.AddVideo(directorId, videoUrl);
+
+        return this.RedirectToAction("Details", "Director", new { Area = "", directorId });
+
+    }
 }
