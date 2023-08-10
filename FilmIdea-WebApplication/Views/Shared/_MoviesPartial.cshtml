@@ -13,12 +13,22 @@
 <div class="row">
     @foreach (var movie in Model)
     {
-        <div class="col-md-3 mb-4 movie-card" style="width: 255px;">
+        <div class="col-md-3 mb-5 movie-card" style="width: 255px; height: 355px">
             <div class="card position-relative h-100 border-0">
                 <div style="position: relative; height: 100%;">
                     <a href="@Url.Action("Details", "Movie", new { movieId = movie.Id })">
                         <img src="@movie.CoverPhotoUrl" class="card-img-top" style="height: 355px" alt="@movie.Title">
                     </a>
+                    <button class="btn-hide btn btn-secondary btn-sm position-absolute top-0 mt-0 ms-0 duration-button" style="right: 0;background-color: #5454548a; border: none" disabled>
+                        <p class="card-font"><strong>⭐</strong><strong style="color: white">
+                            @{
+                                double rating = Convert.ToDouble(movie.Rating);
+
+                                string formattedRating = (Math.Abs(rating - Math.Round(rating, 2)) > 0.001) ? rating.ToString("N1") : rating.ToString("N0");
+                            }
+                            @formattedRating
+                        </strong></p>
+                    </button>
                     <button class="btn-hide btn btn-secondary btn-sm position-absolute bottom-0 mt-0 ms-0 duration-button" style="right: 0;background-color: #5454548a; border: none" disabled>
                         @{
                             var totalMinutes = movie.Duration;
@@ -54,7 +64,6 @@
                     </button>
                 }
                 <div class="card-body card-footer" style="display: none;">
-                    <p class="card-font"><strong>⭐</strong> @movie.Rating</p>
                     <h6 class="card-title"><strong>@movie.Title (@movie.ReleaseYear)</strong></h6>
                 </div>
             </div>
@@ -93,16 +102,14 @@
     </div>
 </div>
 
-@section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        var addToUserWatchlistUrl = '@Url.Action("AddToUserWatchlist", "Movie")';
-        var removeFromUserWatchlistUrl = '@Url.Action("RemoveFromUserWatchlist", "Movie")';
-        var addRatingUrl = '@Url.Action("AddRating", "Movie")';
+    var addToUserWatchlistUrl = '@Url.Action("AddToUserWatchlist", "Movie", new{Area=""})';
+        var removeFromUserWatchlistUrl = '@Url.Action("RemoveFromUserWatchlist", "Movie", new{Area=""})';
+    var addRatingUrl = '@Url.Action("AddRating", "Movie", new{Area=""})';
 
         var csrfToken = '@Antiforgery.GetAndStoreTokens(Context).RequestToken';
     </script>
-    
-}
+ 
     <script src="~/js/watchlistAndRating.js"></script>
 

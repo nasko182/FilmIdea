@@ -49,10 +49,9 @@ public class MovieController : BaseController
 
     //TODO: Edit views to be more beautiful
     //TODO: Edit Swipe View and Add Link to details on movie pic in swipe
-    //TODO: Like and dislike to not move when dislike
-    //TODO: Edit movie detail footer
 
-    //TODO: Fix bug with reload page in details Deleting Edit Like don't reload properly 
+    //TODO: Like and dislike to not move when dislike
+    
 
 
     private readonly IMovieService _movieService;
@@ -332,7 +331,7 @@ public class MovieController : BaseController
         {
             await this._movieService.AddRatingAsync(movieId, ratingValue, this.GetUserId());
 
-            return this.RedirectToAction("Details", new { id = movieId });
+            return this.RedirectToAction(this.TempData["LastAction"]!.ToString(), this.TempData["LastController"]!.ToString());
         }
         catch
         {
