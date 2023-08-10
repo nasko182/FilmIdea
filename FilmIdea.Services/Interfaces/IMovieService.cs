@@ -1,5 +1,7 @@
 ﻿namespace FilmIdea.Services.Data.Interfaces;
 
+using FilmIdea.Data.Models;
+using FilmIdea.Web.ViewModels.Actor;
 using Models.Movies;
 using Web.ViewModels.Comment;
 using Web.ViewModels.Genre;
@@ -66,4 +68,7 @@ public interface IMovieService
 
     Task<int> GetMovieIdByReviewId(string? reviewId);
 
+    Task<ICollection<EditMovieGenres>> GetAllGenresAsync(int movieId);
+
+    Task EditMovieGenres(List<int> genresIds, int movieId);
 }

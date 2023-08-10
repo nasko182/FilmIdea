@@ -1,5 +1,6 @@
 ﻿namespace FilmIdea.Services.Data.Interfaces;
 
+using FilmIdea.Data.Models;
 using Web.ViewModels.Actor;
 
 public interface IActorService 
@@ -13,4 +14,8 @@ public interface IActorService
     Task EditActorByIdAndModelAsync(int id,EditActorViewModel model);
 
     Task DeleteActorByIdAsync(int id);
+
+    Task<ICollection<EditMovieActors>> GetAllActorsAsync(int movieId);
+
+    Task EditMovieActors(List<int> actorsIds,int movieId);
 }

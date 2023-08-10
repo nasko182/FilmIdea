@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using FilmIdea.Data;
 using FilmIdea.Data.Models;
+using FilmIdea.Data.Models.Join_Tables;
 using Interfaces;
 using Web.ViewModels.Actor;
 using Web.ViewModels.Movie;
@@ -165,5 +166,78 @@ public class ActorService : FilmIdeaService, IActorService
         _dbContext.Remove(actor);
 
         await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<ICollection<EditMovieActors>> GetAllActorsAsync(int movieId)
+    {
+        var actors = new List<EditMovieActors>();
+
+        var actorsInMovie = await this._dbContext.Actors
+            .Include(a=>a.Movies)
+            .Where(a => a.Movies.Any(m => m.MovieId == movieId))
+            .Select(a=>new EditMovieActors
+            {
+                Id = a.Id,
+                Name = a.Name,
+                IsInMovie = true,
+                MovieId = movieId
+            })
+            .ToListAsync();
+
+        actors.AddRange(actorsInMovie);
+
+        var actorsNotInMovie = await this._dbContext.Actors
+            .Include(a => a.Movies)
+            .Where(a => !a.Movies.Any(m => m.MovieId == movieId))
+            .Select(a => new EditMovieActors
+            {
+                Id = a.Id,
+                Name = a.Name,
+                IsInMovie = false,
+                MovieId = movieId
+            })
+            .ToListAsync();
+
+        actors.AddRange(actorsNotInMovie);
+
+        return actors;
+    }
+
+    public async Task EditMovieActors(List<int> actorsIds, int movieId)
+    {
+        var movie = await this._dbContext.Movies
+            .Include(m=>m.Actors)
+            .FirstAsync(m => m.Id == movieId);
+
+        var actorsToRemove = movie.Actors
+            .Where(ma => !actorsIds.Contains(ma.ActorId))
+            .ToList();
+
+        var existingUserIds = movie.Actors.Select(ma=>ma.ActorId).ToList();
+
+        var newActorIdsToAdd = actorsIds
+            .Except(existingUserIds).ToList();
+
+        foreach (var id in newActorIdsToAdd)
+        {
+            var newActor = new MovieActor()
+            {
+                ActorId = id,
+                MovieId = movieId
+            };
+            movie.Actors.Add(newActor);
+        }
+
+        _dbContext.MoviesActors.RemoveRange(actorsToRemove);
+
+
+        try
+        {
+            await this._dbContext.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.ToString());
+        }
     }
 }

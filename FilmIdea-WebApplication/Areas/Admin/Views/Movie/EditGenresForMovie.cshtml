@@ -1,0 +1,104 @@
+﻿@model List<EditMovieGenres>
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+
+@{
+    ViewBag.Title = "Edit Genres";
+}
+
+<div class="center-container">
+    <h1> @ViewBag.Title</h1>
+</div>
+
+<div class="center-container">
+    <div class="input-group">
+        <input type="search" id="search-bar" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+        <button type="button" class="btn btn-outline-primary">search</button>
+    </div>
+
+</div>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Is Movie Genre</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var genre in @Model)
+        {
+            <tr>
+                <th scope="row">@genre.Id</th>
+                <td>@genre.Name</td>
+                <td>
+                    <label>
+                        <input type="checkbox" name="GenresIds" value="@genre.Id" data-id="@genre.Id" @(genre.IsInMovie ? "checked" : "")>
+                    </label>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+<div class="center-container">
+    <button id="edit-genres" class="btn btn-primary">Edit Genres</button>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $("#search-bar").on("keyup", function () {
+                var searchText = $(this).val().toLowerCase();
+                $("tbody tr").each(function () {
+                    var genreName = $(this).find("td:nth-child(2)").text().toLowerCase();
+                    if (genreName.includes(searchText)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            $("#edit-genres").click(function () {
+                var csrfToken = '@Antiforgery.GetAndStoreTokens(Context).RequestToken';
+
+                var selectedGenresIds = [];
+                $("input[name='GenresIds']:checked").each(function () {
+                    selectedGenresIds.push($(this).val());
+                });
+
+
+                if (selectedGenresIds.length > 0) {
+
+                    var movieId = @Model.First().MovieId;
+                    var genresIds = selectedGenresIds;
+
+                    var data = {
+                        movieId: movieId,
+                        genresIds: selectedGenresIds.join(",")
+                    };
+
+                    var queryString = $.param(data);
+
+                    var url = "/Admin/Movie/EditGenresForMovie?" + queryString;
+
+                    $.ajax({
+                        url: url,
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            RequestVerificationToken: csrfToken
+                        },
+                        body: movieId, genresIds,
+                        success: function (response) {
+                            window.location.href = "/Movie/Details?movieId="+movieId;
+                        },
+                    });
+                }
+            });
+        });
+    </script>
+}

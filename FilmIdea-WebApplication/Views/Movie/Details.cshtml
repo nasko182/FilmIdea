@@ -148,23 +148,43 @@
     </div>
 </div>
 <hr />
-@foreach (var genre in Model.MovieDetails.Genres)
-{
-    <button class="btn-login rounded-pill" style="width: 163px;height: 29px;">
-        <a class="nav-link text-white login-btn" style="padding-top: 0;padding-bottom: 10px;" asp-area="" asp-controller="Movie" asp-action="ByGenre" asp-route-genreId="@genre.Id"><strong style="color: black !important; font-size: 17px">@genre.Name</strong></a>
-    </button>
-}
+<div class="d-flex justify-content-between">
+    <div>
+        @foreach (var genre in Model.MovieDetails.Genres)
+        {
+            <button class="btn-login rounded-pill" style="width: 163px;height: 29px;">
+                <a class="nav-link text-white login-btn" style="padding-top: 0;padding-bottom: 10px;" asp-area="" asp-controller="Movie" asp-action="ByGenre" asp-route-genreId="@genre.Id"><strong style="color: black !important; font-size: 17px">@genre.Name</strong></a>
+            </button>
+        }
+    </div>
+    @if (User.IsAdmin())
+    {
+        <div>
+            <a asp-area="Admin" asp-controller="Movie" asp-action="EditGenresForMovie" asp-route-movieId="@Model.MovieDetails.Id" class="btn btn-success">Edit Genres</a>
+        </div>
+    }
+</div>
 <hr />
 <div class="row">
     <p>Director: </p><a asp-area="" asp-controller="Director" asp-action="Details" asp-route-directorId="@Model.MovieDetails.Director.Id" >@Model.MovieDetails.Director.Name</a>
 </div>
 <hr />
 <div class="row">
-    <p>Actors: </p>
-    @foreach (var actor in Model.MovieDetails.Actors.Take(3))
-    {
-        <a asp-area="" asp-controller="Actor" asp-action="Details">@actor.Name</a>
-    }
+    <div class="d-flex justify-content-between">
+        <div>
+            <p>Actors: </p>
+            @foreach (var actor in Model.MovieDetails.Actors.Take(3))
+            {
+                <a asp-area="" asp-controller="Actor" asp-action="Details">@actor.Name</a>
+            }
+        </div>
+        @if (User.IsAdmin())
+        {
+            <div>
+                <a asp-area="Admin" asp-controller="Actor" asp-action="EditActorsForMovie" asp-route-movieId="@Model.MovieDetails.Id" class="btn btn-success">Edit Actors</a>
+            </div>
+        }
+    </div>
 </div>
 <hr />
 

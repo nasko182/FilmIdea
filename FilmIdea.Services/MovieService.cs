@@ -782,6 +782,79 @@ public class MovieService : FilmIdeaService, IMovieService
         return review!.MovieId;
     }
 
+    public async Task<ICollection<EditMovieGenres>> GetAllGenresAsync(int movieId)
+    {
+        var genres = new List<EditMovieGenres>();
+
+        var movieGenres = await this._dbContext.Genres
+            .Include(g => g.Movies)
+            .Where(g => g.Movies.Any(mg => mg.MovieId == movieId))
+            .Select(g => new EditMovieGenres
+            {
+                Id = g.Id,
+                Name = g.Name,
+                IsInMovie = true,
+                MovieId = movieId
+            })
+            .ToListAsync();
+
+        genres.AddRange(movieGenres);
+
+        var genresNotForMovie = await this._dbContext.Genres
+            .Include(g => g.Movies)
+            .Where(g => !g.Movies.Any(mg => mg.MovieId == movieId))
+            .Select(g => new EditMovieGenres
+            {
+                Id = g.Id,
+                Name = g.Name,
+                IsInMovie = false,
+                MovieId = movieId
+            })
+            .ToListAsync();
+
+        genres.AddRange(genresNotForMovie);
+
+        return genres;
+    }
+
+    public async Task EditMovieGenres(List<int> genresIds, int movieId)
+    {
+        var movie = await this._dbContext.Movies
+            .Include(m => m.Genres)
+            .FirstAsync(m => m.Id == movieId);
+
+        var genresToRemove = movie.Genres
+            .Where(mg => !genresIds.Contains(mg.GenreId))
+            .ToList();
+
+        var existingGenrsIds = movie.Genres.Select(mg => mg.GenreId).ToList();
+
+        var newGenresIdsToAdd = genresIds
+            .Except(existingGenrsIds).ToList();
+
+        foreach (var id in newGenresIdsToAdd)
+        {
+            var newGenre = new MovieGenre()
+            {
+                GenreId = id,
+                MovieId = movieId
+            };
+            movie.Genres.Add(newGenre);
+        }
+
+        _dbContext.MoviesGenres.RemoveRange(genresToRemove);
+
+
+        try
+        {
+            await this._dbContext.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.ToString());
+        }
+    }
+
     public async Task<int> Create(AddMovieViewModel model, string photoUrl, string videoUrl)
     {
         var movie = new Movie

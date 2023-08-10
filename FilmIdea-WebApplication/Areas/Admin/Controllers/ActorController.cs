@@ -1,5 +1,6 @@
 ﻿namespace FilmIdea.Web.Areas.Admin.Controllers;
 
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 
 using Services.Data.Interfaces;
@@ -8,6 +9,7 @@ using ViewModels.Actor;
 using static Common.NotificationMessageConstants;
 using static Common.ExceptionMessagesConstants;
 using static Common.SuccessMessagesConstants;
+using static Dropbox.Api.Files.ListRevisionsMode;
 
 public class ActorController : BaseAdminController
 {
@@ -113,6 +115,24 @@ public class ActorController : BaseAdminController
         {
             return GeneralError();
         }
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> EditActorsForMovie(int movieId)
+    {
+        var model = await this._actorService.GetAllActorsAsync(movieId);
+
+        return this.View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> EditActorsForMovie(int movieId, string actorIds)
+    {
+
+        var actorsIds = actorIds.Split(",").Select(id=>int.Parse(id)).ToList();
+        await this._actorService.EditMovieActors(actorsIds,movieId);
+
+        return RedirectToAction("Details", "Movie", new { Area = "", movieId });
     }
 
 }

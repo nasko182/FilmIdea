@@ -128,4 +128,22 @@ public class MovieController : BaseAdminController
             return GeneralError();
         }
     }
+
+    [HttpGet]
+    public async Task<IActionResult> EditGenresForMovie(int movieId)
+    {
+        var model = await this._movieService.GetAllGenresAsync(movieId);
+
+        return this.View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> EditGenresForMovie(int movieId, string genresIds)
+    {
+
+        var genresIdsList = genresIds.Split(",").Select(id => int.Parse(id)).ToList();
+        await this._movieService.EditMovieGenres(genresIdsList, movieId);
+
+        return RedirectToAction("Details", "Movie", new { Area = "", movieId });
+    }
 }
