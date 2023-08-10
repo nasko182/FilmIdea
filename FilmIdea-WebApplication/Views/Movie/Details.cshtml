@@ -314,13 +314,15 @@
                                 {
                                     <div id="reviewId" data-review='@Html.Raw(review.Id)'></div>
 
-                                    <button class="addLikeButton" data-review-id="@review.Id">👍</button>
-                                    <p class="likes" data-reviewid="@review.Id">@review.Likes</p>
+                                    <p class="btn btn-reaction addLikeButton" data-review-id="@review.Id">👍</p>
+                                    <span class="span-reaction likes"  data-reviewid="@review.Id">@review.Likes</span>
 
-                                    <button class="addDislikeButton" data-review-id="@review.Id">👎</button>
-                                    <p class="dislikes" data-reviewid="@review.Id">@review.Dislikes</p>
+                                    <p class="btn btn-reaction addDislikeButton" data-review-id="@review.Id">👎</p>
+                                    <span class="span-reaction dislikes" data-reviewid="@review.Id">@review.Dislikes</span>
 
-                                    <button class="btn btn-sm btn-success d-flex justify-content-end addCommentButton" data-review-id="@review.Id">Add Comment</button>
+                                    <div class="d-flex justify-content-end">
+                                        <button class="btn btn-sm btn-success addCommentButton" data-review-id="@review.Id">Add Comment</button>
+                                    </div>
 
                                 }
 

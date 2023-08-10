@@ -1441,3 +1441,23 @@ p {
 .hidden {
     display: none !important;
 }
+
+.btn-reaction {
+    font-size: 25px !important;
+    margin-bottom: 0;
+    padding-left: 6px !important;
+    padding-bottom: 0px !important;
+    padding-top: 0px !important;
+    padding-right: 6px !important;
+}
+
+.btn-reaction:hover {
+    margin-right: 10px;
+}
+
+.span-reaction {
+    width: 10px;
+    font-size: 20px;
+    margin-top: 5px;
+    margin-right: 4px;
+}
