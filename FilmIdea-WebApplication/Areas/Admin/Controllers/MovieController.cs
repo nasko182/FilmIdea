@@ -146,4 +146,46 @@ public class MovieController : BaseAdminController
 
         return RedirectToAction("Details", "Movie", new { Area = "", movieId });
     }
+
+    [HttpPost]
+    public async Task<IActionResult> AddPhoto(IFormFile photo, int movieId)
+    {
+        var imageName = photo.Name + "_Image.jpg";
+        var folderName = $"ImagesDb/Movies/Photos/{photo.Name}";
+        string photoUrl = string.Empty;
+        try
+        {
+            photoUrl = await this.UploadPhoto(photo, folderName, imageName);
+        }
+        catch (Exception e)
+        {
+            TempData[ErrorMessage] = e.Message;
+        }
+
+        await this._movieService.AddPhoto(movieId, photoUrl);
+
+        return this.RedirectToAction("Details", "Movie", new { Area = "", movieId });
+
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddVideo(IFormFile video, int movieId)
+    {
+        var imageName = video.Name + "_Video.mp4";
+        var folderName = $"VideosDb/Movies/Videos/{video.Name}";
+        string videoUrl = string.Empty;
+        try
+        {
+            videoUrl = await this.UploadVideo(video, folderName, imageName);
+        }
+        catch (Exception e)
+        {
+            TempData[ErrorMessage] = e.Message;
+        }
+
+        await this._movieService.AddVideo(movieId, videoUrl);
+
+        return this.RedirectToAction("Details", "Movie", new { Area = "", movieId });
+
+    }
 }

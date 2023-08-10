@@ -71,4 +71,8 @@ public interface IMovieService
     Task<ICollection<EditMovieGenres>> GetAllGenresAsync(int movieId);
 
     Task EditMovieGenres(List<int> genresIds, int movieId);
+
+    Task AddPhoto(int movieId, string photoUrl);
+
+    Task AddVideo(int movieId, string videoUrl);
 }
