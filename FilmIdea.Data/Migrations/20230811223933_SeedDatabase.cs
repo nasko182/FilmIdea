@@ -5,45 +5,633 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FilmIdea.Data.Migrations
 {
-    public partial class SeedMoreData : Migration
+    public partial class SeedDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DeleteData(
-                table: "Photos",
-                keyColumn: "Id",
-                keyValue: new Guid("15a85343-f3f0-440d-9105-98cbf20645eb"));
+            migrationBuilder.CreateTable(
+                name: "Actors",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(105)", maxLength: 105, nullable: false),
+                    Bio = table.Column<string>(type: "nvarchar(max)", maxLength: 10000, nullable: false),
+                    ProfileImageUrl = table.Column<string>(type: "nvarchar(2048)", maxLength: 2048, nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Actors", x => x.Id);
+                });
 
-            migrationBuilder.DeleteData(
-                table: "Photos",
-                keyColumn: "Id",
-                keyValue: new Guid("c6d4cd7b-fbee-4534-a99b-fd062cb7ea40"));
+            migrationBuilder.CreateTable(
+                name: "AspNetRoles",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
 
-            migrationBuilder.DeleteData(
-                table: "Photos",
-                keyColumn: "Id",
-                keyValue: new Guid("e711dff0-ceb7-4072-a8f6-b409c529d23d"));
+            migrationBuilder.CreateTable(
+                name: "Critics",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(105)", maxLength: 105, nullable: false),
+                    Bio = table.Column<string>(type: "nvarchar(max)", maxLength: 10000, nullable: false),
+                    ProfileImageUrl = table.Column<string>(type: "nvarchar(2048)", maxLength: 2048, nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Critics", x => x.Id);
+                });
 
-            migrationBuilder.DeleteData(
-                table: "Videos",
-                keyColumn: "Id",
-                keyValue: new Guid("36be3d32-5f09-4640-bc19-840a44a07998"));
+            migrationBuilder.CreateTable(
+                name: "Directors",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(105)", maxLength: 105, nullable: false),
+                    Bio = table.Column<string>(type: "nvarchar(max)", maxLength: 10000, nullable: false),
+                    ProfileImageUrl = table.Column<string>(type: "nvarchar(2048)", maxLength: 2048, nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Directors", x => x.Id);
+                });
 
-            migrationBuilder.DeleteData(
-                table: "Videos",
-                keyColumn: "Id",
-                keyValue: new Guid("e3b502b0-f13f-4738-bdbf-f58a7945d60f"));
+            migrationBuilder.CreateTable(
+                name: "Genres",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Genres", x => x.Id);
+                });
 
-            migrationBuilder.DeleteData(
-                table: "Videos",
-                keyColumn: "Id",
-                keyValue: new Guid("f4336dd3-4468-4178-825d-7a68ae8b07dc"));
+            migrationBuilder.CreateTable(
+                name: "Groups",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    Icon = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ChatId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Groups", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetRoleClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    CriticId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_Critics_CriticId",
+                        column: x => x.CriticId,
+                        principalTable: "Critics",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Movies",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    ReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Duration = table.Column<int>(type: "int", nullable: false),
+                    CoverImageUrl = table.Column<string>(type: "nvarchar(2048)", maxLength: 2048, nullable: false),
+                    TrailerUrl = table.Column<string>(type: "nvarchar(2048)", maxLength: 2048, nullable: false),
+                    DirectorId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Movies", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Movies_Directors_DirectorId",
+                        column: x => x.DirectorId,
+                        principalTable: "Directors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Chats",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    GroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Chats", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Chats_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserLogins",
+                columns: table => new
+                {
+                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserRoles",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserTokens",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GroupsUsers",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    GroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GroupsUsers", x => new { x.UserId, x.GroupId });
+                    table.ForeignKey(
+                        name: "FK_GroupsUsers_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_GroupsUsers_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MoviesActors",
+                columns: table => new
+                {
+                    MovieId = table.Column<int>(type: "int", nullable: false),
+                    ActorId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MoviesActors", x => new { x.MovieId, x.ActorId });
+                    table.ForeignKey(
+                        name: "FK_MoviesActors_Actors_ActorId",
+                        column: x => x.ActorId,
+                        principalTable: "Actors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_MoviesActors_Movies_MovieId",
+                        column: x => x.MovieId,
+                        principalTable: "Movies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MoviesGenres",
+                columns: table => new
+                {
+                    MovieId = table.Column<int>(type: "int", nullable: false),
+                    GenreId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MoviesGenres", x => new { x.MovieId, x.GenreId });
+                    table.ForeignKey(
+                        name: "FK_MoviesGenres_Genres_GenreId",
+                        column: x => x.GenreId,
+                        principalTable: "Genres",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_MoviesGenres_Movies_MovieId",
+                        column: x => x.MovieId,
+                        principalTable: "Movies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PassedMovies",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MovieId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PassedMovies", x => new { x.UserId, x.MovieId });
+                    table.ForeignKey(
+                        name: "FK_PassedMovies_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PassedMovies_Movies_MovieId",
+                        column: x => x.MovieId,
+                        principalTable: "Movies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Photos",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Url = table.Column<string>(type: "nvarchar(2048)", maxLength: 2048, nullable: false),
+                    ActorId = table.Column<int>(type: "int", nullable: true),
+                    DirectorId = table.Column<int>(type: "int", nullable: true),
+                    MovieId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Photos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Photos_Actors_ActorId",
+                        column: x => x.ActorId,
+                        principalTable: "Actors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Photos_Directors_DirectorId",
+                        column: x => x.DirectorId,
+                        principalTable: "Directors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Photos_Movies_MovieId",
+                        column: x => x.MovieId,
+                        principalTable: "Movies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Reviews",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Rating = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    ReviewDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    MovieId = table.Column<int>(type: "int", nullable: false),
+                    CriticId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reviews", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Reviews_Critics_CriticId",
+                        column: x => x.CriticId,
+                        principalTable: "Critics",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Reviews_Movies_MovieId",
+                        column: x => x.MovieId,
+                        principalTable: "Movies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserRatings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Rating = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MovieId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRatings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserRatings_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserRatings_Movies_MovieId",
+                        column: x => x.MovieId,
+                        principalTable: "Movies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UsersMovies",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MovieId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UsersMovies", x => new { x.UserId, x.MovieId });
+                    table.ForeignKey(
+                        name: "FK_UsersMovies_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UsersMovies_Movies_MovieId",
+                        column: x => x.MovieId,
+                        principalTable: "Movies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Videos",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Url = table.Column<string>(type: "nvarchar(2048)", maxLength: 2048, nullable: false),
+                    ActorId = table.Column<int>(type: "int", nullable: true),
+                    DirectorId = table.Column<int>(type: "int", nullable: true),
+                    MovieId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Videos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Videos_Actors_ActorId",
+                        column: x => x.ActorId,
+                        principalTable: "Actors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Videos_Directors_DirectorId",
+                        column: x => x.DirectorId,
+                        principalTable: "Directors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Videos_Movies_MovieId",
+                        column: x => x.MovieId,
+                        principalTable: "Movies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Messages",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    SentAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ChatId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SenderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Messages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Messages_AspNetUsers_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Messages_Chats_ChatId",
+                        column: x => x.ChatId,
+                        principalTable: "Chats",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Comments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    CommentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    WriterId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ReviewId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Comments_AspNetUsers_WriterId",
+                        column: x => x.WriterId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Comments_Reviews_ReviewId",
+                        column: x => x.ReviewId,
+                        principalTable: "Reviews",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Dislikes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ReviewId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Dislikes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Dislikes_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Dislikes_Reviews_ReviewId",
+                        column: x => x.ReviewId,
+                        principalTable: "Reviews",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Likes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ReviewId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Likes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Likes_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Likes_Reviews_ReviewId",
+                        column: x => x.ReviewId,
+                        principalTable: "Reviews",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
 
             migrationBuilder.InsertData(
                 table: "Actors",
                 columns: new[] { "Id", "Bio", "DateOfBirth", "Name", "ProfileImageUrl" },
                 values: new object[,]
                 {
+                    { 1, "Ezra Matthew Miller was born in Wyckoff, New Jersey, to Marta (Koch), a modern dancer, and Robert S. Miller, who has worked at Workman Publishing and as former senior V.P. for Hyperion Books. Ezra has two older sisters and is of Ashkenazi Jewish (father) and German-Dutch (mother) ancestry. Ezra has described themselves as Jewish and \"spiritual\".\r\n\r\nAs a child, Miller sang with the Metropolitan Opera and attended Rockland Country Day School and The Hudson School. Miller's first feature film was the independent Afterschool (2008), with subsequent appearances on the television series Секс до дупка (2007), Закон и ред: Специални разследвания (1999), and Лекар на повикване (2009), and in the films City Island (2009), Всеки ден (2010), Beware the Gonzo (2010), and Another Happy Day (2011).\r\n\r\nMiller drew critical praise playing Kevin Khatchadourian, the homicidal son of Tilda Swinton's character, in the dramatic thriller Трябва да поговорим за Кевин (2011). Miller subsequently played Patrick in the well-received teen drama Предимствата да бъдеш аутсайдер (2012), opposite Logan Lerman and Emma Watson.\r\n\r\nEzra's other roles include the period piece Мадам Бовари (2014), Judd Apatow's comedy Тотал щета (2015), and the psychological thriller The Stanford Prison Experiment (2015). Miller has been cast as superhero The Flash in Светкавицата (2023), scheduled for release in 2022.", new DateTime(1992, 9, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ezra Miller", "https://dl.dropboxusercontent.com/s/aync8kuoks5ii3f/Something_profile_image.jpg" },
+                    { 2, "Harrison Ford was born on July 13, 1942 in Chicago, Illinois, to Dorothy (Nidelman), a radio actress, and Christopher Ford (born John William Ford), an actor turned advertising executive. His father was of Irish and German ancestry, while his maternal grandparents were Jewish emigrants from Minsk, Belarus. Harrison was a lackluster student at Maine Township High School East in Park Ridge Illinois (no athletic star, never above a C average). After dropping out of Ripon College in Wisconsin, where he did some acting and later summer stock, he signed a Hollywood contract with Columbia and later Universal. His roles in movies and television (Ironside (1967), The Virginian (1962)) remained secondary and, discouraged, he turned to a career in professional carpentry. He came back big four years later, however, as Bob Falfa in Американски графити (1973). Four years after that, he hit colossal with the role of Han Solo in Междузвездни войни: Епизод IV - Нова Надежда (1977). Another four years and Ford was Indiana Jones in Похитители на изчезналия кивот (1981).\r\n\r\nFour years later and he received Academy Award and Golden Globe nominations for his role as John Book in Свидетел (1985). All he managed four years after that was his third starring success as Indiana Jones; in fact, many of his earlier successful roles led to sequels as did his more recent portrayal of Jack Ryan in Патриотични игри (1992). Another Golden Globe nomination came his way for the part of Dr. Richard Kimble in Беглецът (1993). He is clearly a well-established Hollywood superstar. He also maintains an 800-acre ranch in Jackson Hole, Wyoming.\r\n\r\nFord is a private pilot of both fixed-wing aircraft and helicopters, and owns an 800-acre (3.2 km2) ranch in Jackson, Wyoming, approximately half of which he has donated as a nature reserve. On several occasions, Ford has personally provided emergency helicopter services at the request of local authorities, in one instance rescuing a hiker overcome by dehydration. Ford began flight training in the 1960s at Wild Rose Idlewild Airport in Wild Rose, Wisconsin, flying in a Piper PA-22 Tri-Pacer, but at $15 an hour, he could not afford to continue the training. In the mid-1990s, he bought a used Gulfstream II and asked one of his pilots, Terry Bender, to give him flying lessons. They started flying a Cessna 182 out of Jackson, Wyoming, later switching to Teterboro, New Jersey, flying a Cessna 206, the aircraft he soloed in. Ford is an honorary board member of the humanitarian aviation organization Wings of Hope.\r\n\r\nOn March 5, 2015, Ford's plane, believed to be a Ryan PT-22 Recruit, made an emergency landing on the Penmar Golf Course in Venice, California. Ford had radioed in to report that the plane had suffered engine failure. He was taken to Ronald Reagan UCLA Medical Center, where he was reported to be in fair to moderate condition. Ford suffered a broken pelvis and broken ankle during the accident, as well as other injuries.", new DateTime(1942, 7, 13, 0, 0, 0, 0, DateTimeKind.Unspecified), "Harrison Ford", "https://dl.dropboxusercontent.com/s/aync8kuoks5ii3f/Something_profile_image.jpg" },
                     { 1001, "Thomas Stanley Holland was born in Kingston-upon-Thames, Surrey, to Nicola Elizabeth (Frost), a photographer, and Dominic Holland (Dominic Anthony Holland), who is a comedian and author. His paternal grandparents were from the Isle of Man and Ireland, respectively. He lives with his parents and three younger brothers - Paddy and twins Sam and Harry. Tom attended Donhead Prep School. Then, after a successful eleven plus exam, he became a pupil at Wimbledon College. Having successfully completed his GCSEs, in September 2012 Tom started a two-year course in the BRIT School for Performing Arts & Technology notable for its numerous famous alumni.\r\n\r\nHolland began dancing at a hip hop class at Nifty Feet Dance School in Wimbledon, London. His potential was spotted by choreographer Lynne Page (who was an Associate to Peter Darling, choreographer of Billy Elliot and Billy Elliot the Musical) when he performed with his dance school as part of the Richmond Dance Festival 2006. After eight auditions and subsequent two years of training, on 28 June 2008 Tom made his West End debut in Billy Elliot the Musical as Michael, Billy's best friend. He gave his first performance in the title role of Billy on 8 September 2008 getting rave reviews praising his versatile acting and dancing skills.\r\n\r\nIn September 2008 Tom (together with co-star Tanner Pflueger) appeared on the news programme on channel FIVE and gave his first TV interview. In 2009 Tom was featured on ITV1 show \"The Feel Good Factor\". At the launch show on 31 January he and two other Billy Elliots, Tanner Pflueger and Layton Williams, performed a specially choreographered version of Angry Dance from Billy Elliot the Musical, after which Tom was interviewed by host Myleene Klass. Then he became involved into training five ordinary British schoolboys learning to get fit and preparing their dance routine (fronted by Tom) for the final \"The Feel Good Factor\" show on 28 March 2009. On 11 March 2010, Tom, along with fellow Billy Elliots Dean-Charles Chapman and Fox Jackson-Keen appeared on The Alan Titchmarsh Show on ITV1.\r\n\r\nOn 8 March 2010, to mark the fifth anniversary of Billy Elliot the Musical, four current Billy Elliots, including Tom Holland, were invited to 10 Downing Street to meet the Prime Minister Gordon Brown. It was Tom Holland who was chosen to be a lead at the special fifth anniversary show on 31 March 2010. Elton John, Billy Elliot the Musical composer, who was at the audience, called Tom's performance \"astonishing\" and said that he was \"blown away\" by it. Holland had been appearing on a regular basis as Billy in Billy Elliot the Musical rotating with three other performers till 29 May 2010 when he finished his run in the musical.\r\n\r\nIn two months after leaving Billy Elliot the Musical, Holland successfully auditioned for a starring role in the film The Impossible (directed by Juan Antonio Bayona) alongside Naomi Watts and Ewan McGregor. The Impossible was based on a true story that took place during the 2004 Indian Ocean earthquake. The film premiered at the Toronto International Film Festival on September 9, 2012, and was released in Europe in October 2012, and in North America in December 2012.\r\n\r\nTom has received universal praise for his performance, in particular: \"What a debut, too, from Tom Holland as the eldest of their three lads\" (The Telegraph); \"Tom Holland, making one of the finest feature debuts in years\" (HeyUGuys); \"the excellent Tom Holland\" (The Guardian); \"The child performers are uncanny and there is an especially terrific performance from Tom Holland as the resourceful, levelheaded Lucas terrified but tenacious in the face of an unspeakable ordeal\" (Screen Daily); \"Young Holland in particular is astonishingly good as the terrified but courageous Lucas.\" (The Hollywood Reporter); \"However, the real acting standout in The Impossible is the performance of Tom Holland as the eldest son Lucas. His portrayal is genuine, and at no moment does it feel melodramatic and forced. The majority of his scenes are separate from the lead actors and for the most part it feels like The Impossible is Holland's film\" (Entertainment Maven); \"Mr. Holland, meanwhile, matures before our eyes, navigating the passage from adolescent self-absorption to profound and terrible responsibility. He is a terrific young actor\" (New York Times).\r\n\r\nTom has given a number of interviews about his role in The Impossible. In particular, he talked on video to Vanity Fair Senior West Coast editor Krista Smith and with IAMROGUE's Managing Editor Jami Philbrick. He has also given interviews to The Hollywood Reporter, to the MovieWeb, to Today Show on NBC and to other outlets. Tom's director and co-stars have also talked about him. Juan Antonio Bayona: \"He had this extraordinary ability to get into the emotion and portray it in a very, very easy way. The best I'd ever seen in a kid.\" Ewan McGregor: \"It was wonderful watching Tom who had never worked in front of a camera before, to see him really get it and grow as a film actor as he went along. He's really talented and polite to everyone. It's very easy for children to lose perspective but he's absolutely on the right road and a brilliant actor.\" Naomi Watts: \"He has an incredible emotional instrument and an unbelievable sense of himself... Tom Holland and I had a couple of moments where we came together and I could just tell how wonderful he was and what a beautiful instrument he had. It was just easy to work with him, that was one of the greatest highlights for me: discovering a friendship with Tom off-screen and this beautiful relationship between mother and son on-screen. The intimacy that develops through the course of the film between Lucas and Maria, I just loved that relationship. I mean, Tom is a beyond gifted actor. He's just a raw, open talent that is just so easy to work with. And Tom, he's inspiring, he kind of lifts everyone's game around him because he can do nothing but tell the truth. He was great.\"", new DateTime(1996, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Tom Holland", "https://dl.dropboxusercontent.com/scl/fi/qxam6ib8y8qm78k3u230n/Tom-Holland_ProfileImageImage.jpg?dl=0&rlkey=qxqp5gxawx1hmwosz51m1lavo" },
                     { 1007, "Robert Downey Jr. has evolved into one of the most respected actors in Hollywood. With an amazing list of credits to his name, he has managed to stay new and fresh even after over four decades in the business.\r\n\r\nDowney was born April 4, 1965 in Manhattan, New York, the son of writer, director and filmographer Robert Downey Sr. and actress Elsie Downey (née Elsie Ann Ford). Robert's father is of half Lithuanian Jewish, one quarter Hungarian Jewish, and one quarter Irish, descent, while Robert's mother was of English, Scottish, German, and Swiss-German ancestry. Robert and his sister, Allyson Downey, were immersed in film and the performing arts from a very young age, leading Downey Jr. to study at the Stagedoor Manor Performing Arts Training Center in upstate New York, before moving to California with his father following his parents' 1978 divorce. In 1982, he dropped out of Santa Monica High School to pursue acting full time. Downey Sr., himself a drug addict, exposed his son to drugs at a very early age, and Downey Jr. would go on to struggle with abuse for decades.\r\n\r\nDowney Jr. made his debut as an actor at the age of five in the film Pound (1970), written and directed by his father, Robert Downey Sr.. He built his film repertoire throughout the 1980s and 1990s with roles in Герой Бунтовник (1985), Нечиста наука (1985), The Fanatic (1989) , and Wonder Boys (2000) among many others. In 1992, Downey received an Academy Award nomination and won the BAFTA (British Academy Award) for Best Actor for his performance in the title role of Chaplin (1992) .\r\n\r\nIn Robert Altman 's Shortcuts (1993) , he appeared as an aspiring film make-up artist whose best friend commits murder. In Oliver Stone 's Born Killers (1994) , with Woody Harrelson and Juliette Lewis , Downey starred as a tabloid TV journalist who exploits a murderous couple's killing spree to boost his ratings. For the comedy Heart and Soul (1993), Downey starred as a young man with a special relationship with four ghosts. In 1995, Downey starred in Restoration (1995) , with Hugh Grant , Meg Ryan and Ian McKellen , directed by Michael Hoffman . Also that year, he starred in Richard III (1995) , in which he appears opposite his Restoration (1995) co-star McKellen.\r\n\r\nIn 1997, Downey was seen in Robert Altman 's The Bread Man (1998) , alongside Kenneth Branagh , Daryl Hannah and Embeth Davidtz ; in One Night Flirting (1997) , directed byMike Figgis and starring Wesley Snipes and Nastassja Kinski; and in Басейнът на Хюго (1997), directed by his father, Robert Downey Sr. and starring Sean Penn and Patrick Dempsey. In September of 1999, Downey appeared in Чeрно и бяло (1999), written and directed by James Toback, along with Ben Stiller, Elijah Wood, Gaby Hoffmann, Brooke Shields and Claudia Schiffer. In January of 1999, he starred with Annette Bening and Aidan Quinn in Видението (1999), directed by Neil Jordan.\r\n\r\nIn 2000, Downey co-starred with Michael Douglas and Tobey Maguire in Момчета-чудо (2000), directed by Curtis Hanson. In this dramatic comedy, Downey played the role of a bisexual literary agent. In 2001, Downey made his prime-time television debut when he joined the cast of the Fox-TV series Али Макбийл (1997) as attorney \"Larry Paul\". For this role, he won the Golden Globe Award for Best Performance by an Actor in a Supporting Role in a Series, Mini-Series or Motion Picture Made for Television, as well as the Screen Actors Guild Award for Outstanding Performance by a Male in a Comedy Series. In addition, Downey was nominated for an Emmy for Outstanding Supporting Actor in a Comedy Series.\r\n\r\nThe actor's drug-related problems escalated from 1996 to 2001, leading to arrests, rehab visits and incarcerations, and he was eventually fired from Али Макбийл (1997). Emerging clean and sober in 2003, Downey Jr. began to rebuild his career.\r\n\r\nHe marked his debut into music with his debut album, titled \"The Futurist\", on the Sony Classics Label on November 23rd, 2004. The album's eight original songs, that Downey wrote, and his two musical numbers debuting as cover songs revealed his sultry singing voice and his musical talents. Downey displayed his versatility in two different films in October 2003: the musical/drama The Singing Detective (2003), a remake of the BBC hit of the same name, and the thriller Готика (2003) starring Halle Berry and Penélope Cruz. Downey starred in powerful yet humbling roles inspired by real-life accounts of some of history's most precious kept secrets, including Richard Linklater's Камера потъмняла (2006)in 2006 co-starring Keanu Reeves , Winona Ryder and Woody Harrelson , and Kozina: Imaginary Portrait of Diane Arbus (2006) co-starring Nicole Kidman , a film inspired by the life of Diane Arbus, the revered photographer whose images captured attention in the early 1960s. These roles exhibited Downey's momentum from the previous year of 2005, in which he starred in the Academy Award®-nominated feature film Good Night and Luck (2005) , directed by George Clooney and in Shane Black 's action comedy Kisses with an Unexpected End ( 2005) co-starring Val Kilmer . In 2007, he co-starred inDavid Fincher's suspenseful Зодиак (2007), alongside Jake Gyllenhaal and Mark Ruffalo, about the notorious serial killer who haunted San Francisco during the 1970s.\r\n\r\nIn May 2008, Downey achieved critical acclaim and worldwide box office success for his starring role in Железният човек (2008), Jon Favreau's big-screen rendering of the Marvel comic book superhero. The film co-starred Gwyneth Paltrow, Jeff Bridges and Terrence Howard. In August of 2008, Downey starred with Ben Stiller and Jack Black in the comedy Тропическа буря (2008), and went on to receive an Academy Award®-nomination for Best Supporting Actor for his, Kirk Lazarus.\r\n\r\nIn December 2009, Downey starred in the action-adventure Шерлок Холмс (2009). The film, directed by Guy Ritchie, co-starred Jude Law and Rachel McAdams and earned Downey a Golden Globe for Best Performance by an Actor in a Motion Picture - Comedy or Musical in January of 2010. In early Summer 2010, Downey re-teamed with director Jon Favreau and reprised his role as \"Tony Stark/Iron Man\" in the hugely successful sequel to the original film, Железният човек 2 (2010), starring Gwyneth Paltrow, Scarlett Johansson, Samuel L. Jackson and Mickey Rourke .\r\n\r\nDowney next starred in Road with an Advantage (2010) , a comedy directed by Todd Phillips , in which he plays the role of an expectant father on a road trip racing to get back in time for the birth of his first child. Lane of Precedence (2010) , starring The Last Bachelor Party (2009) 's Zach Galifianakis , was released in November 2010.\r\n\r\nDowney was honored by Time Magazine's \"Time 100\" in 2008, an annual list of the 100 most influential people in the world. His laurels include two Academy Award nominations, three Golden Globe wins, numerous other award nominations and wins, and tremendous popular and commercial success, particularly in his roles as Sherlock Holmes and Tony Stark (the latter of which he has so far played in Iron Man (2008) , Iron Man 2 (2010) , The Avengers (2012) , Iron Man 3 (2013) , and Avengers: Age of Ultron (2015). For three consecutive years, from 2012 to 2015, Downey has topped the Forbes list of Hollywood's highest-paid actors, making an estimated $80 million in earnings between June 2014 and June 2015.", new DateTime(1965, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), "Robert Downey Jr.", "https://dl.dropboxusercontent.com/scl/fi/xen6j6nfxtx59ho0ud79f/Robert-Downey-Jr._ProfileImageImage.jpg" },
                     { 1009, "Margot Elise Robbie was born on July 2, 1990 in Dalby, Queensland, Australia to Scottish parents. Her mother, Sarie Kessler, is a physiotherapist, and her father, is Doug Robbie. She comes from a family of four children, having two brothers and one sister. She graduated from Somerset College in Mudgeeraba, Queensland, Australia, a suburb in the Gold Coast hinterland of South East Queensland, where she and her siblings were raised by their mother and spent much of her time at the farm belonging to her grandparents. In her late teens, she moved to Melbourne, Victoria, Australia to pursue an acting career.\r\n\r\nFrom 2008-2010, Robbie played the character of Donna Freedman in the long-running Australian soap opera, Neighbours (1985), for which she was nominated for two Logie Awards. She set off to pursue Hollywood opportunities, quickly landing the role of Laura Cameron on the short-lived ABC series, Pan Am (2011). She made her big screen debut in the film, Въпрос на време (2013).\r\n\r\nRobbie rose to fame co-starring alongside Leonardo DiCaprio, portraying the role of Naomi Lapaglia in Martin Scorsese's Oscar nominated film, Вълкът от Уолстрийт (2013). She was nominated for a Breakthrough Performance MTV Movie Award, and numerous other awards.\r\n\r\nIn 2014, Robbie founded her own production company, LuckyChap Entertainment. She also appeared in the World War II romantic-drama film, Френска сюита (2014). She starred in Focus (2015) and Z for Zachariah (2015) , and made a cameo in The Big Bet (2015) .\r\n\r\nIn 2016, she married Tom Ackerley in Byron Bay, New South Wales, Australia.\r\n\r\nShe starred as Jane Porter in The Legend of Tarzan (2016) , Tanya Vanderpoel in Whiskey, Tango, Foxtrot (2016) and as DC comics villain Harley Quinn in Suicide Squad (2016) , for which she was nominated for a Teen Choice Award, and many other awards.\r\n\r\nShe portrayed figure skater Tonya Harding in the biographical film I, Tonya (2017), receiving critical acclaim and a Golden Globe Award nomination for Best Actress - Motion Picture Comedy or Musical.", new DateTime(1990, 7, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "Margot Robbie", "https://dl.dropboxusercontent.com/scl/fi/10unao6fvgmo15dgqatr9/Margot-Robbie_ProfileImageImage.jpg?rlkey=upttbqbm9bedq7oiy9o3ogquk" },
@@ -57,46 +645,27 @@ namespace FilmIdea.Data.Migrations
                     { 1019, "Joaquin Phoenix was born Joaquin Rafael Bottom in San Juan, Puerto Rico, to Arlyn (Dunetz) and John Bottom, and is the middle child in a brood of five. His parents, from the continental United States, were then serving as Children of God missionaries. His mother is from a Jewish family from New York, while his father, from California, is of mostly British Isles descent. As a youngster, Joaquin took his cues from older siblings River Phoenix and Rain Phoenix, changing his name to Leaf to match their earthier monikers. When the children were encouraged to develop their creative instincts, he followed their lead into acting. Younger sisters Liberty Phoenix and Summer Phoenix rounded out the talented troupe.\r\n\r\nThe family moved often, traveling through Central and South America (and adopting the surname \"Phoenix\" to celebrate their new beginnings) but, by the time Joaquin was age 6, they had more or less settled in the Los Angeles area. Arlyn found work as a secretary at NBC, and John turned his talents to landscaping. They eventually found an agent who was willing to represent all five children, and the younger generation dove into television work. Commercials for meat, milk, and junk food were off-limits (the kids were all raised as strict vegans), but they managed to find plenty of work pushing other products. Joaquin's first real acting gig was a guest appearance on River's sitcom, Seven Brides for Seven Brothers (1982).", new DateTime(1974, 10, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Joaquin Phoenix", "https://dl.dropboxusercontent.com/scl/fi/9g635ce0x3qwotcyyip4i/Joaquin-Phoenix_ProfileImage.jpg?rlkey=y4ibnd111v87lgl799i5hmhtf" }
                 });
 
-            migrationBuilder.UpdateData(
+            migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                keyColumn: "Id",
-                keyValue: new Guid("15eb7825-840b-4528-71cc-08db8c333233"),
-                column: "ConcurrencyStamp",
-                value: "4731950c-4182-4f80-b90a-9ba39c98898d");
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CriticId", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { new Guid("2532ddaa-63f0-4de8-71cb-08db8c333233"), 0, "dcbf6e12-64f6-47f1-86d3-c3e2da63520c", null, "user@user.bg", false, true, null, "USER@USER.BG", "USER182", "AQAAAAEAACcQAAAAEAsQ9sg0mW31vlM2DKquhykexBxdIKzD8YMSV5aAVT9ii4TazrF0Ep9t4AwwalAV8w==", null, false, "CPHRH5Z35EEOSFSFA6UQV2ZDTJGKCIKX", false, "user182" });
 
-            migrationBuilder.UpdateData(
-                table: "AspNetUsers",
-                keyColumn: "Id",
-                keyValue: new Guid("2532ddaa-63f0-4de8-71cb-08db8c333233"),
-                column: "ConcurrencyStamp",
-                value: "44aab537-8f31-449e-b210-45a00c548ea4");
-
-            migrationBuilder.UpdateData(
-                table: "AspNetUsers",
-                keyColumn: "Id",
-                keyValue: new Guid("94756cdf-566e-4bf8-b03b-416a118ad53b"),
-                column: "ConcurrencyStamp",
-                value: "962e8d5a-b834-4bcb-8964-50420d3800a9");
-
-            migrationBuilder.UpdateData(
+            migrationBuilder.InsertData(
                 table: "Critics",
-                keyColumn: "Id",
-                keyValue: new Guid("93372a0a-b9f4-4bc5-8f53-e8da0bce2bfe"),
-                column: "Bio",
-                value: "Administrators do NOT need bio :)");
-
-            migrationBuilder.UpdateData(
-                table: "Critics",
-                keyColumn: "Id",
-                keyValue: new Guid("bf595423-7323-4e40-bd43-0f876c1beece"),
-                column: "Bio",
-                value: "Critic Criticov is  an American film critic, film historian, journalist, essayist, screenwriter, and author. He was a film critic for the Chicago Sun-Times from 1967 until his death in 2013. In 1975, Ebert became the first film critic to win the Pulitzer Prize for Criticism. Neil Steinberg of the Chicago Sun-Times said Ebert \"was without question the nation's most prominent and influential film critic,\"[1] and Kenneth Turan of the Los Angeles Times called him \"the best-known film critic in America.\"[2]\r\n\r\nEbert was known for his intimate, Midwestern writing voice and critical views informed by values of populism and humanism.[3] Writing in a prose style intended to be entertaining and direct, he made sophisticated cinematic and analytical ideas more accessible to non-specialist audiences.[4] While a populist, Ebert frequently endorsed foreign and independent films he believed would be appreciated by mainstream viewers, which often resulted in such films receiving greater exposure.[5] Critic A. O. Scott wrote that Ebert's prose had a \"plain-spoken Midwestern clarity\" and a \"genial, conversational presence on the page...his criticism shows a nearly unequaled grasp of film history and technique, and formidable intellectual range, but he rarely seems to be showing off. He's just trying to tell you what he thinks, and to provoke some thought on your part about how movies work and what they can do\".[6]");
+                columns: new[] { "Id", "Bio", "DateOfBirth", "Name", "ProfileImageUrl", "UserId" },
+                values: new object[,]
+                {
+                    { new Guid("93372a0a-b9f4-4bc5-8f53-e8da0bce2bfe"), "Administrators do NOT need bio :)", new DateTime(2023, 8, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "Administrator", "https://dl.dropboxusercontent.com/scl/fi/jv513momlbuc69iycnqzx/Administrator_ProfileImage.jpg", new Guid("94756cdf-566e-4bf8-b03b-416a118ad53b") },
+                    { new Guid("bf595423-7323-4e40-bd43-0f876c1beece"), "Critic Criticov is  an American film critic, film historian, journalist, essayist, screenwriter, and author. He was a film critic for the Chicago Sun-Times from 1967 until his death in 2013. In 1975, Ebert became the first film critic to win the Pulitzer Prize for Criticism. Neil Steinberg of the Chicago Sun-Times said Ebert \"was without question the nation's most prominent and influential film critic,\"[1] and Kenneth Turan of the Los Angeles Times called him \"the best-known film critic in America.\"[2]\r\n\r\nEbert was known for his intimate, Midwestern writing voice and critical views informed by values of populism and humanism.[3] Writing in a prose style intended to be entertaining and direct, he made sophisticated cinematic and analytical ideas more accessible to non-specialist audiences.[4] While a populist, Ebert frequently endorsed foreign and independent films he believed would be appreciated by mainstream viewers, which often resulted in such films receiving greater exposure.[5] Critic A. O. Scott wrote that Ebert's prose had a \"plain-spoken Midwestern clarity\" and a \"genial, conversational presence on the page...his criticism shows a nearly unequaled grasp of film history and technique, and formidable intellectual range, but he rarely seems to be showing off. He's just trying to tell you what he thinks, and to provoke some thought on your part about how movies work and what they can do\".[6]", new DateTime(2023, 8, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "Critic Criticov", "https://dl.dropboxusercontent.com/scl/fi/aolsn1cqh30yds8e6fj66/CriticTestov_ProfileImage.jpg", new Guid("15eb7825-840b-4528-71cc-08db8c333233") }
+                });
 
             migrationBuilder.InsertData(
                 table: "Directors",
                 columns: new[] { "Id", "Bio", "DateOfBirth", "Name", "ProfileImageUrl" },
                 values: new object[,]
                 {
+                    { 1, "Andy Muschietti was born on 26 August 1973 in Buenos Aires, Federal District, Argentina. He is a producer and director, known for Мама (2013), То (2017) and То: Част втора (2019).", new DateTime(1973, 8, 26, 0, 0, 0, 0, DateTimeKind.Unspecified), "Andy Muschietti", "https://dl.dropboxusercontent.com/s/xye9456bo6f9ld3/MV5BMTkwMDE0NTc0NF5B_profile_image._V1_.jpg" },
+                    { 2, "James Mangold is an American film and television director, screenwriter and producer. Films he has directed include Луди години (1999), Да преминеш границата (2005), which he also co-wrote, the 2007 remake Ескорт до затвора (2007), Върколакът (2013), and Логан: Върколакът (2017).\r\n\r\nMangold also wrote and directed Копланд (1997), starring Sylvester Stallone, Robert De Niro, Harvey Keitel, and Ray Liotta.", new DateTime(1963, 12, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), "James Mangold", "https://dl.dropboxusercontent.com/s/491y3cpjoc4ulzm/MV5BNDI3MzgwMmYtY2JjYy00ZWQ2LTgzN_profile_image.jpg" },
                     { 1001, "Greta Gerwig is an American actress, playwright, screenwriter, and director. She has collaborated with Noah Baumbach on several films, including Greenberg (2010), Frances Ha (2012), for which she earned a Golden Globe nomination, and Mistress America (2015). Gerwig made her solo directorial debut with the critically acclaimed comedy-drama film Лейди Бърд (2017), which she also wrote, and has also had starring roles in the films Damsels in Distress (2011), Jackie (2016), and 20th Century Women (2016).\r\n\r\nGreta Celeste Gerwig was born in Sacramento, California, to Christine Gerwig (née Sauer), a nurse, and Gordon Gerwig, a financial consultant and computer programmer. She has German, Irish, and English ancestry. Gerwig was raised as a Unitarian Universalist, but also attended an all-girls Catholic school. She has described herself as \"an intense child\". With an early interest in dance, she intended to get a degree in musical theatre in New York. She graduated from Barnard College in NY, where she studied English and philosophy, instead. Originally intending to become a playwright, after meeting young film director Joe Swanberg, she became the star of a series of intellectual low budget movies made by first-time filmmakers, a trend dubbed \"mumblecore\".\r\n\r\nGerwig was cast in a minor role in Swanberg's LOL (2006) in 2006, while still studying at Barnard. She then appeared in many of Swanberg's films, and personally co-directed, co-wrote and co-produced one entitled Nights and Weekends (2008). She has worked with good quality directors such as Ti West (Къщата на дявола (2009)), Whit Stillman (Damsels in Distress (2011)), or Woody Allen (На Рим с любов (2012)) but success and (international) recognition did not come until Франсис Ха (2012), directed by Noah Baumbach, a film she also co-wrote. Both tall and immature, awkward and graceful, blundering and candid, annoying and engaging, Greta has won all hearts in the title role of Frances Ha(liday).", new DateTime(1983, 8, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), "Greta Gerwig", "https://dl.dropboxusercontent.com/scl/fi/lj96i6jco3k5kquu482hr/Greta-Gerwig_ProfileImage.jpg?rlkey=ipkpl0wok9k8lczi3xb57mdhr" },
                     { 1004, "Anthony J. Russo is an American filmmaker and producer who works alongside his brother Joseph Russo. They have directed You, Me and Dupree, Cherry and the Marvel films Captain America: The Winter Soldier, Captain America: Civil War, Avengers: Infinity War and Avengers: Endgame. Endgame is one of the highest grossing films of all time.", new DateTime(1970, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "Anthony Russo", "https://dl.dropboxusercontent.com/scl/fi/5s3pw9nltwzxbn9qhtwxe/Anthony-Russo_ProfileImage.jpg?rlkey=vzsat7wh10st141k5a0v35adg" },
                     { 1005, "Ryan Kyle Coogler is an African-American filmmaker and producer who is from Oakland, California. He is known for directing the Black Panther film series, Creed, a Rocky spin-off and Fruitvale Station. He frequently casts Michael B. Jordan in his works. He produced the Creed sequels, Judas and the Black Messiah and Space Jam: A New Legacy. He is married to Zinzi since 2016.", new DateTime(1986, 5, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ryan Coogler", "https://dl.dropboxusercontent.com/scl/fi/kcdzpmxuya99j91c5hqkr/Ryan-Coogler_ProfileImage.jpg?rlkey=2d1mnwewacvfvijm6xswzau6u" },
@@ -110,28 +679,49 @@ namespace FilmIdea.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "MoviesGenres",
-                columns: new[] { "GenreId", "MovieId" },
-                values: new object[] { 1, 2 });
-
-            migrationBuilder.InsertData(
-                table: "Photos",
-                columns: new[] { "Id", "ActorId", "DirectorId", "MovieId", "Url" },
+                table: "Genres",
+                columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("1f62557c-d1b4-41d4-b1bd-37d4b8d278c5"), null, 2, null, "https://dl.dropboxusercontent.com/s/491y3cpjoc4ulzm/MV5BNDI3MzgwMmYtY2JjYy00ZWQ2LTgzN_profile_image.jpg" },
-                    { new Guid("904855ca-5dd6-4fb7-b95a-661ca2e81367"), 2, null, null, "https://dl.dropboxusercontent.com/s/oxqc24aw3xb9n9z/MV5BMTY4Mjg0NjIxOV5BMl5Ban_profile_image.jpg" },
-                    { new Guid("91bfe806-d402-48d3-9e9a-b6f8a8ce399d"), null, null, 2, "https://dl.dropboxusercontent.com/s/kban35sz6tw0d0x/Indiana_Jones_and_the_Dial_of_Destiny_cover_image.jpg" }
+                    { 1, "Action" },
+                    { 2, "Adventure" },
+                    { 3, "Animation" },
+                    { 4, "Biographical" },
+                    { 5, "Comedy" },
+                    { 6, "Action" },
+                    { 7, "Crime" },
+                    { 8, "Documentary" },
+                    { 9, "Drama" },
+                    { 10, "Family" },
+                    { 11, "Fantasy" },
+                    { 12, "History" },
+                    { 13, "Horror" },
+                    { 14, "Musical" }
                 });
 
             migrationBuilder.InsertData(
-                table: "Videos",
-                columns: new[] { "Id", "ActorId", "DirectorId", "MovieId", "Url" },
+                table: "Genres",
+                columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("4e0ec3bf-5045-4860-8b77-5b728925bcfe"), null, null, 2, "https://dl.dropboxusercontent.com/s/evfvsgzlf9f4vok/1434659607842-pgv4ql-1680875129724_trailer.mp4" },
-                    { new Guid("8286da62-f266-4f5b-877a-45eed5e91ce3"), null, 2, null, "https://dl.dropboxusercontent.com/s/joz6wy1q4o55jz4/1434659607842-pgv4ql-1687560633004.mp4" },
-                    { new Guid("942e8c72-f07f-401a-9871-5c1634101e58"), 2, null, null, "https://dl.dropboxusercontent.com/s/l6151myomc65wqc/1434659607842-pgv4ql-1687556762812.mp4" }
+                    { 15, "Mystery" },
+                    { 16, "Romance" },
+                    { 17, "Sci-Fi" },
+                    { 18, "Sport" },
+                    { 19, "Superhero" },
+                    { 20, "Short" },
+                    { 21, "Thriller" },
+                    { 22, "War" },
+                    { 23, "Western" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CriticId", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[,]
+                {
+                    { new Guid("15eb7825-840b-4528-71cc-08db8c333233"), 0, "a8c8e65b-4a5d-4ec8-a4fe-1054b3e543d0", new Guid("bf595423-7323-4e40-bd43-0f876c1beece"), "critic@critic.bg", false, true, null, "CRITIC@CRITIC.BG", "CRITICCRITICOV", "AQAAAAEAACcQAAAAED8AiAX7LsAuELS3lYisOFNJVOGpUD+yNBUxLCVvKeE0nRH/nHDdWjTTbUk9Pt6efA==", null, false, "RCRRYTFZIKPBOLEU7PJ4QZDD7PL3EJTX", false, "CriticCriticov" },
+                    { new Guid("94756cdf-566e-4bf8-b03b-416a118ad53b"), 0, "57bc2c05-86fa-4586-8a84-fd5019e8b4e6", new Guid("93372a0a-b9f4-4bc5-8f53-e8da0bce2bfe"), "admin@admin.com", false, true, null, "ADMIN@ADMIN.COM", "ADMINISTRATOR", "AQAAAAEAACcQAAAAEIDAX0WNuYyTTwkcp9gbVk146rrp9KcqXGumzJ7/bR33e1FBPSMU6035VP9GrLkwPA==", null, false, "NJN3O3VL2VQRL2ESBOFVB5JLFCZCJS2A", false, "Administrator" }
                 });
 
             migrationBuilder.InsertData(
@@ -139,6 +729,8 @@ namespace FilmIdea.Data.Migrations
                 columns: new[] { "Id", "CoverImageUrl", "Description", "DirectorId", "Duration", "ReleaseDate", "Title", "TrailerUrl" },
                 values: new object[,]
                 {
+                    { 1, "https://dl.dropboxusercontent.com/scl/fi/lgvgll5jt71j0ad3202d4/The_Flash_cover_image.jpg?rlkey=ya84xsnh8dioy08iw497uyjdf", "Barry Allen uses his super speed to change the past, but his attempt to save his family creates a world without super heroes, forcing him to race for his life in order to save the future.", 1, 144, new DateTime(2023, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "The Flash", "https://dl.dropboxusercontent.com/scl/fi/t44ljvld1q9ybw8oeqe8z/2023-_trailer.mp4?rlkey=wnapnzwvtfhk1x5nlwr7oa88x" },
+                    { 2, "https://dl.dropboxusercontent.com/s/kban35sz6tw0d0x/Indiana_Jones_and_the_Dial_of_Destiny_cover_image.jpg", "Archaeologist Indiana Jones races against time to retrieve a legendary artifact that can change the course of history.", 2, 154, new DateTime(2023, 5, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), "Indiana Jones and the Dial of Destiny", "https://dl.dropboxusercontent.com/s/evfvsgzlf9f4vok/1434659607842-pgv4ql-1680875129724_trailer.mp4" },
                     { 1003, "https://dl.dropboxusercontent.com/scl/fi/azbfvlt972dy4t5sygzii/Barbie_CoverImage.jpg?rlkey=vmf7122bseqsxeif5vigbyxb4", "Barbie suffers a crisis that leads her to question her world and her existence", 1001, 114, new DateTime(2023, 7, 21, 0, 0, 0, 0, DateTimeKind.Unspecified), "Barbie", "https://dl.dropboxusercontent.com/scl/fi/c4uuqbg38lipejpdkj0s3/Barbie_Trailer.mp4?rlkey=hexi9dm3p97ujwglgkw1cn3ju" },
                     { 1006, "https://dl.dropboxusercontent.com/scl/fi/ksdursap46bdhr8ccfkm1/Jurassic-World-Fallen-Kingdom_CoverImage.jpg?rlkey=zpdumvgy9jbc25ppxvk7gtj6r", "When the island's dormant volcano begins roaring to life, Owen and Claire mount a campaign to rescue the remaining dinosaurs from this extinction-level event.", 1005, 128, new DateTime(2018, 8, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), "Jurassic World: Fallen Kingdom", "https://dl.dropboxusercontent.com/scl/fi/har6gphbx8whg0onnm969/Jurassic-World-Fallen-Kingdom_Trailer.mp4?rlkey=7wzfd7c5cu1l90cqdij7cm4jv" },
                     { 1007, "https://dl.dropboxusercontent.com/scl/fi/4e8kznbyb0r1ly2xadp2i/Avengers-Endgame_CoverImage.jpg?rlkey=unhpzjogw5izyod2xde36z0p9", "After the devastating events of Advengers:  War(2018), the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos' actions and restore balance to the universe.", 1004, 181, new DateTime(2019, 4, 26, 0, 0, 0, 0, DateTimeKind.Unspecified), "Avengers: Endgame", "https://dl.dropboxusercontent.com/scl/fi/dbnf05zefybz86yeuk4fl/Avengers-Endgame_Trailer.mp4?rlkey=mxmy8lwsqnxb3u5hv2oti0ebk" },
@@ -156,10 +748,30 @@ namespace FilmIdea.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Photos",
+                columns: new[] { "Id", "ActorId", "DirectorId", "MovieId", "Url" },
+                values: new object[,]
+                {
+                    { new Guid("68d65f56-b265-4445-9407-8d87e3ef14f2"), 2, null, null, "https://dl.dropboxusercontent.com/s/oxqc24aw3xb9n9z/MV5BMTY4Mjg0NjIxOV5BMl5Ban_profile_image.jpg" },
+                    { new Guid("ccda3d1b-f7db-41f8-9c42-6e92b11ce957"), null, 2, null, "https://dl.dropboxusercontent.com/s/491y3cpjoc4ulzm/MV5BNDI3MzgwMmYtY2JjYy00ZWQ2LTgzN_profile_image.jpg" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Videos",
+                columns: new[] { "Id", "ActorId", "DirectorId", "MovieId", "Url" },
+                values: new object[,]
+                {
+                    { new Guid("55842a6a-53e3-4899-a535-55d9044eea19"), 2, null, null, "https://dl.dropboxusercontent.com/s/l6151myomc65wqc/1434659607842-pgv4ql-1687556762812.mp4" },
+                    { new Guid("fc56776c-9109-4bf8-9cf3-24c1caf7cfe5"), null, 2, null, "https://dl.dropboxusercontent.com/s/joz6wy1q4o55jz4/1434659607842-pgv4ql-1687560633004.mp4" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "MoviesActors",
                 columns: new[] { "ActorId", "MovieId" },
                 values: new object[,]
                 {
+                    { 1, 1 },
+                    { 2, 2 },
                     { 1009, 1003 },
                     { 1012, 1003 },
                     { 1014, 1006 },
@@ -187,6 +799,9 @@ namespace FilmIdea.Data.Migrations
                 columns: new[] { "GenreId", "MovieId" },
                 values: new object[,]
                 {
+                    { 1, 1 },
+                    { 1, 2 },
+                    { 2, 2 },
                     { 5, 1003 },
                     { 14, 1003 },
                     { 16, 1003 },
@@ -203,12 +818,7 @@ namespace FilmIdea.Data.Migrations
                     { 1, 1010 },
                     { 10, 1010 },
                     { 11, 1010 },
-                    { 15, 1011 },
-                    { 17, 1011 },
-                    { 19, 1011 },
-                    { 4, 1012 },
-                    { 7, 1012 },
-                    { 11, 1012 }
+                    { 15, 1011 }
                 });
 
             migrationBuilder.InsertData(
@@ -216,6 +826,11 @@ namespace FilmIdea.Data.Migrations
                 columns: new[] { "GenreId", "MovieId" },
                 values: new object[,]
                 {
+                    { 17, 1011 },
+                    { 19, 1011 },
+                    { 4, 1012 },
+                    { 7, 1012 },
+                    { 11, 1012 },
                     { 4, 1013 },
                     { 5, 1013 },
                     { 7, 1013 },
@@ -232,564 +847,272 @@ namespace FilmIdea.Data.Migrations
                     { 11, 1017 },
                     { 11, 1020 }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Photos",
+                columns: new[] { "Id", "ActorId", "DirectorId", "MovieId", "Url" },
+                values: new object[] { new Guid("a1ec0f48-25a2-495a-a8be-1ecf98590e2f"), null, null, 2, "https://dl.dropboxusercontent.com/s/kban35sz6tw0d0x/Indiana_Jones_and_the_Dial_of_Destiny_cover_image.jpg" });
+
+            migrationBuilder.InsertData(
+                table: "Videos",
+                columns: new[] { "Id", "ActorId", "DirectorId", "MovieId", "Url" },
+                values: new object[] { new Guid("d10e42ca-1961-4ffc-8b5d-fb1e662a26c1"), null, null, 2, "https://dl.dropboxusercontent.com/s/evfvsgzlf9f4vok/1434659607842-pgv4ql-1680875129724_trailer.mp4" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetRoleClaims_RoleId",
+                table: "AspNetRoleClaims",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "RoleNameIndex",
+                table: "AspNetRoles",
+                column: "NormalizedName",
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserClaims_UserId",
+                table: "AspNetUserClaims",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserLogins_UserId",
+                table: "AspNetUserLogins",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserRoles_RoleId",
+                table: "AspNetUserRoles",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "EmailIndex",
+                table: "AspNetUsers",
+                column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_CriticId",
+                table: "AspNetUsers",
+                column: "CriticId",
+                unique: true,
+                filter: "[CriticId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "UserNameIndex",
+                table: "AspNetUsers",
+                column: "NormalizedUserName",
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Chats_GroupId",
+                table: "Chats",
+                column: "GroupId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_ReviewId",
+                table: "Comments",
+                column: "ReviewId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_WriterId",
+                table: "Comments",
+                column: "WriterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Dislikes_ReviewId",
+                table: "Dislikes",
+                column: "ReviewId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Dislikes_UserId",
+                table: "Dislikes",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GroupsUsers_GroupId",
+                table: "GroupsUsers",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Likes_ReviewId",
+                table: "Likes",
+                column: "ReviewId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Likes_UserId",
+                table: "Likes",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Messages_ChatId",
+                table: "Messages",
+                column: "ChatId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Messages_SenderId",
+                table: "Messages",
+                column: "SenderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Movies_DirectorId",
+                table: "Movies",
+                column: "DirectorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MoviesActors_ActorId",
+                table: "MoviesActors",
+                column: "ActorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MoviesGenres_GenreId",
+                table: "MoviesGenres",
+                column: "GenreId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PassedMovies_MovieId",
+                table: "PassedMovies",
+                column: "MovieId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Photos_ActorId",
+                table: "Photos",
+                column: "ActorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Photos_DirectorId",
+                table: "Photos",
+                column: "DirectorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Photos_MovieId",
+                table: "Photos",
+                column: "MovieId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_CriticId",
+                table: "Reviews",
+                column: "CriticId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_MovieId",
+                table: "Reviews",
+                column: "MovieId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRatings_MovieId",
+                table: "UserRatings",
+                column: "MovieId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRatings_UserId",
+                table: "UserRatings",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UsersMovies_MovieId",
+                table: "UsersMovies",
+                column: "MovieId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Videos_ActorId",
+                table: "Videos",
+                column: "ActorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Videos_DirectorId",
+                table: "Videos",
+                column: "DirectorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Videos_MovieId",
+                table: "Videos",
+                column: "MovieId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DeleteData(
-                table: "Comments",
-                keyColumn: "Id",
-                keyValue: new Guid("4594c66d-c87c-4a72-9721-8ee5b8f98e45"));
+            migrationBuilder.DropTable(
+                name: "AspNetRoleClaims");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesActors",
-                keyColumns: new[] { "ActorId", "MovieId" },
-                keyValues: new object[] { 1009, 1003 });
+            migrationBuilder.DropTable(
+                name: "AspNetUserClaims");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesActors",
-                keyColumns: new[] { "ActorId", "MovieId" },
-                keyValues: new object[] { 1012, 1003 });
+            migrationBuilder.DropTable(
+                name: "AspNetUserLogins");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesActors",
-                keyColumns: new[] { "ActorId", "MovieId" },
-                keyValues: new object[] { 1014, 1006 });
+            migrationBuilder.DropTable(
+                name: "AspNetUserRoles");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesActors",
-                keyColumns: new[] { "ActorId", "MovieId" },
-                keyValues: new object[] { 1001, 1007 });
+            migrationBuilder.DropTable(
+                name: "AspNetUserTokens");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesActors",
-                keyColumns: new[] { "ActorId", "MovieId" },
-                keyValues: new object[] { 1007, 1007 });
+            migrationBuilder.DropTable(
+                name: "Comments");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesActors",
-                keyColumns: new[] { "ActorId", "MovieId" },
-                keyValues: new object[] { 1015, 1008 });
+            migrationBuilder.DropTable(
+                name: "Dislikes");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesActors",
-                keyColumns: new[] { "ActorId", "MovieId" },
-                keyValues: new object[] { 1018, 1009 });
+            migrationBuilder.DropTable(
+                name: "GroupsUsers");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesActors",
-                keyColumns: new[] { "ActorId", "MovieId" },
-                keyValues: new object[] { 1016, 1010 });
+            migrationBuilder.DropTable(
+                name: "Likes");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesActors",
-                keyColumns: new[] { "ActorId", "MovieId" },
-                keyValues: new object[] { 1014, 1011 });
+            migrationBuilder.DropTable(
+                name: "Messages");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesActors",
-                keyColumns: new[] { "ActorId", "MovieId" },
-                keyValues: new object[] { 1019, 1012 });
+            migrationBuilder.DropTable(
+                name: "MoviesActors");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesActors",
-                keyColumns: new[] { "ActorId", "MovieId" },
-                keyValues: new object[] { 1009, 1013 });
+            migrationBuilder.DropTable(
+                name: "MoviesGenres");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesActors",
-                keyColumns: new[] { "ActorId", "MovieId" },
-                keyValues: new object[] { 1013, 1013 });
+            migrationBuilder.DropTable(
+                name: "PassedMovies");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesActors",
-                keyColumns: new[] { "ActorId", "MovieId" },
-                keyValues: new object[] { 1007, 1014 });
+            migrationBuilder.DropTable(
+                name: "Photos");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesActors",
-                keyColumns: new[] { "ActorId", "MovieId" },
-                keyValues: new object[] { 1017, 1014 });
+            migrationBuilder.DropTable(
+                name: "UserRatings");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesActors",
-                keyColumns: new[] { "ActorId", "MovieId" },
-                keyValues: new object[] { 1009, 1015 });
+            migrationBuilder.DropTable(
+                name: "UsersMovies");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesActors",
-                keyColumns: new[] { "ActorId", "MovieId" },
-                keyValues: new object[] { 1001, 1016 });
+            migrationBuilder.DropTable(
+                name: "Videos");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesActors",
-                keyColumns: new[] { "ActorId", "MovieId" },
-                keyValues: new object[] { 1007, 1016 });
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesActors",
-                keyColumns: new[] { "ActorId", "MovieId" },
-                keyValues: new object[] { 1001, 1017 });
+            migrationBuilder.DropTable(
+                name: "Reviews");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesActors",
-                keyColumns: new[] { "ActorId", "MovieId" },
-                keyValues: new object[] { 2, 1020 });
+            migrationBuilder.DropTable(
+                name: "Chats");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesActors",
-                keyColumns: new[] { "ActorId", "MovieId" },
-                keyValues: new object[] { 1012, 1020 });
+            migrationBuilder.DropTable(
+                name: "Genres");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 1, 2 });
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 5, 1003 });
+            migrationBuilder.DropTable(
+                name: "Actors");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 14, 1003 });
+            migrationBuilder.DropTable(
+                name: "Movies");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 16, 1003 });
+            migrationBuilder.DropTable(
+                name: "Groups");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 1, 1006 });
+            migrationBuilder.DropTable(
+                name: "Critics");
 
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 11, 1006 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 17, 1006 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 1, 1007 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 2, 1007 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 11, 1007 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 19, 1007 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 11, 1008 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 19, 1008 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 5, 1009 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 1, 1010 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 10, 1010 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 11, 1010 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 15, 1011 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 17, 1011 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 19, 1011 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 4, 1012 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 7, 1012 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 11, 1012 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 4, 1013 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 5, 1013 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 7, 1013 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 1, 1014 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 4, 1014 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 15, 1014 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 5, 1015 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 11, 1015 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 19, 1015 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 11, 1016 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 19, 1016 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 2, 1017 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 10, 1017 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 11, 1017 });
-
-            migrationBuilder.DeleteData(
-                table: "MoviesGenres",
-                keyColumns: new[] { "GenreId", "MovieId" },
-                keyValues: new object[] { 11, 1020 });
-
-            migrationBuilder.DeleteData(
-                table: "Photos",
-                keyColumn: "Id",
-                keyValue: new Guid("1f62557c-d1b4-41d4-b1bd-37d4b8d278c5"));
-
-            migrationBuilder.DeleteData(
-                table: "Photos",
-                keyColumn: "Id",
-                keyValue: new Guid("904855ca-5dd6-4fb7-b95a-661ca2e81367"));
-
-            migrationBuilder.DeleteData(
-                table: "Photos",
-                keyColumn: "Id",
-                keyValue: new Guid("91bfe806-d402-48d3-9e9a-b6f8a8ce399d"));
-
-            migrationBuilder.DeleteData(
-                table: "Videos",
-                keyColumn: "Id",
-                keyValue: new Guid("4e0ec3bf-5045-4860-8b77-5b728925bcfe"));
-
-            migrationBuilder.DeleteData(
-                table: "Videos",
-                keyColumn: "Id",
-                keyValue: new Guid("8286da62-f266-4f5b-877a-45eed5e91ce3"));
-
-            migrationBuilder.DeleteData(
-                table: "Videos",
-                keyColumn: "Id",
-                keyValue: new Guid("942e8c72-f07f-401a-9871-5c1634101e58"));
-
-            migrationBuilder.DeleteData(
-                table: "Actors",
-                keyColumn: "Id",
-                keyValue: 1001);
-
-            migrationBuilder.DeleteData(
-                table: "Actors",
-                keyColumn: "Id",
-                keyValue: 1007);
-
-            migrationBuilder.DeleteData(
-                table: "Actors",
-                keyColumn: "Id",
-                keyValue: 1009);
-
-            migrationBuilder.DeleteData(
-                table: "Actors",
-                keyColumn: "Id",
-                keyValue: 1012);
-
-            migrationBuilder.DeleteData(
-                table: "Actors",
-                keyColumn: "Id",
-                keyValue: 1013);
-
-            migrationBuilder.DeleteData(
-                table: "Actors",
-                keyColumn: "Id",
-                keyValue: 1014);
-
-            migrationBuilder.DeleteData(
-                table: "Actors",
-                keyColumn: "Id",
-                keyValue: 1015);
-
-            migrationBuilder.DeleteData(
-                table: "Actors",
-                keyColumn: "Id",
-                keyValue: 1016);
-
-            migrationBuilder.DeleteData(
-                table: "Actors",
-                keyColumn: "Id",
-                keyValue: 1017);
-
-            migrationBuilder.DeleteData(
-                table: "Actors",
-                keyColumn: "Id",
-                keyValue: 1018);
-
-            migrationBuilder.DeleteData(
-                table: "Actors",
-                keyColumn: "Id",
-                keyValue: 1019);
-
-            migrationBuilder.DeleteData(
-                table: "Movies",
-                keyColumn: "Id",
-                keyValue: 1003);
-
-            migrationBuilder.DeleteData(
-                table: "Movies",
-                keyColumn: "Id",
-                keyValue: 1006);
-
-            migrationBuilder.DeleteData(
-                table: "Movies",
-                keyColumn: "Id",
-                keyValue: 1007);
-
-            migrationBuilder.DeleteData(
-                table: "Movies",
-                keyColumn: "Id",
-                keyValue: 1008);
-
-            migrationBuilder.DeleteData(
-                table: "Movies",
-                keyColumn: "Id",
-                keyValue: 1009);
-
-            migrationBuilder.DeleteData(
-                table: "Movies",
-                keyColumn: "Id",
-                keyValue: 1010);
-
-            migrationBuilder.DeleteData(
-                table: "Movies",
-                keyColumn: "Id",
-                keyValue: 1011);
-
-            migrationBuilder.DeleteData(
-                table: "Movies",
-                keyColumn: "Id",
-                keyValue: 1012);
-
-            migrationBuilder.DeleteData(
-                table: "Movies",
-                keyColumn: "Id",
-                keyValue: 1013);
-
-            migrationBuilder.DeleteData(
-                table: "Movies",
-                keyColumn: "Id",
-                keyValue: 1014);
-
-            migrationBuilder.DeleteData(
-                table: "Movies",
-                keyColumn: "Id",
-                keyValue: 1015);
-
-            migrationBuilder.DeleteData(
-                table: "Movies",
-                keyColumn: "Id",
-                keyValue: 1016);
-
-            migrationBuilder.DeleteData(
-                table: "Movies",
-                keyColumn: "Id",
-                keyValue: 1017);
-
-            migrationBuilder.DeleteData(
-                table: "Movies",
-                keyColumn: "Id",
-                keyValue: 1020);
-
-            migrationBuilder.DeleteData(
-                table: "Directors",
-                keyColumn: "Id",
-                keyValue: 1001);
-
-            migrationBuilder.DeleteData(
-                table: "Directors",
-                keyColumn: "Id",
-                keyValue: 1004);
-
-            migrationBuilder.DeleteData(
-                table: "Directors",
-                keyColumn: "Id",
-                keyValue: 1005);
-
-            migrationBuilder.DeleteData(
-                table: "Directors",
-                keyColumn: "Id",
-                keyValue: 1006);
-
-            migrationBuilder.DeleteData(
-                table: "Directors",
-                keyColumn: "Id",
-                keyValue: 1007);
-
-            migrationBuilder.DeleteData(
-                table: "Directors",
-                keyColumn: "Id",
-                keyValue: 1008);
-
-            migrationBuilder.DeleteData(
-                table: "Directors",
-                keyColumn: "Id",
-                keyValue: 1009);
-
-            migrationBuilder.DeleteData(
-                table: "Directors",
-                keyColumn: "Id",
-                keyValue: 1010);
-
-            migrationBuilder.DeleteData(
-                table: "Directors",
-                keyColumn: "Id",
-                keyValue: 1011);
-
-            migrationBuilder.DeleteData(
-                table: "Directors",
-                keyColumn: "Id",
-                keyValue: 1012);
-
-            migrationBuilder.UpdateData(
-                table: "AspNetUsers",
-                keyColumn: "Id",
-                keyValue: new Guid("15eb7825-840b-4528-71cc-08db8c333233"),
-                column: "ConcurrencyStamp",
-                value: "9a2a3dd1-843c-4af6-8f63-a900b688c09d");
-
-            migrationBuilder.UpdateData(
-                table: "AspNetUsers",
-                keyColumn: "Id",
-                keyValue: new Guid("2532ddaa-63f0-4de8-71cb-08db8c333233"),
-                column: "ConcurrencyStamp",
-                value: "bcfbbcf7-03cb-4512-94bd-04e6e38f1086");
-
-            migrationBuilder.UpdateData(
-                table: "AspNetUsers",
-                keyColumn: "Id",
-                keyValue: new Guid("94756cdf-566e-4bf8-b03b-416a118ad53b"),
-                column: "ConcurrencyStamp",
-                value: "09fe4203-727e-4027-ab7b-354b42a5148f");
-
-            migrationBuilder.UpdateData(
-                table: "Critics",
-                keyColumn: "Id",
-                keyValue: new Guid("93372a0a-b9f4-4bc5-8f53-e8da0bce2bfe"),
-                column: "Bio",
-                value: "Admin bio");
-
-            migrationBuilder.UpdateData(
-                table: "Critics",
-                keyColumn: "Id",
-                keyValue: new Guid("bf595423-7323-4e40-bd43-0f876c1beece"),
-                column: "Bio",
-                value: "Critic Criticov bio");
-
-            migrationBuilder.InsertData(
-                table: "Photos",
-                columns: new[] { "Id", "ActorId", "DirectorId", "MovieId", "Url" },
-                values: new object[,]
-                {
-                    { new Guid("15a85343-f3f0-440d-9105-98cbf20645eb"), 2, null, null, "https://dl.dropboxusercontent.com/s/oxqc24aw3xb9n9z/MV5BMTY4Mjg0NjIxOV5BMl5Ban_profile_image.jpg" },
-                    { new Guid("c6d4cd7b-fbee-4534-a99b-fd062cb7ea40"), null, null, 2, "https://dl.dropboxusercontent.com/s/kban35sz6tw0d0x/Indiana_Jones_and_the_Dial_of_Destiny_cover_image.jpg" },
-                    { new Guid("e711dff0-ceb7-4072-a8f6-b409c529d23d"), null, 2, null, "https://dl.dropboxusercontent.com/s/491y3cpjoc4ulzm/MV5BNDI3MzgwMmYtY2JjYy00ZWQ2LTgzN_profile_image.jpg" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Videos",
-                columns: new[] { "Id", "ActorId", "DirectorId", "MovieId", "Url" },
-                values: new object[,]
-                {
-                    { new Guid("36be3d32-5f09-4640-bc19-840a44a07998"), null, null, 2, "https://dl.dropboxusercontent.com/s/evfvsgzlf9f4vok/1434659607842-pgv4ql-1680875129724_trailer.mp4" },
-                    { new Guid("e3b502b0-f13f-4738-bdbf-f58a7945d60f"), null, 2, null, "https://dl.dropboxusercontent.com/s/joz6wy1q4o55jz4/1434659607842-pgv4ql-1687560633004.mp4" },
-                    { new Guid("f4336dd3-4468-4178-825d-7a68ae8b07dc"), 2, null, null, "https://dl.dropboxusercontent.com/s/l6151myomc65wqc/1434659607842-pgv4ql-1687556762812.mp4" }
-                });
+            migrationBuilder.DropTable(
+                name: "Directors");
         }
     }
 }

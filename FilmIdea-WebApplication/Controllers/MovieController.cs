@@ -22,10 +22,6 @@ public class MovieController : BaseController
 
     //TODO: Add More tests
 
-    //TODO: Check if admin work when get project from github with new db
-
-
-
     private readonly IMovieService _movieService;
     private readonly ICriticService _criticService;
 
