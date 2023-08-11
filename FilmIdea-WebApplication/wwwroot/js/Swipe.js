@@ -10,7 +10,9 @@
             var movie = movies[index];
             var rating = parseFloat(movie.rating);
             var formattedRating = (Math.abs(rating - Math.round(rating, 2)) > 0.001) ? rating.toFixed(1) : rating.toFixed(0);
-
+            if (isNaN(parseFloat(formattedRating))) {
+                formattedRating = 0;
+            }
             var totalMinutes = movie.duration;
             var hours = Math.floor(totalMinutes / 60) + 'h';
             var minutes = (totalMinutes % 60) + 'm';

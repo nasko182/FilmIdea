@@ -19,11 +19,8 @@ using static Common.SuccessMessagesConstants;
 public class MovieController : BaseController
 {
     //TODO: Check all using
+
     //TODO: Add More tests
-    //TODO: Everywhere where Critic is Write something use criticName in blue,  Everywhere where user write something use UserName in green, to be clear that this is critic
-    //TODO: Add button for becoming admin in user all
-    //TODO: Add cache is need somewhere(adding something, displayCollections), also remove cache is update(last(1:30))
-    //TODO: check code coverage
 
     //TODO: Check if admin work when get project from github with new db
 

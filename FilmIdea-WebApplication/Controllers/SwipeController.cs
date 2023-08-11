@@ -47,7 +47,7 @@ public class SwipeController : BaseController
     }
 
 
-    [HttpGet]
+    [HttpPost]
     public async Task<IActionResult> PassMovie(int movieId)
     {
         try

@@ -136,7 +136,7 @@ public class ActorController : BaseAdminController
     [HttpPost]
     public async Task<IActionResult> AddPhoto(IFormFile photo,int actorId)
     {
-        var imageName = photo.Name + "_Image.jpg";
+        var imageName = photo.FileName + "_Image.jpg";
         var folderName = $"ImagesDb/Actors/Photos/{photo.Name}";
         string photoUrl;
         try
@@ -159,7 +159,7 @@ public class ActorController : BaseAdminController
     [HttpPost]
     public async Task<IActionResult> AddVideo(IFormFile video, int actorId)
     {
-        var videoName = video.Name + "_Video.mp4";
+        var videoName = video.FileName + "_Video.mp4";
         var folderName = $"VideosDb/Actors/Videos/{video.Name}";
         string videoUrl;
         try

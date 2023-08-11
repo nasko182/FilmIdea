@@ -23,6 +23,7 @@ public class SwipeService : FilmIdeaService, ISwipeService
             .Where(m=> !m.PassedUsers.Any(pm=> pm.MovieId == m.Id && pm.UserId == Guid.Parse(userId)))
             .OrderBy(m=>m.CoverImageUrl)
             .Include(m=>m.Ratings)
+            .Include(m=>m.Genres)
             .Select(m=> new SwipeMovieViewModel()
             {
                 Id = m.Id,
@@ -37,7 +38,7 @@ public class SwipeService : FilmIdeaService, ISwipeService
                 ReleaseYear = m.ReleaseDate.Year,
                 Title = m.Title,
                 TrailerUrl = m.TrailerUrl,
-                Rating = m.Ratings.Average(r=>r.Rating)
+                Rating = m.Ratings.Average(r => r.Rating)
             })
             .ToListAsync();
     }
