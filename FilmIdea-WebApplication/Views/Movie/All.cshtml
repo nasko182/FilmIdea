@@ -3,85 +3,92 @@
     ViewBag.Title = "Movies";
     var topMovies = Model.TopSectionMovies.ToList();
 }
-<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner">
-        @for (int i = 0; i < topMovies.Count(); i++)
-        {
-            var movie = topMovies[i];
-            <div class="carousel-item @(i == 0 ? "active" : string.Empty)">
-                <img class="d-block w-100" style="height:500px"
-                     src="@movie.PictureUrl" alt="@movie.Title">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>
-                        <a class="btn btn-primary" asp-controller="Movie" asp-action="Details"
-                           asp-route-movieId="@movie.Id">@movie.Title</a>
-                    </h5>
-                </div>
-            </div>
-        }
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
-</div>
 
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
-
-
-<form class="mb-4" method="get">
-    <div class="row">
-        <div class="form-group col-md-2">
-            <div class="form-group">
-                <label asp-for="Genre"></label>
-                <select asp-for="Genre" class="form-control">
-                    <option value="">All</option>
-                    @foreach (var category in Model.Genres)
-                    {
-                        <option value="@category.Name">@category.Name</option>
-                    }
-                </select>
-            </div>
+<div class="d-flex justify-content-between mb-4">
+    <div id="carouselExampleControls" class="carousel slide w-75 center-container" data-bs-ride="carousel">
+        <h2>New Movies To Watch</h2>
+        <div class="carousel-inner">
+            @for (int i = 0; i < topMovies.Count(); i++)
+            {
+                var movie = topMovies[i];
+                <div class="carousel-item @(i == 0 ? "active" : string.Empty)">
+                    <img class="d-block w-100" style="height: 500px"
+                         src="@movie.PictureUrl" alt="@movie.Title">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>
+                            <a class="btn btn-primary" asp-controller="Movie" asp-action="Details"
+                               asp-route-movieId="@movie.Id">@movie.Title</a>
+                        </h5>
+                    </div>
+                </div>
+            }
         </div>
-        <div class="form-group col-md-3">
-            <label asp-for="SearchString"></label>
-            <input asp-for="SearchString" class="form-control" placeholder="...">
-        </div>
-        <div class="form-group col-md-2">
-            <div class="form-group">
-                <label asp-for="MovieSorting"></label>
-                <select asp-for="MovieSorting" class="form-control">
-                    <option value="">Sort by...</option>
-                    <option value="0">Newest</option>
-                    <option value="1">Oldest</option>
-                    <option value="2">Rating Ascending</option>
-                    <option value="3">Rating Descending</option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group col-md-2">
-            <label asp-for="MoviesPerPage"></label>
-            <select asp-for="MoviesPerPage" class="form-control">
-                <option value="5">5</option>
-                <option value="15">15</option>
-                <option value="25">25</option>
-                
-            </select>
-        </div>
-        <div class="col-md-3">
-            <div class="form-group mt-4 p-2">
-                <input type="submit" value="Search" class="btn btn-primary" />
-            </div>
-        </div>
-
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
-</form>
 
+    <div class="center-container ">
+        <h2> Filter Movies</h2>
+        <form class="mb-4 filter-card" style="margin-left: 5rem" method="get">
+            <div class="row" >
+                <div class="form-group col-md-12">
+                    <div class="form-group">
+                        <label asp-for="Genre"></label>
+                        <select asp-for="Genre" class="form-control">
+                            <option value="">All</option>
+                            @foreach (var category in Model.Genres)
+                            {
+                                <option value="@category.Name">@category.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-md-12 mt-4">
+                    <label asp-for="SearchString"></label>
+                    <input asp-for="SearchString" class="form-control" placeholder="...">
+                </div>
+                <div class="form-group col-md-12 mt-4">
+                    <div class="form-group">
+                        <label asp-for="MovieSorting"></label>
+                        <select asp-for="MovieSorting" class="form-control">
+                            <option value="">Sort by...</option>
+                            <option value="0">Newest</option>
+                            <option value="1">Oldest</option>
+                            <option value="2">Rating Ascending</option>
+                            <option value="3">Rating Descending</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-md-12 mt-4">
+                    <label asp-for="MoviesPerPage"></label>
+                    <select asp-for="MoviesPerPage" class="form-control">
+                        <option value="5">5</option>
+                        <option value="15">15</option>
+                        <option value="25">25</option>
+                
+                    </select>
+                </div>
+                <div class="col-md-11">
+                    <div class="form-group mt-4 p-2 center-container">
+                        <input type="submit" style="font-size: 25px;" value="Filter" class="btn btn-primary" />
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+<hr/>
+<h2>All Movies</h2>
+<hr/>
 @if (!Model.Movies.Any())
 {
     <h2 class="text-center">No movies found by the given criteria!</h2>

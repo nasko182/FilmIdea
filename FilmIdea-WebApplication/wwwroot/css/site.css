@@ -1461,3 +1461,25 @@ p {
     margin-top: 5px;
     margin-right: 4px;
 }
+
+.filter-card {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    padding: 20px;
+    margin: 10px;
+}
+
+.info-button {
+    right: 8px !important;
+    bottom: 0 !important;
+    background-color: #5454548e !important;
+    color: white !important;
+    width: 40px !important;
+    font-weight: 500 !important;
+    font-family: auto !important;
+    border: none !important;
+    font-size: 20px !important;
+    border-radius: 30px !important;
+}

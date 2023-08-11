@@ -42,10 +42,8 @@ public class MovieController : BaseController
 
     //TODO: Edit views to be more beautiful
 
-    //TODO: @*TODO: Make Watchlist button work correctly*@
-    //TODO: edit movies partial
-    //TODO: Move all js in files
-
+    //TODO: Edit edit roulette view
+    //TODO: Edit all 
 
 
     private readonly IMovieService _movieService;
