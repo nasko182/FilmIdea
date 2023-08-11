@@ -1,132 +1,65 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+
 @model MovieViewModel
 @{
     Layout = "_Layout";
     ViewBag.Title = "What Should I Watch?";
 }
 
-<div class="card-footer">
+<div class="card-footer center-container">
     <h1>Roulette: What Should I Watch?</h1>
     @if (!User.Identity!.IsAuthenticated)
     {
-        <h3>
+        <h3 class="text-center">
             Wondering what to watch? Let Roulette, the random movie generator, pick from the FilmIdea catalog for you. Take a chance on something new with FilmIdea randomizer. Use more than FilmIdea?
             <a asp-area="Identity" asp-page="/Account/Register">CreateAsyncAsyncCriticAsync a free FilmIdea account!</a>
         </h3>
     }
     else
     {
-        <h3>
+        <h3 class="text-center">
             Wondering what to watch? Let Roulette, the random movie generator, pick from the FilmIdea catalog for you. Take a chance on something new with FilmIdea randomizer.
         </h3>
     }
 </div>
 
-<div class="center-container">
+<div class="center-container mt-3">
     <div class="row">
         <div class="col-md-4 w-auto p-0">
             <div class="card position-relative">
                 <a href="@Url.Action("Details", "Movie", new { movieId = Model.Id })">
-                    <img src="@Model.CoverPhotoUrl" class="card-img-top" alt="@Model.Title">
+                    <img style="width: 220px; height: 323px;" src="@Model.CoverPhotoUrl" class="card-img-top" alt="@Model.Title">
                 </a>
-                @if (User.Identity.IsAuthenticated)
-                {
-                    @if (Model.HasMovieInWatchlist)
-                    {
-                        <button class="btn btn-secondary btn-sm added-button position-absolute top-0 start-0 mt-0 ms-0" data-movie="@Model.Id">
-                            ✔
-                        </button>
-                    }
-                    else
-                    {
-                        <button class="btn btn-secondary btn-sm watchlist-button position-absolute top-0 start-0 mt-0 ms-0" data-movie="@Model.Id">
-                            ➕
-                        </button>
-                    }
-                    <button class="btn btn-primary btn-sm position-absolute top-0 start-0 mt-5 ms-0 rate-button" data-toggle="modal" data-target="#rateModal" data-movie="@Model.Id">
-                        @if (Model.UserRating > 0)
-                        {
-                            <span>★ @Model.UserRating/10</span>
-                        }
-                        else
-                        {
-                            <span>✰</span>
-                        }
-                    </button>
-                }
             </div>
         </div>
         <div class="col-md-4 w-auto p-0">
             <div class="card position-relative">
-                <div class="card-body">
+                <div class="card-body" style="width: 370px; height: 323px;">
                     <h5 class="card-title">@Model.Title</h5>
                     <p class="card-font"><strong>Release Year:</strong> @Model.ReleaseYear</p>
                     <p class="card-font"><strong>Duration:</strong> @Model.Duration</p>
-                    <p class="card-font"><strong>Rating:</strong> @Model.Rating</p>
-                </div>
-            </div>
-        </div>
-    </div>
+                    <p class="card-font">
+                        <strong>Rating:</strong>@{
+                                                    double rating = Convert.ToDouble(Model.Rating);
 
-    <div class="modal fade" id="rateModal" tabindex="-1" role="dialog" aria-labelledby="rateModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="rateModalLabel">Rate Movie</h5>
-                    <button type="button" id="closeModal" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="ratingForm">
-                        <input type="hidden" id="movieId" name="movieId" value="" />
-                        <div class="form-group">
-                            <label for="ratingValue">Rating:</label>
-                            <select class="form-control" id="ratingValue" name="ratingValue" required>
-                                <option value="">Select Rating</option>
-                                @for (int i = 1; i <= 10; i++)
-                                {
-                                    <option value="@i">@i</option>
-                                }
-                            </select>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="submitRating">Submit</button>
+                                                    string formattedRating = (Math.Abs(rating - Math.Round(rating, 2)) > 0.001) ? rating.ToString("N1") : rating.ToString("N0");
+                                                }
+                        @formattedRating⭐
+                    </p>
+                    <p class="card-font"><strong>Description:</strong> @Model.Description</p>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
 <div class="center-container">
-    @if (User.Identity.IsAuthenticated)
-    {
-        @if (Model.HasMovieInWatchlist)
-        {
-            <a href="#" class="btn btn-secondary btn-sm added-button" data-movie="@Model.Id">
-                ✔ In Watchlist
-            </a>
-        }
-        else
-        {
-            <a href="#" class="btn btn-secondary btn-sm watchlist-button" data-movie="@Model.Id">
-                ➕ Watchlist
-            </a>
-        }
-    }
     <a asp-controller="Movie" asp-action="Roulette" class="btn btn-secondary btn-sm m-3 " data-movie="@Model.Id">
         <i class="fas fa-plus"></i> Spin Again
     </a>
 </div>
 
     <partial name="_ValidationScriptsPartial" />
-@section Scripts {
-    <script>
-        var addToUserWatchlistUrl = '@Url.Action("AddToUserWatchlist", "Movie")';
-        var removeFromUserWatchlistUrl = '@Url.Action("RemoveFromUserWatchlist", "Movie")';
-        var addRatingUrl = '@Url.Action("AddRating", "Movie")';
-    </script>
-    <script src="~/js/WatchlistAndRating.js" asp-append-version="true"></script>
-}
+
 

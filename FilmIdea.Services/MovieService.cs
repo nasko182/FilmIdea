@@ -243,43 +243,9 @@ public class MovieService : FilmIdeaService, IMovieService
         return movie;
     }
 
-    public async Task<MovieViewModel> GetRouletteMovieAsync(string? userId)
+    public async Task<MovieViewModel> GetRouletteMovieAsync()
     {
-        if (userId != null)
-        {
-            var moviesCount = this._dbContext.Movies.Count();
-            var movieIndex = this._random.Next(0, moviesCount);
-
-            var userRatings = await this._dbContext.UserRatings
-                .Where(r => r.UserId.ToString() == userId)
-                .Select(r => new UserRating()
-                {
-                    Rating = r.Rating,
-                    MovieId = r.MovieId
-                })
-                .ToListAsync();
-
-            var movie = await this._dbContext
-                .Movies
-                .Skip(movieIndex)
-                .Include(m => m.Ratings)
-                .Select(m => new MovieViewModel()
-                {
-                    Title = m.Title,
-                    CoverPhotoUrl = m.CoverImageUrl,
-                    Duration = m.Duration,
-                    Id = m.Id,
-                    Rating = m.CalculateUserRating(),
-                    ReleaseYear = m.ReleaseDate.Year,
-                    UserRating = GetRating(userRatings, m.Id)
-                })
-                .FirstAsync();
-
-            return movie;
-        }
-        else
-        {
-            var moviesCount = this._dbContext.Movies.Count();
+        var moviesCount = this._dbContext.Movies.Count();
             var movieIndex = this._random.Next(0, moviesCount);
 
             var movie = await this._dbContext
@@ -294,11 +260,11 @@ public class MovieService : FilmIdeaService, IMovieService
                     Id = m.Id,
                     Rating = m.CalculateUserRating(),
                     ReleaseYear = m.ReleaseDate.Year,
+                    Description = m.Description
                 })
                 .FirstAsync();
 
             return movie;
-        }
     }
 
     public async Task<List<GenreViewModel>> GetAllGenresAsync()

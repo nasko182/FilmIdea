@@ -234,21 +234,13 @@ public class MovieServiceTest
     }
 
     [Test]
-    public async Task GetRouletteMovieAsyncShouldReturnMovieWithUserRatingIfUserIdIsValid()
+    public async Task GetRouletteMovieAsyncShouldReturnMovie()
     {
         var userId = "2532DDAA-63F0-4DE8-71CB-08DB8C333233";
 
-        var resultMovie = await this._movieService.GetRouletteMovieAsync(userId);
+        var resultMovie = await this._movieService.GetRouletteMovieAsync();
 
         Assert.That(resultMovie.UserRating, Is.EqualTo(0));
-    }
-
-    [Test]
-    public async Task GetRouletteMovieAsyncShouldReturnMovieWithNullUserRatingIfUserIdIsNull()
-    {
-        var resultMovie = await this._movieService.GetRouletteMovieAsync(null);
-
-        Assert.That(resultMovie.UserRating, Is.Null);
     }
 
     [Test]

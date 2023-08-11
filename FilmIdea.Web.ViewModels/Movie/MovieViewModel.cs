@@ -23,5 +23,7 @@
 
     public bool HasMovieInWatchlist { get; set; }
 
+    public string? Description { get; set; }
+
     public IEnumerable<TopSectionMovieViewModel> Movies { get; set; }
 }

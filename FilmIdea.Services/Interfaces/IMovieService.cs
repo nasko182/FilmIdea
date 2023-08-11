@@ -1,7 +1,5 @@
 ﻿namespace FilmIdea.Services.Data.Interfaces;
 
-using FilmIdea.Data.Models;
-using FilmIdea.Web.ViewModels.Actor;
 using Models.Movies;
 using Web.ViewModels.Comment;
 using Web.ViewModels.Genre;
@@ -26,7 +24,7 @@ public interface IMovieService
 
     Task<MovieDetailsViewModel?> GetMovieDetailsAsync(int movieId, string userId);
 
-    Task<MovieViewModel> GetRouletteMovieAsync(string? userId);
+    Task<MovieViewModel> GetRouletteMovieAsync();
 
     Task<List<GenreViewModel>> GetAllGenresAsync();
 

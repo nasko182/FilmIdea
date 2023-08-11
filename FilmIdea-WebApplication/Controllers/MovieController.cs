@@ -43,7 +43,6 @@ public class MovieController : BaseController
     //TODO: Edit views to be more beautiful
 
     //TODO: Edit edit roulette view
-    //TODO: Edit all 
 
 
     private readonly IMovieService _movieService;
@@ -157,14 +156,9 @@ public class MovieController : BaseController
         try
         {
             MovieViewModel movie;
-            if (this.IsAuthenticated())
-            {
-                movie = await this._movieService.GetRouletteMovieAsync(this.GetUserId());
-            }
-            else
-            {
-                movie = await this._movieService.GetRouletteMovieAsync(null);
-            }
+
+            movie = await this._movieService.GetRouletteMovieAsync();
+
 
             this.TempData["LastAction"] = this.ControllerContext.ActionDescriptor.ActionName;
             this.TempData["LastController"] = this.ControllerContext.ActionDescriptor.ControllerName;
