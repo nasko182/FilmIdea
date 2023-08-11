@@ -22,6 +22,7 @@ public class SwipeService : FilmIdeaService, ISwipeService
         return await this._dbContext.Movies
             .Where(m=> !m.PassedUsers.Any(pm=> pm.MovieId == m.Id && pm.UserId == Guid.Parse(userId)))
             .OrderBy(m=>m.CoverImageUrl)
+            .Include(m=>m.Ratings)
             .Select(m=> new SwipeMovieViewModel()
             {
                 Id = m.Id,
@@ -35,7 +36,8 @@ public class SwipeService : FilmIdeaService, ISwipeService
                 Duration = m.Duration,
                 ReleaseYear = m.ReleaseDate.Year,
                 Title = m.Title,
-                TrailerUrl = m.TrailerUrl
+                TrailerUrl = m.TrailerUrl,
+                Rating = m.Ratings.Average(r=>r.Rating)
             })
             .ToListAsync();
     }

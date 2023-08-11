@@ -17,6 +17,7 @@
     var totalMinutes = Model.MovieDetails.Duration;
     var hours = $"{totalMinutes / 60}h";
     var minutes = $"{totalMinutes % 60}m";
+    var isAdminStr = User.IsAdmin() ? "admin" : "not";
 
     var serializedPhotos = Json.Serialize(Model.MovieDetails.Photos);
     var serializedVideos = Json.Serialize(Model.MovieDetails.Videos);
@@ -44,7 +45,12 @@
         <div class="d-flex justify-content-end">
 
             <div>FILMIDEA RATING</div>
-            <p style="font-size: 20px; margin-right: 20px"><strong>⭐</strong> @Model.MovieDetails.Rating/10</p>
+            <p style="font-size: 20px; margin-right: 20px"><strong>⭐</strong> @{
+                                                                                  double rating = Convert.ToDouble(Model.MovieDetails.Rating);
+
+                                                                                  string formattedRating = (Math.Abs(rating - Math.Round(rating, 2)) > 0.001) ? rating.ToString("N1") : rating.ToString("N0");
+                                                                              }
+                @formattedRating/10</p>
             @if (Model.MovieDetails.UserRating > 0)
             {
                 <div>YOUR RATING</div>
@@ -407,6 +413,7 @@
         var addRemoveDislike = '@Url.Action("AddRemoveDislike", "Movie")';
         var removeReview = '@Url.Action("DeleteReview", "Movie")';
         var removeComment = '@Url.Action("DeleteComment", "Movie")';
+        var isAdmin = '@User.IsAdmin()';
 
         var csrfToken = '@Antiforgery.GetAndStoreTokens(Context).RequestToken';
     </script>

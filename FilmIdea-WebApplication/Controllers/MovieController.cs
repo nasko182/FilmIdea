@@ -19,6 +19,9 @@ using FilmIdea.Data.Models;
 public class MovieController : BaseController
 {
     //TODO: Add More tests
+    //TODO: Everywhere where Critic is Write something use criticName in blue,  Everywhere where user write something use UserName in green, to be clear that this is critic
+    //TODO: Add button for becoming admin in user all
+    //TODO: Add cache is need somewhere(adding something, displayCollections), also remove cache is update(last(1:30))
     //TODO: check code coverage
 
     //TODO: Check all collections if empty (message?)
@@ -40,17 +43,12 @@ public class MovieController : BaseController
     //TODO: Add asp-append-version="true" to all scripts that invoke js files
 
     //TODO: Set cultureInfo.Invariant to every date
-    //TODO: Everywhere where Critic is Write something use criticName in blue,  Everywhere where user write something use UserName in green, to be clear that this is critic
-    //TODO: Add button for becoming admin in user all
-    //TODO: Add cache is need somewhere(adding something, displayCollections), also remove cache is update(last(1:30))
 
 
 
 
     //TODO: Edit views to be more beautiful
     //TODO: Edit Swipe View and Add Link to details on movie pic in swipe
-
-    //TODO: Like and dislike to not move when dislike
     
 
 

@@ -1,4 +1,6 @@
-﻿@model List<SwipeMovieViewModel>
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+
+@model List<SwipeMovieViewModel>
 @{
     ViewBag.Title = "Swipe";
     var jsonMovies = Json.Serialize(Model);
@@ -6,23 +8,59 @@
 <div id="movieData" data-movies='@Html.Raw(jsonMovies)'></div>
 
 <div class="center-container">
-    <h2>Swipe Genres</h2>
+    <h2>Swipe Movies</h2>
 </div>
 
-<div class="tinder-container">
+<div class="tinder-container center-container">
     @if (Model.Any())
     {
-        <div class="tinder-card-stack">
-            <div class="tinder-card">
-                <img src="@Model[0].CoverImageUrl" alt="@Model[0].Title" class="tinder-card-image" />
-                <h3>@Model[0].Title</h3>
-                <p>@Model[0].Description</p>
+        var movie = Model[0];
+        <div class="col-md-3  movie-card" style="width: 340px; height: 435px">
+            <div class="card position-relative h-100 border-0">
+                <div id="body" style="position: relative; height: 100%;">
+                    <a href="@Url.Action("Details", "Movie", new { movieId = movie.Id })">
+                        <img src="@movie.CoverImageUrl" class="card-img-top tinder-card-image" style="height: 435px" alt="@movie.Title">
+                    </a>
+                    <button class="btn btn-sm position-absolute top-0 mt-0 ms-0" style="right: 0;background-color: #5454548a; border: none; font-size: 20px; opacity: unset !important;" disabled>
+                        <p class="card-font">
+                            <strong>⭐</strong>
+                            <strong class="tinder-card-rating" style="color: white">
+                                @{
+                                    double rating = Convert.ToDouble(movie.Rating);
+
+                                    string formattedRating = (Math.Abs(rating - Math.Round(rating, 2)) > 0.001) ? rating.ToString("N1") : rating.ToString("N0");
+                                }
+                                @formattedRating
+                            </strong>
+                        </p>
+                    </button>
+                    <button class="btn-hide btn btn-secondary btn-sm position-absolute bottom-0 mt-0 ms-0 duration-button tinder-card-duration" style="left: 0;background-color: #5454548a; border: none; font-size: 20px;opacity: unset !important;" disabled>
+                        @{
+                            var totalMinutes = movie.Duration;
+                            var hours = $"{totalMinutes / 60}h";
+                            var minutes = $"{totalMinutes % 60}m";
+                        }
+                        @hours @minutes
+                    </button>
+                    <button id="more" class="btn btn-sm position-absolute mt-0 ms-0 duration-button" style="right: 10px; bottom: 0;background-color: #5454548a; border: none; font-size: 25px; border-radius: 30px;">
+                        👇🏻
+                    </button>
+                </div>
+                <div class="hidden" id="cardFooter">
+                    <div class="card-body card-footer mb-4">
+                        <h6 class="card-title h3"><strong>@movie.Title (@movie.ReleaseYear)</strong></h6>
+                        <p class="tinder-card-description">@movie.Description</p>
+                        <a id="tinder-card-trailer" class="btn btn-primary" href="@movie.TrailerUrl" target="_blank">Watch trailer</a>
+                    </div>
+                    <button class="tinder-btn tinder-btn-dislike dislike"><i class="fas fa-thumbs-down"></i></button>
+                    <button class="tinder-btn tinder-btn-like like"><i class="fas fa-thumbs-up"></i></button>
+                </div>
             </div>
         </div>
 
-        <div class="tinder-buttons">
-            <button class="tinder-btn tinder-btn-dislike" id="dislike"><i class="fas fa-thumbs-down"></i></button>
-            <button class="tinder-btn tinder-btn-like" id="like"><i class="fas fa-thumbs-up"></i></button>
+        <div class="tinder-buttons " id="tinderButtons">
+            <button class="tinder-btn tinder-btn-dislike dislike" ><i class="fas fa-thumbs-down"></i></button>
+            <button class="tinder-btn tinder-btn-like like"><i class="fas fa-thumbs-up"></i></button>
         </div>
     }
     else
@@ -47,6 +85,9 @@
         var addToUserWatchlistUrl = '@Url.Action("AddToUserWatchlist", "Movie")';
         var addToUserPassedList = '@Url.Action("PassMovie", "Swipe")';
         var resetUserPassedLisr = '@Url.Action("Reset", "Swipe")';
+
+        var csrfToken = '@Antiforgery.GetAndStoreTokens(Context).RequestToken';
+
     </script>
     <script src="~/js/Swipe.js" asp-append-version="true"></script>
 }

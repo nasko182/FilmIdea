@@ -14,10 +14,12 @@ if (showMore != null) {
 }
 
 
-document.getElementById("addPhotoBtn").addEventListener("click", function () {
-    document.getElementById("addPhoto").classList.toggle("hidden");
-});
+if (isAdmin == 'True') {
+    document.getElementById("addPhotoBtn").addEventListener("click", function () {
+        document.getElementById("addPhoto").classList.toggle("hidden");
+    });
 
-document.getElementById("addVideoBtn").addEventListener("click", function () {
-    document.getElementById("addVideo").classList.toggle("hidden");
-});
+    document.getElementById("addVideoBtn").addEventListener("click", function () {
+        document.getElementById("addVideo").classList.toggle("hidden");
+    });
+}

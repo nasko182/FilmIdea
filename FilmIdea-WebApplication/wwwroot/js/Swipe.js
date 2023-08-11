@@ -1,4 +1,6 @@
 ﻿$(document).ready(function () {
+    const likeBtns = document.querySelectorAll(".like");
+    const dislikeBtns = document.querySelectorAll(".dislike");
     var movies = $('#movieData').data('movies');
     var currentIndex = 0; // Declare and initialize the currentIndex
 
@@ -6,19 +8,32 @@
     function showMovie(index) {
         if (index < movies.length) {
             var movie = movies[index];
+            var rating = parseFloat(movie.rating);
+            var formattedRating = (Math.abs(rating - Math.round(rating, 2)) > 0.001) ? rating.toFixed(1) : rating.toFixed(0);
+
+            var totalMinutes = movie.duration;
+            var hours = Math.floor(totalMinutes / 60) + 'h';
+            var minutes = (totalMinutes % 60) + 'm';
+
+            var title = movie.title + " (" + movie.releaseYear + ")";
+
             $('.tinder-card-image').attr('src', movie.coverImageUrl);
-            $('.tinder-card h3').text(movie.title);
-            $('.tinder-card p').text(movie.description);
+            $('.tinder-card-rating').text(formattedRating);
+            $('.tinder-card-duration').text(hours +" "+ minutes);
+            $('.card-title').text(title);
+            $('.tinder-card-description').text(movie.description);
+            const trailerBtn = document.getElementById('tinder-card-trailer');
+            trailerBtn.setAttribute("href", movie.trailerUrl);
+            $("#cardFooter").addClass("hidden");
+            $("#tinderButtons").removeClass("hidden");
             shouldReloadPage = true;
         }
         else {
-            // All movies swiped, show a message or redirect to a new page
             if (shouldReloadPage) {
                 location.reload();
                 shouldReloadPage = false;
             }
-            //$('.tinder-card').html('<h3>No more movies available to swipe.</h3><h3>Do you want to start from the beginning?</h3 >');
-
+            
             $('.tinder-buttons').hide();
         }
     }
@@ -27,35 +42,63 @@
         currentIndex++;
         showMovie(currentIndex);
     }
+    dislikeBtns.forEach(function (dislikeBtn) {
+        dislikeBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
 
-    $('#dislike').on('click', function (e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
+            var movieId = movies[currentIndex].id;
 
-        var movieId = movies[currentIndex].id;
+            $.ajax({
+                type: 'POST',
+                url: addToUserPassedList,
+                headers: {
+                    'RequestVerificationToken': csrfToken
+                },
+                data: {
+                    movieId: movieId,
+                }
+            });
 
-        $.post(addToUserPassedList, {
-            movieId: movieId,
-        })
-
-        showNextMovie();
+            showNextMovie();
+        });
     });
 
-    $('#like').on('click', function (e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
+    likeBtns.forEach(function (likeBtn) {
+        likeBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
 
-        var movieId = movies[currentIndex].id;
+            var movieId = movies[currentIndex].id;
 
-        $.post(addToUserWatchlistUrl, {
-            movieId: movieId,
-        })
+            $.ajax({
+                type: 'POST',
+                url: addToUserWatchlistUrl,
+                headers: {
+                    'RequestVerificationToken': csrfToken
+                },
+                data: {
+                    movieId: movieId,
+                }
+            });
 
-        $.post(addToUserPassedList, {
-            movieId: movieId,
-        })
+            $.ajax({
+                type: 'POST',
+                url: addToUserPassedList,
+                headers: {
+                    'RequestVerificationToken': csrfToken
+                },
+                data: {
+                    movieId: movieId,
+                }
+            });
 
-        showNextMovie();
+            showNextMovie();
+        });
+    });
+    $("#more").click(function () {
+        $("#cardFooter").toggleClass("hidden");
+        $("#tinderButtons").toggleClass("hidden");
     });
 
     // Show the first movie initially

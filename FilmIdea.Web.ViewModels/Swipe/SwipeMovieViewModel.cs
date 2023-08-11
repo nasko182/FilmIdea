@@ -13,6 +13,7 @@ public class SwipeMovieViewModel
     public string Description { get; set; } = null!;
     public int ReleaseYear { get; set; } 
     public int Duration { get; set; }
+    public double Rating { get; set; }
     public string CoverImageUrl { get; set; } = null!;
     public string TrailerUrl { get; set;} = null!;
     public ICollection<GenreViewModel> Genres { get; set; }
