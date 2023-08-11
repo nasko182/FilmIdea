@@ -12,6 +12,8 @@ public class SwipeController : BaseController
     {
         this._swipeService = swipeService;
     }
+
+    [HttpGet]
     public async Task<IActionResult> Swipe()
     {
         try
@@ -29,6 +31,7 @@ public class SwipeController : BaseController
         }
     }
 
+    [HttpGet]
     public async Task<IActionResult> Reset()
     {
         try
@@ -44,6 +47,7 @@ public class SwipeController : BaseController
     }
 
 
+    [HttpGet]
     public async Task<IActionResult> PassMovie(int movieId)
     {
         try

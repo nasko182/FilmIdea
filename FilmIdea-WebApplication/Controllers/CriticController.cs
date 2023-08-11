@@ -1,5 +1,7 @@
 ﻿namespace FilmIdea.Web.Controllers;
 
+using Ganss.Xss;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 
@@ -9,7 +11,6 @@ using ViewModels.Critic;
 using static Common.NotificationMessageConstants;
 using static Common.SuccessMessagesConstants;
 using static Common.ExceptionMessagesConstants;
-using Ganss.Xss;
 
 public class CriticController : BaseController
 {
@@ -25,6 +26,7 @@ public class CriticController : BaseController
         this._sanitizer = new HtmlSanitizer();
     }
 
+    [HttpGet]
     public async Task<IActionResult> Become()
     {
         if (await this._criticService.CriticExistByUserIdAsync(this.GetUserId()))
@@ -93,18 +95,8 @@ public class CriticController : BaseController
     }
 
     [HttpGet]
-    public async Task<IActionResult> Details()
+    public async Task<IActionResult> Details(string criticId)
     {
-        var isCritic =await  this._criticService.CriticExistByUserIdAsync(this.GetUserId());
-        if (!isCritic)
-        {
-            TempData[ErrorMessage] = UnauthorizedAccessErrorMessage;
-
-            return this.RedirectToAction("Become");
-        }
-
-        var criticId =await this._criticService.GetCriticIdAsync(this.GetUserId());
-
         var model =await this._criticService.GetCriticDetailsByIdAsync(criticId!);
 
         return this.View(model);
@@ -178,7 +170,7 @@ public class CriticController : BaseController
             return View(sanitizedModel);
         }
         TempData[SuccessMessage] = "Critic was edited successfully!";
-        return RedirectToAction("Details", "Critic", new { Area = ""});
+        return RedirectToAction("Details", "Critic", new { Area = "",criticId});
     }
 
     [HttpGet]
@@ -205,7 +197,7 @@ public class CriticController : BaseController
             return this.RedirectToAction("Details");
         }
 
-        TempData[SuccessMessage] = "Critic was deleted successfully!";
+        TempData[SuccessMessage] = DeleteCriticSuccess;
 
         return RedirectToAction("Logout", "User", new { Area = "" });
     }

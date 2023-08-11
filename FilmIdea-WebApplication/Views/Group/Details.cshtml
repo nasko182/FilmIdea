@@ -1,4 +1,6 @@
-﻿@model DetailsGroupModel
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+
+@model DetailsGroupModel
 @{
     ViewBag.Title = $"{Model.Name} Details";
     Layout = "_GroupDetailsLayout";
@@ -47,10 +49,35 @@
     </div>
 </div>
 <input type="text" id="groupId" value="@Model.Id" style="display: none" />
+
 @section scripts {
     <script>
         var sendMessageUrl = '@Url.Action("SendMessage", "Group")';
         var leaveGroupUrl = '@Url.Action("LeaveGroup", "Group")';
         var EditGroupUrl = '@Url.Action("Edit", "Group")';
+
+        var csrfToken = '@Antiforgery.GetAndStoreTokens(Context).RequestToken';
     </script>
-    }
+
+    <script>
+        document.getElementById("leaveGroupButton").addEventListener("click", function () {
+            var groupInput = document.getElementById("groupId");
+            var groupId = groupInput.value.trim();
+
+            $.ajax({
+                type: 'POST',
+                url: leaveGroupUrl,
+                headers: {
+                    'RequestVerificationToken': csrfToken
+                },
+                data: {
+                    groupId: groupId,
+                }, success: function (data) {
+
+                    window.location.href = data.redirectUrl;
+                },
+
+            });
+        });
+    </script>
+}

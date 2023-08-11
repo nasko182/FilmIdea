@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 public class PhotoController : BaseController
 {
+    [HttpGet]
     public IActionResult All(string serializedPhotos)
     {
         var model = JsonSerializer.Deserialize<List<string>>(serializedPhotos);

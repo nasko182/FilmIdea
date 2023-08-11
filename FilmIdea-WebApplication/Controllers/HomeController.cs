@@ -1,12 +1,14 @@
 ﻿namespace FilmIdea.Web.Controllers;
 
-using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+using Infrastructure.Extensions;
 
 public class HomeController : BaseController
 {
     [AllowAnonymous]
+    [HttpGet]
     public IActionResult Index()
     {
         if (User.IsAdmin())
@@ -21,6 +23,7 @@ public class HomeController : BaseController
     }
 
     [AllowAnonymous]
+    [HttpGet]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error(int statusCode)
     {

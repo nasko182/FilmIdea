@@ -15,7 +15,8 @@ public class ActorController : BaseController
     }
 
     [AllowAnonymous]
-    public async Task<IActionResult> Details(int actorId, string information)
+    [HttpGet]
+    public async Task<IActionResult> Details(int actorId)
     {
         try
         {

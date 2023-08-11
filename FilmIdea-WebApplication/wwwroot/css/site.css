@@ -650,13 +650,14 @@ h3.title {
 .actor-name {
     font-size: 36px;
     margin-top: 20px;
+    margin-bottom: 0;
     color: #007bff;
 }
 
 .actor-birthdate {
     font-size: 18px;
     color: #666;
-    margin-top: -10px;
+    margin-top: 0;
 }
 
 .actor-links {

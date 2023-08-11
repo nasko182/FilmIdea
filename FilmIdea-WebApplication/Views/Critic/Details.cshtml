@@ -1,16 +1,19 @@
-﻿@model CriticDetailsViewModel
+﻿@using FilmIdea.Web.Infrastructure.Extensions
+@model CriticDetailsViewModel
 @{
     ViewBag.Title = $"{Model.Name} - FilmIdea";
 }
 
-<div class="btn-container">
-    <a asp-area="" asp-controller="Critic" asp-action="Edit" class="btn btn-edit">Edit</a>
-    <a asp-area="" asp-controller="Critic" asp-action="Delete"
-       class="btn btn-delete"
-       onclick="return showDeleteConfirmation()">
-        Delete</a>
-</div>
-
+@if (Model.UseId==User.GetId())
+{
+    <div class="btn-container">
+        <a asp-area="" asp-controller="Critic" asp-action="Edit" class="btn btn-edit">Edit</a>
+        <a asp-area="" asp-controller="Critic" asp-action="Delete"
+           class="btn btn-delete"
+           onclick="return showDeleteConfirmation()">
+            Delete</a>
+    </div>
+}
 <div class="profile-container">
     <img class="img-round" src="@Model.ProfileImageUrl" alt="Profile Image" />
     <h1>@Model.Name</h1>
@@ -21,7 +24,7 @@
 </div>
 
 @section scripts {
-    <script src="~/js/delete.js"></script>
+    <script src="~/js/delete.js" asp-append-version="true"></script>
 }
 
 

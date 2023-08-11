@@ -25,19 +25,19 @@
     <div class="form-group">
         <label for="Users">Select Users</label>
         <input type="text" class="form-control" id="UserSearch" placeholder="Enter a username">
-        <div id="usersSection" style="display: none">
+        <div id="usersSection" style="display: none" >
             @foreach (var user in Model.AllUsers)
             {
                 var isSelected = Model.GroupData.UsersIds.Contains(user.Id);
                 <label>
-                    <input type="checkbox" name="UsersIds" value="@user.Id" data-id="@user.Id" @(isSelected ? "checked" : "")>
+                    <input type="checkbox" name="UsersIds" value="@user.Id" data-id="@user.Id" @(isSelected ? "checked" : "") autocomplete="off">
                     @user.Username
                 </label>
             }
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary" id="editGroupButton" disabled>Edit Group</button>
+    <button type="submit" class="btn btn-primary mt-2" id="editGroupButton" disabled>Edit Group</button>
 
     <input type="hidden" id="groupId" name="groupId" value="@Model.Id">
 

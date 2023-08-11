@@ -15,7 +15,7 @@ public class DirectorController : BaseController
     }
 
     [AllowAnonymous]
-    public async Task<IActionResult> Details(int directorId, string information)
+    public async Task<IActionResult> Details(int directorId)
     {
         try
         {

@@ -11,7 +11,6 @@ using Web.ViewModels.Group;
 using Web.ViewModels.Message;
 using Web.ViewModels.Movie;
 using Web.ViewModels.User;
-using static Dropbox.Api.Files.ListRevisionsMode;
 
 public class GroupService : FilmIdeaService, IGroupService
 {
@@ -48,7 +47,12 @@ public class GroupService : FilmIdeaService, IGroupService
 
         if (model.UsersIds.Any())
         {
-            model.UsersIds.Add(userId);
+            
+            this._dbContext.GroupsUsers.Add(new GroupUser()
+            {
+                GroupId = group.Id,
+                UserId = Guid.Parse(userId)
+            });
             foreach (var user in model.UsersIds)
             {
                 if (user != null)
@@ -94,7 +98,6 @@ public class GroupService : FilmIdeaService, IGroupService
 
         if (group == null)
         {
-            // Handle the case where the entity is not found
             return;
         }
 
@@ -226,7 +229,7 @@ public class GroupService : FilmIdeaService, IGroupService
             throw new InvalidOperationException("Invalid group");
         }
         var groupUser = group.GroupUsers
-            .FirstOrDefault(gu => gu.UserId.ToString() == userId && gu.GroupId.ToString() == groupId);
+            .FirstOrDefault(gu => gu.UserId.ToString() == userId);
         if (groupUser == null)
         {
             throw new InvalidOperationException("Invalid group");

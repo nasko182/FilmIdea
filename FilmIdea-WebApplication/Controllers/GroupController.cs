@@ -1,7 +1,9 @@
 ﻿namespace FilmIdea.Web.Controllers;
 
 using Ganss.Xss;
+
 using Microsoft.AspNetCore.Mvc;
+
 using Services.Data.Interfaces;
 using ViewModels.Group;
 
@@ -18,6 +20,8 @@ public class GroupController : BaseController
         this._groupService = groupService;
         this._sanitizer = new HtmlSanitizer();
     }
+
+    [HttpGet]
     public async Task<IActionResult> All()
     {
         try
@@ -32,6 +36,7 @@ public class GroupController : BaseController
         }
     }
 
+    [HttpGet]
     public async Task<IActionResult> Details(string groupId)
     {
         try
@@ -48,6 +53,7 @@ public class GroupController : BaseController
         }
     }
 
+    [HttpGet]
     public async Task<IActionResult> Create()
     {
         try
@@ -91,6 +97,7 @@ public class GroupController : BaseController
         return this.View(model);
     }
 
+    [HttpGet]
     public async Task<IActionResult> Edit(string icon, string name, string userIds, string groupId)
     {
         List<string> userIdList = userIds.Split(",").ToList();
@@ -161,7 +168,6 @@ public class GroupController : BaseController
             TempData[ErrorMessage] = GeneralErrorMessage;
         }
 
-        return this.RedirectToAction("All");
-
+        return Json(new { redirectUrl = Url.Action("All") });
     }
 }

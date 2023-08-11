@@ -75,6 +75,7 @@ public class CriticService : FilmIdeaService, ICriticService
         return new CriticDetailsViewModel
         {
             Id = critic.Id.ToString(),
+            UseId =critic.UserId.ToString() ,
             Name = critic.Name,
             Bio = critic.Bio,
             ProfileImageUrl = critic.ProfileImageUrl,
@@ -85,16 +86,17 @@ public class CriticService : FilmIdeaService, ICriticService
     public async Task<EditCriticViewModel> GetCriticForEditByIdAsync(string id)
     {
         var critic = await this._dbContext.Critics
-            .Select(c => new EditCriticViewModel
-            {
-                Name = c.Name,
-                Bio = c.Bio,
-                DateOfBirth = c.DateOfBirth,
-                ProfileImageUrl = c.ProfileImageUrl
-            })
-            .FirstAsync();
+            .FirstAsync(c => c.Id.ToString() == id);
 
-        return critic;
+        var model = new EditCriticViewModel()
+        {
+            Name = critic.Name,
+            Bio = critic.Bio,
+            DateOfBirth = critic.DateOfBirth,
+            ProfileImageUrl = critic.ProfileImageUrl
+        };
+
+        return model;
     }
 
     public async Task EditCriticByIdAndModelAsync(string criticId, EditCriticViewModel model)

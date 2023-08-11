@@ -1,15 +1,15 @@
 ﻿namespace FilmIdea.Web.Controllers;
 
+using Griesoft.AspNetCore.ReCaptcha;
+using Ganss.Xss;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNetCore.Authentication;
 
-using Griesoft.AspNetCore.ReCaptcha;
-
 using Data.Models;
-using Ganss.Xss;
 using ViewModels.User;
 
 using static Common.NotificationMessageConstants;
