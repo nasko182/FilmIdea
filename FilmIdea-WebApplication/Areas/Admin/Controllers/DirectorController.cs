@@ -121,7 +121,7 @@ public class DirectorController : BaseAdminController
     {
         var imageName = photo.Name + "_Image.jpg";
         var folderName = $"ImagesDb/Directors/Photos/{photo.Name}";
-        string photoUrl = string.Empty;
+        string photoUrl;
         try
         {
             photoUrl = await this.UploadPhoto(photo, folderName, imageName);
@@ -129,6 +129,8 @@ public class DirectorController : BaseAdminController
         catch (Exception e)
         {
             TempData[ErrorMessage] = e.Message;
+
+            return this.RedirectToAction("Details", "Director", new { Area = "", directorId });
         }
 
         await this._directorService.AddPhoto(directorId, photoUrl);
@@ -142,7 +144,7 @@ public class DirectorController : BaseAdminController
     {
         var imageName = video.Name + "_Video.mp4";
         var folderName = $"VideosDb/Directors/Videos/{video.Name}";
-        string videoUrl = string.Empty;
+        string videoUrl;
         try
         {
             videoUrl = await this.UploadVideo(video, folderName, imageName);
@@ -150,6 +152,8 @@ public class DirectorController : BaseAdminController
         catch (Exception e)
         {
             TempData[ErrorMessage] = e.Message;
+
+            return this.RedirectToAction("Details", "Director", new { Area = "", directorId });
         }
 
         await this._directorService.AddVideo(directorId, videoUrl);
