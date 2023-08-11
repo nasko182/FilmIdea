@@ -20,193 +20,193 @@ public class MovieGenreSeeder
             },
             new MovieGenre()
             {
-                GenreId = 1006,
-                MovieId = 1
+                MovieId = 1006,
+                GenreId = 1
             },
             new MovieGenre()
             {
-                GenreId = 1007,
-                MovieId =1
+                MovieId = 1007,
+                GenreId =1
             },
             new MovieGenre()
             {
-                GenreId = 1010,
-                MovieId =1
+                MovieId = 1010,
+                GenreId =1
             },
             new MovieGenre()
             {
-                GenreId = 1014,
-                MovieId =1
+                MovieId = 1014,
+                GenreId =1
             },
             new MovieGenre()
             {
-                GenreId = 2,
-                MovieId =1
+                MovieId = 2,
+                GenreId =1
             },
             new MovieGenre()
             {
-                GenreId = 1007,
-                MovieId =2
+                MovieId = 1007,
+                GenreId =2
             },
             new MovieGenre()
             {
-                GenreId = 1017,
-                MovieId =2
+                MovieId = 1017,
+                GenreId =2
             },
             new MovieGenre()
             {
-                GenreId = 1012,
-                MovieId =4
+                MovieId = 1012,
+                GenreId =4
             },
             new MovieGenre()
             {
-                GenreId = 1013,
-                MovieId =4
+                MovieId = 1013,
+                GenreId =4
             },
             new MovieGenre()
             {
-                GenreId = 1014,
-                MovieId =4
+                MovieId = 1014,
+                GenreId =4
             },
             new MovieGenre()
             {
-                GenreId = 1003,
-                MovieId =5
+                MovieId = 1003,
+                GenreId =5
             },
             new MovieGenre()
             {
-                GenreId = 1009,
-                MovieId =5
+                MovieId = 1009,
+                GenreId =5
             },
             new MovieGenre()
             {
-                GenreId = 1013,
-                MovieId =5
+                MovieId = 1013,
+                GenreId =5
             },
             new MovieGenre()
             {
-                GenreId = 1015,
-                MovieId =5
+                MovieId = 1015,
+                GenreId =5
             },
             new MovieGenre()
             {
-                GenreId = 1012,
-                MovieId =7
+                MovieId = 1012,
+                GenreId =7
             },
             new MovieGenre()
             {
-                GenreId = 1013,
-                MovieId =7
+                MovieId = 1013,
+                GenreId =7
             },
             new MovieGenre()
             {
-                GenreId = 1010,
-                MovieId =10
+                MovieId = 1010,
+                GenreId =10
             },
             new MovieGenre()
             {
-                GenreId = 1017,
-                MovieId =10
+                MovieId = 1017,
+                GenreId =10
             },
             new MovieGenre()
             {
-                GenreId = 1006,
-                MovieId =11
+                MovieId = 1006,
+                GenreId =11
             },
             new MovieGenre()
             {
-                GenreId = 1007,
-                MovieId =11
+                MovieId = 1007,
+                GenreId =11
             },
             new MovieGenre()
             {
-                GenreId = 1008,
-                MovieId =11
+                MovieId = 1008,
+                GenreId =11
             },
             new MovieGenre()
             {
-                GenreId = 1010,
-                MovieId =11
+                MovieId = 1010,
+                GenreId =11
             },
             new MovieGenre()
             {
-                GenreId = 1012,
-                MovieId =11
+                MovieId = 1012,
+                GenreId =11
             },
             new MovieGenre()
             {
-                GenreId = 1015,
-                MovieId =11
+                MovieId = 1015,
+                GenreId =11
             },
             new MovieGenre()
             {
-                GenreId = 1016,
-                MovieId =11
+                MovieId = 1016,
+                GenreId =11
             },
             new MovieGenre()
             {
-                GenreId = 1017,
-                MovieId =11
+                MovieId = 1017,
+                GenreId =11
             },
             new MovieGenre()
             {
-                GenreId = 1020,
-                MovieId =11
+                MovieId = 1020,
+                GenreId =11
             },
             new MovieGenre()
             {
-                GenreId = 1003,
-                MovieId =14
+                MovieId = 1003,
+                GenreId =14
             },
             new MovieGenre()
             {
-                GenreId = 1011,
-                MovieId =15
+                MovieId = 1011,
+                GenreId =15
             },
             new MovieGenre()
             {
-                GenreId = 1014,
-                MovieId =15
+                MovieId = 1014,
+                GenreId =15
             },
             new MovieGenre()
             {
-                GenreId = 1003,
-                MovieId =16
+                MovieId = 1003,
+                GenreId =16
             },
             new MovieGenre()
             {
-                GenreId = 1006,
-                MovieId =17
+                MovieId = 1006,
+                GenreId =17
             },
             new MovieGenre()
             {
-                GenreId = 1011,
-                MovieId =17
+                MovieId = 1011,
+                GenreId =17
             },
             new MovieGenre()
             {
-                GenreId = 1007,
-                MovieId =19
+                MovieId = 1007,
+                GenreId =19
             },
             new MovieGenre()
             {
-                GenreId = 1008,
-                MovieId =19
+                MovieId = 1008,
+                GenreId =19
             },
             new MovieGenre()
             {
-                GenreId = 1011,
-                MovieId =19
+                MovieId = 1011,
+                GenreId =19
             },
             new MovieGenre()
             {
-                GenreId = 1015,
-                MovieId =19
+                MovieId = 1015,
+                GenreId =19
             },
             new MovieGenre()
             {
-                GenreId = 1016,
-                MovieId =19
+                MovieId = 1016,
+                GenreId =19
             },
         };
     }

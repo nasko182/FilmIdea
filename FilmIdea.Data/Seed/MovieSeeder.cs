@@ -87,10 +87,10 @@ public class MovieSeeder
                 Id = 1009,
                 Title = "The Hangover II",
                 Description = "Three buddies wake up from a bachelor party in Las Vegas, with no memory of the previous night and the bachelor missing. They make their way around the city in order to find their friend before his wedding.",
-                Duration = 1006,
+                Duration = 142,
                 ReleaseDate = new DateTime(2007,06,05),
                 CoverImageUrl = "https://dl.dropboxusercontent.com/scl/fi/7bgm1wt5sxnk0wtzc3y2r/The-Hangover-II_CoverImage.jpg?rlkey=e80yfei74yh1qzyr9j9lxogfz",
-                DirectorId = 10,
+                DirectorId = 1006,
                 TrailerUrl = "https://dl.dropboxusercontent.com/scl/fi/aboafm63fb89qirpszl44/The-Hangover-II_Trailer.mp4?rlkey=l23lend702b87v0ekri7bpnaz",
             },
             new Movie()
@@ -189,7 +189,7 @@ public class MovieSeeder
                 Duration = 146,
                 ReleaseDate = new DateTime(2017,09,20),
                 CoverImageUrl = "https://dl.dropboxusercontent.com/scl/fi/vral4iavrbc0lk0x36vel/Blade-Runner-2049_CoverImage.jpg?rlkey=kgnpjc3nelyba4rgoyml400zy",
-                DirectorId = 112,
+                DirectorId = 1012,
                 TrailerUrl = "https://dl.dropboxusercontent.com/scl/fi/sn346bvsm61xc0swlvb1x/Blade-Runner-2049_Trailer.mp4?rlkey=gyxp5gzest3b56peqk3tars7j",
             },
 
