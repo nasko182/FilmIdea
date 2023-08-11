@@ -27,6 +27,7 @@ public class MovieController : BaseController
     //TODO: Check all collections if empty (message?)
     //TODO: Check if admin work when get project from github with new db
 
+    //TODO: Set cultureInfo.Invariant to every date
     //TODO: Check site like user,critic,admin and un logged if btn don't work add asp-area=""
 
     //TODO: Check all views and js for more todo
@@ -39,17 +40,12 @@ public class MovieController : BaseController
     //TODO: Add not authenticated where redirect to login ??
     //TODO: Remove all un used classes and methods Like databaseSeeder
 
-    //TODO: Move all js in files
-    //TODO: Add asp-append-version="true" to all scripts that invoke js files
-
-    //TODO: Set cultureInfo.Invariant to every date
-
-
-
-
     //TODO: Edit views to be more beautiful
-    //TODO: Edit Swipe View and Add Link to details on movie pic in swipe
-    
+
+    //TODO: @*TODO: Make Watchlist button work correctly*@
+    //TODO: edit movies partial
+    //TODO: Move all js in files
+
 
 
     private readonly IMovieService _movieService;

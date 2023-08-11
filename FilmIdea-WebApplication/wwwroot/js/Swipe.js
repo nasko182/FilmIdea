@@ -2,7 +2,7 @@
     const likeBtns = document.querySelectorAll(".like");
     const dislikeBtns = document.querySelectorAll(".dislike");
     var movies = $('#movieData').data('movies');
-    var currentIndex = 0; // Declare and initialize the currentIndex
+    var currentIndex = 0; 
 
     var shouldReloadPage = false;
     function showMovie(index) {
@@ -101,6 +101,5 @@
         $("#tinderButtons").toggleClass("hidden");
     });
 
-    // Show the first movie initially
     showMovie(currentIndex);
 });
