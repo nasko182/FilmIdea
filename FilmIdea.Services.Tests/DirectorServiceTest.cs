@@ -222,4 +222,22 @@ public class DirectorServiceTest
 
         Assert.That(result, Is.Null);
     }
+
+    [Test]
+    public async Task AddPhotoShouldAddPhotoForActor()
+    {
+        var actorId = 1;
+        var photoUrl = "https://example.com/photo.jpg";
+
+        Assert.DoesNotThrowAsync(async () => await this._directorService.AddPhoto(actorId, photoUrl));
+    }
+
+    [Test]
+    public async Task AddVideoShouldAddVideoForActor()
+    {
+        var actorId = 1;
+        var videoUrl = "https://example.com/video.mp4";
+
+        Assert.DoesNotThrowAsync(async () => await this._directorService.AddVideo(actorId, videoUrl));
+    }
 }

@@ -18,10 +18,6 @@ using static Common.SuccessMessagesConstants;
 
 public class MovieController : BaseController
 {
-    //TODO: Check all using
-
-    //TODO: Add More tests
-
     private readonly IMovieService _movieService;
     private readonly ICriticService _criticService;
 

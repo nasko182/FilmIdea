@@ -7,6 +7,7 @@ using FilmIdea.Data;
 using Data.Interfaces;
 using Web.ViewModels.Comment;
 using Web.ViewModels.Review;
+using FilmIdea.Data.Models;
 
 [TestFixture]
 public class MovieServiceTest
@@ -537,5 +538,141 @@ public class MovieServiceTest
         await this._movieService.AddVideo(movie.Id, videoUrl);
 
         Assert.That(movie.Videos.Any(p => p.Url == videoUrl), Is.True);
+    }
+
+    [Test]
+    public async Task AddRemoveLikeAsyncShouldAddLike_WhenNotLikedBefore()
+    {
+        var model = new AddReviewViewModel
+        {
+            Title = "Title",
+            Rating = 6,
+            Content = "Anu content"
+        };
+
+        var movieId = 2;
+        var criticId = "93372a0a-b9f4-4bc5-8f53-e8da0bce2bfe";
+
+        await this._movieService.AddReviewAsync(model, movieId, criticId);
+
+        var reviewId = this._dbContext.Reviews.First().Id.ToString();
+
+        var userId = "15EB7825-840B-4528-71CC-08DB8C333233".ToLower();
+        
+        var likesBefore = await this._dbContext.Likes.CountAsync();
+        var result = await this._movieService.AddRemoveLikeAsync(reviewId, userId);
+        var likesAfter = await this._dbContext.Likes.CountAsync();
+        
+        Assert.AreEqual(likesBefore + 1, likesAfter);
+        Assert.AreEqual(1, result);
+    }
+
+    [Test]
+    public async Task AddRemoveLikeAsyncShouldRemoveLike_WhenLikedBefore()
+    {
+        var model = new AddReviewViewModel
+        {
+            Title = "Title",
+            Rating = 6,
+            Content = "Anu content"
+        };
+
+        var movieId = 2;
+        var criticId = "93372a0a-b9f4-4bc5-8f53-e8da0bce2bfe";
+
+        await this._movieService.AddReviewAsync(model, movieId, criticId);
+
+        var reviewId = this._dbContext.Reviews.First().Id.ToString();
+
+        var userId = "15EB7825-840B-4528-71CC-08DB8C333233".ToLower();
+        await this._movieService.AddRemoveLikeAsync(reviewId, userId);
+        
+        var likesBefore = await this._dbContext.Likes.CountAsync();
+        var result = await this._movieService.AddRemoveLikeAsync(reviewId, userId);
+        var likesAfter = await this._dbContext.Likes.CountAsync();
+
+        // Assert
+        Assert.AreEqual(likesBefore - 1, likesAfter);
+        Assert.AreEqual(0, result);
+    }
+
+    [Test]
+    public async Task AddRemoveDislikeAsyncShouldAddDislike_WhenNotDislikedBefore()
+    {
+        var model = new AddReviewViewModel
+        {
+            Title = "Title",
+            Rating = 6,
+            Content = "Anu content"
+        };
+
+        var movieId = 2;
+        var criticId = "93372a0a-b9f4-4bc5-8f53-e8da0bce2bfe";
+
+        await this._movieService.AddReviewAsync(model, movieId, criticId);
+
+        var reviewId = this._dbContext.Reviews.First().Id.ToString();
+
+        var userId = "15EB7825-840B-4528-71CC-08DB8C333233".ToLower();
+        
+        var dislikesBefore = await this._dbContext.Dislikes.CountAsync();
+        var result = await this._movieService.AddRemoveDislikeAsync(reviewId, userId);
+        var dislikesAfter = await this._dbContext.Dislikes.CountAsync();
+        
+        Assert.AreEqual(dislikesBefore + 1, dislikesAfter);
+        Assert.AreEqual(1, result);
+    }
+
+    [Test]
+    public async Task AddRemoveDislikeAsyncShouldRemoveDislike_WhenDislikedBefore()
+    {
+        var model = new AddReviewViewModel
+        {
+            Title = "Title",
+            Rating = 6,
+            Content = "Anu content"
+        };
+
+        var movieId = 2;
+        var criticId = "93372a0a-b9f4-4bc5-8f53-e8da0bce2bfe";
+
+        await this._movieService.AddReviewAsync(model, movieId, criticId);
+
+        var reviewId = this._dbContext.Reviews.First().Id.ToString();
+
+        var userId = "15EB7825-840B-4528-71CC-08DB8C333233".ToLower();
+        
+        await this._movieService.AddRemoveDislikeAsync(reviewId, userId);
+        
+        var dislikesBefore = await this._dbContext.Dislikes.CountAsync();
+        var result = await this._movieService.AddRemoveDislikeAsync(reviewId, userId);
+        var dislikesAfter = await this._dbContext.Dislikes.CountAsync();
+        
+        Assert.AreEqual(dislikesBefore - 1, dislikesAfter);
+        Assert.AreEqual(0, result);
+    }
+
+    [Test]
+    public async Task DeleteReviewAsyncShouldDeleteReviewAndRelatedComments()
+    {
+        var model = new AddReviewViewModel
+        {
+            Title = "Title",
+            Rating = 6,
+            Content = "Anu content"
+        };
+
+        var movieId = 2;
+        var criticId = "93372a0a-b9f4-4bc5-8f53-e8da0bce2bfe";
+
+        await this._movieService.AddReviewAsync(model, movieId, criticId);
+
+        var reviewId = this._dbContext.Reviews.First().Id.ToString();
+
+        await this._movieService.DeleteReviewAsync(reviewId);
+
+        // Assert
+        Assert.AreEqual(0, await this._dbContext.Reviews.CountAsync());
+        Assert.AreEqual(0, await this._dbContext.Comments.CountAsync());
     }
 }

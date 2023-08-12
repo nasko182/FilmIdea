@@ -221,4 +221,41 @@ public class ActorServiceTest
 
         Assert.That(result, Is.Null);
     }
+
+    [Test]
+    public async Task GetAllActorsAsyncShouldReturnAllActorsForMovie()
+    {
+        var movieId = 1;
+
+        var result = await this._actorService.GetAllActorsAsync(movieId);
+
+        Assert.IsNotNull(result);
+    }
+
+    [Test]
+    public async Task EditMovieActorsShouldModifyActorsForMovie()
+    {
+        var actorsIds = new List<int> { 1, 2, 3 };
+        var movieId = 1; 
+
+        Assert.DoesNotThrowAsync(async () => await this._actorService.EditMovieActors(actorsIds, movieId));
+    }
+
+    [Test]
+    public async Task AddPhotoShouldAddPhotoForActor()
+    {
+        var actorId = 1; 
+        var photoUrl = "https://example.com/photo.jpg";
+
+        Assert.DoesNotThrowAsync(async () => await this._actorService.AddPhoto(actorId, photoUrl));
+    }
+
+    [Test]
+    public async Task AddVideoShouldAddVideoForActor()
+    {
+        var actorId = 1; 
+        var videoUrl = "https://example.com/video.mp4"; 
+
+        Assert.DoesNotThrowAsync(async () => await this._actorService.AddVideo(actorId, videoUrl));
+    }
 }
