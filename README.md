@@ -41,7 +41,7 @@ FilmIdea is crafted using a diverse range of cutting-edge technologies and tools
 
 9. Dropbox: Integrating Dropbox API for efficient storage and retrieval of files, contributing to the seamless sharing of resources.
 
-10.Bootstrap: Incorporating Bootstrap framework for responsive and visually appealing UI design, ensuring compatibility across various devices.
+10. Bootstrap: Incorporating Bootstrap framework for responsive and visually appealing UI design, ensuring compatibility across various devices.
 
 11. Font Awesome Icons: Enhancing the visual aesthetics with a wide range of Font Awesome icons for intuitive navigation and visual cues.
 
