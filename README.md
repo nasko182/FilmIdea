@@ -115,9 +115,9 @@ Explore the various features and functionalities of FilmIdea, including movie re
 
 ![Database Diagram](FilmIdea-WebApplication/wwwroot/ReadMeImages/diagram.png)
 
-### Test Coverage
+### Services Test Coverage
 
-![Test Coverage](FilmIdea-WebApplication/wwwroot/ReadMeImages/testCoverage.png)
+![Test Coverage](FilmIdea-WebApplication/wwwroot/ReadMeImages/codeCoverage.png)
 
 ## App Images
 
