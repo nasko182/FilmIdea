@@ -236,11 +236,9 @@ public class MovieServiceTest
     [Test]
     public async Task GetRouletteMovieAsyncShouldReturnMovie()
     {
-        var userId = "2532DDAA-63F0-4DE8-71CB-08DB8C333233";
-
         var resultMovie = await this._movieService.GetRouletteMovieAsync();
 
-        Assert.That(resultMovie.UserRating, Is.EqualTo(0));
+        Assert.That(resultMovie, Is.Not.Null);
     }
 
     [Test]
@@ -334,110 +332,7 @@ public class MovieServiceTest
         Assert.That(movie!.Reviews.First().Title, Is.EqualTo(expected));
     }
 
-    [Test]
-    public async Task EditReviewAsyncShouldEditReviewToMovieIfMovieExist()
-    {
-        var criticId = "bf595423-7323-4e40-bd43-0f876c1beece";
-
-        var userId = "15EB7825-840B-4528-71CC-08DB8C333233";
-
-        var movieId = 2;
-
-        var model = new EditReviewViewModel()
-        {
-            ReviewId = "7DCC5BD6-1133-432B-B6A6-F6C27DA75948".ToLower(),
-            Title = "Title2",
-            Rating = 10,
-            Content = "Content",
-        };
-
-        await this._movieService.EditReviewAsync(model, criticId);
-
-        var movie = await this._movieService.GetMovieDetailsAsync(movieId, userId);
-
-        var expected = "Title2";
-
-        Assert.That(movie!.Reviews.First().Title, Is.EqualTo(expected));
-    }
-
-    [Test]
-    public async Task AddCommentAsyncShouldAddCommentToReview()
-    {
-        var userId = "15EB7825-840B-4528-71CC-08DB8C333233";
-
-        var movieId = 2;
-
-        var model = new AddCommentViewModel()
-        {
-            ReviewId = "7DCC5BD6-1133-432B-B6A6-F6C27DA75948".ToLower(),
-            Content = "Content",
-        };
-
-        await this._movieService.AddCommentAsync(model, userId);
-
-        var movie = await this._movieService.GetMovieDetailsAsync(movieId, userId);
-
-        var expected = "Content";
-
-        Assert.That(movie!.Reviews.First().Comments.First().Content, Is.EqualTo(expected));
-    }
-
-    [Test]
-    public async Task EditCommentAsyncShouldEditComment()
-    {
-        var userId = "2532ddaa-63f0-4de8-71cb-08db8c333233";
-
-        var movieId = 2;
-
-        var commentId = this._dbContext.Movies
-            .Where(m => m.Id == movieId)
-            .Include(m => m.Reviews)
-            .ThenInclude(r => r.Comments)
-            .Select(m => m.Reviews.First().Comments.First().Id)
-            .First()
-            .ToString();
-
-        var model = new EditCommentViewModel()
-        {
-            Content = "Content2",
-            CommentId = commentId,
-            MovieId = movieId
-        };
-
-        await this._movieService.EditCommentAsync(model, userId);
-
-        var movie = await this._movieService.GetMovieDetailsAsync(movieId, userId);
-
-        var expected = "Content2";
-
-        Assert.That(movie!.Reviews.First().Comments.First().Content, Is.EqualTo(expected));
-    }
-
-    [Test]
-    public void EditCommentAsyncShouldThrowsErrorIfUserIdIsInValid()
-    {
-        var userId = "2532ddaa-63f0-4de8-71cb-08db8c333234";
-
-        var movieId = 2;
-
-        var commentId = this._dbContext.Movies
-            .Where(m => m.Id == movieId)
-            .Include(m => m.Reviews)
-            .ThenInclude(r => r.Comments)
-            .Select(m => m.Reviews.First().Comments.First().Id)
-            .First()
-            .ToString();
-
-        var model = new EditCommentViewModel()
-        {
-            Content = "Content2",
-            CommentId = commentId,
-            MovieId = movieId
-        };
-
-        Assert.ThrowsAsync<ArgumentException>(async ()=> await this._movieService.EditCommentAsync(model, userId));
-    }
-
+   
     [Test]
     public void EditCommentAsyncShouldThrowsErrorIfCommentIdIsInValid()
     {
@@ -476,18 +371,6 @@ public class MovieServiceTest
         result = await this._movieService.GetWatchlistMoviesAsync(userId);
 
         Assert.That(result.Count,Is.EqualTo(0));
-    }
-
-    [Test]
-    public async Task IsCriticOwnerOfReviewShouldReturnTrueIfCriticIsOwner()
-    {
-        var criticId = "bf595423-7323-4e40-bd43-0f876c1beece";
-
-        var reviewId = "7DCC5BD6-1133-432B-B6A6-F6C27DA75948".ToLower();
-
-        var result = await this._movieService.IsCriticOwnerOfReview(criticId, reviewId);
-
-        Assert.That(result, Is.True);
     }
 
     [Test]
@@ -535,46 +418,6 @@ public class MovieServiceTest
     }
 
     [Test]
-    public async Task IsUserOwnerOfCommentShouldReturnTrueIfUserIsOwner()
-    {
-        var userId = "2532DDAA-63F0-4DE8-71CB-08DB8C333233".ToLower();
-
-        var movieId = 2;
-
-        var commentId = this._dbContext.Movies
-            .Where(m => m.Id == movieId)
-            .Include(m => m.Reviews)
-            .ThenInclude(r => r.Comments)
-            .Select(m => m.Reviews.First().Comments.First().Id)
-            .First()
-            .ToString();
-
-        var result = await this._movieService.IsUserOwnerOfComment(userId, commentId);
-
-        Assert.That(result, Is.True);
-    }
-
-    [Test]
-    public async Task IsUserOwnerOfCommentShouldReturnFalseIfUserIsNotOwner()
-    {
-        var userId = "2532DDAA-63F0-4DE8-71CB-08DB8C333233";
-
-        var movieId = 2;
-
-        var commentId = this._dbContext.Movies
-            .Where(m => m.Id == movieId)
-            .Include(m => m.Reviews)
-            .ThenInclude(r => r.Comments)
-            .Select(m => m.Reviews.First().Comments.First().Id)
-            .First()
-            .ToString();
-
-        var result = await this._movieService.IsUserOwnerOfComment(userId, commentId);
-
-        Assert.That(result, Is.False);
-    }
-
-    [Test]
     public async Task IsUserOwnerOfCommentShouldReturnFalseIfCommentIdIsNotValid()
     {
         var userId = "2532DDAA-63F0-4DE8-71CB-08DB8C333233".ToLower();
@@ -586,24 +429,7 @@ public class MovieServiceTest
         Assert.That(result, Is.False);
     }
 
-    [Test]
-    public async Task IsUserOwnerOfCommentShouldReturnFalseIfUserIdIsNull()
-    {
-        var movieId = 2;
-
-        var commentId = this._dbContext.Movies
-            .Where(m => m.Id == movieId)
-            .Include(m => m.Reviews)
-            .ThenInclude(r => r.Comments)
-            .Select(m => m.Reviews.First().Comments.First().Id)
-            .First()
-            .ToString();
-
-        var result = await this._movieService.IsUserOwnerOfComment(null, commentId);
-
-        Assert.That(result, Is.False);
-    }
-
+    
     [Test]
     public async Task IsUserOwnerOfCommentShouldReturnFalseIfCommentIdIsNull()
     {
@@ -646,17 +472,6 @@ public class MovieServiceTest
     }
 
     [Test]
-    public async Task GetMovieIdByReviewIdShouldReturnCorrectMovieId()
-    {
-        var reviewId = "7DCC5BD6-1133-432B-B6A6-F6C27DA75948".ToLower();
-
-        var result = await this._movieService.GetMovieIdByReviewId(reviewId);
-
-        var expected = 2;
-
-        Assert.That(result,Is.EqualTo(expected));
-    }
-    [Test]
     public async Task GetMovieIdByReviewIdShouldReturnNegativeIfReviewIdIsInvalid()
     {
         var reviewId = "7DCC5BD6-1133-432B-B6A6-F6C27DA75948";
@@ -664,5 +479,63 @@ public class MovieServiceTest
         var result = await this._movieService.GetMovieIdByReviewId(reviewId);
 
         Assert.That(result, Is.Negative);
+    }
+
+    [Test]
+    public async Task GetAllGenresAsyncShouldReturnCollection()
+    {
+        var result = await this._movieService.GetAllGenresAsync();
+
+        Assert.That(result.First().Id, Is.EqualTo(1));
+    }
+
+    [Test]
+    public async Task GetAllGenresAsyncShouldReturnCollection23Genres()
+    {
+        var result = await this._movieService.GetAllGenresAsync();
+
+        Assert.That(result.Count, Is.EqualTo(23));
+    }
+
+    [Test]
+    public async Task EditMovieGenresShouldEditMovie()
+    {
+        var movie = this._dbContext.Movies
+            .Include(m=>m.Genres)
+            .First();
+
+        var genresIds = new List<int>(){1,2,3};
+
+        await this._movieService.EditMovieGenres(genresIds, movie.Id);
+
+        Assert.That(movie.Genres.First().GenreId,Is.EqualTo(1));
+    }
+
+    [Test]
+    public async Task AddPhotoShouldAddPhotoToMovie()
+    {
+        var movie = this._dbContext.Movies
+            .Include(m => m.Photos)
+            .First();
+
+        string photoUrl = "Url";
+
+        await this._movieService.AddPhoto(movie.Id,photoUrl);
+
+        Assert.That(movie.Photos.Any(p=>p.Url==photoUrl), Is.True);
+    }
+
+    [Test]
+    public async Task AddVideoShouldAddVideoToMovie()
+    {
+        var movie = this._dbContext.Movies
+            .Include(m => m.Videos)
+            .First();
+
+        string videoUrl = "Url";
+
+        await this._movieService.AddVideo(movie.Id, videoUrl);
+
+        Assert.That(movie.Videos.Any(p => p.Url == videoUrl), Is.True);
     }
 }

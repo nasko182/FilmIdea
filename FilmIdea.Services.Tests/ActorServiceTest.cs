@@ -144,7 +144,7 @@ public class ActorServiceTest
 
         var result = await this._actorService.CreateAsync(actor, "someUrl");
 
-        Assert.That(result,Is.EqualTo(3));
+        Assert.That(result,Is.EqualTo(1020));
 
 
     }

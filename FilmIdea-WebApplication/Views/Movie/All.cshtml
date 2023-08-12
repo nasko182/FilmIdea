@@ -94,6 +94,7 @@
     <h2 class="text-center">No movies found by the given criteria!</h2>
 }
 
+
 <partial name="_MoviesPartial" model="@Model.Movies.ToList()" />
 
 @{
@@ -102,7 +103,7 @@
     {
         previousPage = 1;
     }
-    var maxPage = Math.Ceiling((double)Model.TotalMovies / Model.MoviesPerPage);
+    var maxPage = (int)Math.Ceiling((double)Model.TotalMovies / Model.MoviesPerPage);
 }
 <div class="row mb-5">
     <div class="col-md-6 d-grid fixed-bottom gap-2 d-md-flex justify-content-md-start">
@@ -125,7 +126,8 @@
     <div class="col-md-6 d-grid w-100 fixed-bottom gap-2 d-md-flex justify-content-md-end">
         @if (!shouldButtonBeDisabled)
         {
-            <a class="page-btn"
+            <a class="page-btn 
+@(shouldButtonBeDisabled ? "disabled" : string.Empty)"
                asp-controller="Movie"
                asp-action="All"
                asp-route-currentPage="@(Model.CurrentPage + 1)"
