@@ -201,7 +201,7 @@ public class DirectorService : FilmIdeaService, IDirectorService
         }
     }
 
-    public async Task AddPhoto(int directorId, string photoUrl)
+    public async Task AddPhotoAsync(int directorId, string photoUrl)
     {
 
         await this._dbContext.Photos.AddAsync(new Photo
@@ -220,7 +220,7 @@ public class DirectorService : FilmIdeaService, IDirectorService
         }
     }
 
-    public async Task AddVideo(int directorId, string videoUrl)
+    public async Task AddVideoAsync(int directorId, string videoUrl)
     {
         await this._dbContext.Videos.AddAsync(new Video
         {

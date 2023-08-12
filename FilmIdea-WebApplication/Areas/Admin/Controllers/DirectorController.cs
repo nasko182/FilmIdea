@@ -133,7 +133,7 @@ public class DirectorController : BaseAdminController
             return this.RedirectToAction("Details", "Director", new { Area = "", directorId });
         }
 
-        await this._directorService.AddPhoto(directorId, photoUrl);
+        await this._directorService.AddPhotoAsync(directorId, photoUrl);
 
         return this.RedirectToAction("Details", "Director", new { Area = "", directorId });
 
@@ -156,7 +156,7 @@ public class DirectorController : BaseAdminController
             return this.RedirectToAction("Details", "Director", new { Area = "", directorId });
         }
 
-        await this._directorService.AddVideo(directorId, videoUrl);
+        await this._directorService.AddVideoAsync(directorId, videoUrl);
 
         return this.RedirectToAction("Details", "Director", new { Area = "", directorId });
 

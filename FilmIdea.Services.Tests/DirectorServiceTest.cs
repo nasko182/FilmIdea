@@ -229,7 +229,7 @@ public class DirectorServiceTest
         var actorId = 1;
         var photoUrl = "https://example.com/photo.jpg";
 
-        Assert.DoesNotThrowAsync(async () => await this._directorService.AddPhoto(actorId, photoUrl));
+        Assert.DoesNotThrowAsync(async () => await this._directorService.AddPhotoAsync(actorId, photoUrl));
     }
 
     [Test]
@@ -238,6 +238,6 @@ public class DirectorServiceTest
         var actorId = 1;
         var videoUrl = "https://example.com/video.mp4";
 
-        Assert.DoesNotThrowAsync(async () => await this._directorService.AddVideo(actorId, videoUrl));
+        Assert.DoesNotThrowAsync(async () => await this._directorService.AddVideoAsync(actorId, videoUrl));
     }
 }

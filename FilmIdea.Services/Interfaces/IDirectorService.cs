@@ -14,7 +14,7 @@ public interface IDirectorService
 
     Task DeleteDirectorByIdAsync(int id);
 
-    Task AddPhoto(int directorId, string photoUrl);
+    Task AddPhotoAsync(int directorId, string photoUrl);
 
-    Task AddVideo(int directorId, string videoUrl);
+    Task AddVideoAsync(int directorId, string videoUrl);
 }

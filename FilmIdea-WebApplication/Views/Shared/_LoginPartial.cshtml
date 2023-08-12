@@ -7,7 +7,7 @@
     var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
     bool isCritic = await CriticService.CriticExistByUserIdAsync(userId);
 
-    var criticName = await CriticService.GetCriticName(userId!);
+    var criticName = await CriticService.GetCriticNameAsync(userId!);
 
     var criticId = await CriticService.GetCriticIdAsync(userId);
 

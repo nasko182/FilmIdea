@@ -63,7 +63,7 @@ public class MovieController : BaseAdminController
         int movieId;
         try
         {
-            movieId = await this._movieService.Create(model, photoUrl,videoUrl);
+            movieId = await this._movieService.CreateAsync(model, photoUrl,videoUrl);
         }
         catch (Exception)
         {
@@ -142,7 +142,7 @@ public class MovieController : BaseAdminController
     {
 
         var genresIdsList = genresIds.Split(",").Select(id => int.Parse(id)).ToList();
-        await this._movieService.EditMovieGenres(genresIdsList, movieId);
+        await this._movieService.EditMovieGenresAsync(genresIdsList, movieId);
 
         return RedirectToAction("Details", "Movie", new { Area = "", movieId });
     }
@@ -164,7 +164,7 @@ public class MovieController : BaseAdminController
             return this.RedirectToAction("Details", "Movie", new { Area = "", movieId });
         }
 
-        await this._movieService.AddPhoto(movieId, photoUrl);
+        await this._movieService.AddPhotoAsync(movieId, photoUrl);
 
         return this.RedirectToAction("Details", "Movie", new { Area = "", movieId });
 
@@ -187,7 +187,7 @@ public class MovieController : BaseAdminController
             return this.RedirectToAction("Details", "Movie", new { Area = "", movieId });
         }
 
-        await this._movieService.AddVideo(movieId, videoUrl);
+        await this._movieService.AddVideoAsync(movieId, videoUrl);
 
         return this.RedirectToAction("Details", "Movie", new { Area = "", movieId });
 

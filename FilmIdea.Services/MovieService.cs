@@ -619,7 +619,7 @@ public class MovieService : FilmIdeaService, IMovieService
         return comment.Review.MovieId;
     }
 
-    public async Task<bool> IsCriticOwnerOfReview(string? criticId, string? reviewId)
+    public async Task<bool> IsCriticOwnerOfReviewAsync(string? criticId, string? reviewId)
     {
 
         if (reviewId == null)
@@ -638,7 +638,7 @@ public class MovieService : FilmIdeaService, IMovieService
         return critic.Reviews.Any(r => r.Id.ToString() == reviewId.ToLower());
     }
 
-    public async Task<bool> IsUserOwnerOfComment(string? userId, string? commentId)
+    public async Task<bool> IsUserOwnerOfCommentAsync(string? userId, string? commentId)
     {
         if (commentId == null)
         {
@@ -739,7 +739,7 @@ public class MovieService : FilmIdeaService, IMovieService
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<int> GetMovieIdByReviewId(string? reviewId)
+    public async Task<int> GetMovieIdByReviewIdAsync(string? reviewId)
     {
         var review = await this._dbContext.Reviews
             .FirstOrDefaultAsync(r => r.Id.ToString() == reviewId);
@@ -786,7 +786,7 @@ public class MovieService : FilmIdeaService, IMovieService
         return genres;
     }
 
-    public async Task EditMovieGenres(List<int> genresIds, int movieId)
+    public async Task EditMovieGenresAsync(List<int> genresIds, int movieId)
     {
         var movie = await this._dbContext.Movies
             .Include(m => m.Genres)
@@ -824,7 +824,7 @@ public class MovieService : FilmIdeaService, IMovieService
         }
     }
 
-    public async Task<int> Create(AddMovieViewModel model, string photoUrl, string videoUrl)
+    public async Task<int> CreateAsync(AddMovieViewModel model, string photoUrl, string videoUrl)
     {
         var movie = new Movie
         {
@@ -851,7 +851,7 @@ public class MovieService : FilmIdeaService, IMovieService
         return movie.Id;
     }
 
-    public async Task AddPhoto(int movieId, string photoUrl)
+    public async Task AddPhotoAsync(int movieId, string photoUrl)
     {
 
         await this._dbContext.Photos.AddAsync(new Photo
@@ -870,7 +870,7 @@ public class MovieService : FilmIdeaService, IMovieService
         }
     }
 
-    public async Task AddVideo(int movieId, string videoUrl)
+    public async Task AddVideoAsync(int movieId, string videoUrl)
     {
         await this._dbContext.Videos.AddAsync(new Video
         {

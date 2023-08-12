@@ -278,7 +278,7 @@
                 @foreach (var review in Model.MovieDetails.Reviews)
                 {
 
-                    var isCriticOwner = await MovieService.IsCriticOwnerOfReview(criticId, review.Id);
+                    var isCriticOwner = await MovieService.IsCriticOwnerOfReviewAsync(criticId, review.Id);
 
                     <div class="review card mb-2" style="width: 80%">
                         <div class="card-body">
@@ -371,7 +371,7 @@
                             <div class="comments mt-3">
                                 @foreach (var comment in review.Comments)
                                 {
-                                    var isUserOwner = await MovieService.IsUserOwnerOfComment(userId, comment.Id);
+                                    var isUserOwner = await MovieService.IsUserOwnerOfCommentAsync(userId, comment.Id);
                                     <div class="comment card bg-light mb-2">
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between">

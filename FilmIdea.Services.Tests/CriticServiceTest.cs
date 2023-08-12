@@ -142,7 +142,7 @@ public class CriticServiceTest
         var userId = "15EB7825-840B-4528-71CC-08DB8C333233".ToLower();
         
         // Act
-        var result = await this._criticService.GetCriticName(userId);
+        var result = await this._criticService.GetCriticNameAsync(userId);
 
         var expected = "Critic Criticov";
         // Assert

@@ -33,7 +33,6 @@ public class CriticService : FilmIdeaService, ICriticService
         return critic?.Id.ToString();
     }
 
-
     public async Task CreateCriticAsync(string userId, BecomeCriticViewModel model, string photoUrl)
     {
 
@@ -58,7 +57,7 @@ public class CriticService : FilmIdeaService, ICriticService
         }
     }
 
-    public async Task<string?> GetCriticName(string userId)
+    public async Task<string?> GetCriticNameAsync(string userId)
     {
         var critic = await this._dbContext.Critics
             .Where(c => c.UserId.ToString() == userId)

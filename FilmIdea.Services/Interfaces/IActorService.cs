@@ -16,9 +16,9 @@ public interface IActorService
 
     Task<ICollection<EditMovieActors>> GetAllActorsAsync(int movieId);
 
-    Task EditMovieActors(List<int> actorsIds,int movieId);
+    Task EditMovieActorsAsync(List<int> actorsIds,int movieId);
 
-    Task AddPhoto(int actorId,string photoUrl);
+    Task AddPhotoAsync(int actorId,string photoUrl);
 
-    Task AddVideo(int actorId,string videoUrl);
+    Task AddVideoAsync(int actorId,string videoUrl);
 }

@@ -436,7 +436,7 @@ public class MovieController : BaseController
         try
         {
             var criticId = await this._criticService.GetCriticIdAsync(this.GetUserId());
-            var isOwner = await this._movieService.IsCriticOwnerOfReview(criticId, reviewId);
+            var isOwner = await this._movieService.IsCriticOwnerOfReviewAsync(criticId, reviewId);
             if (isOwner || this.User.IsAdmin())
             {
                 await this._movieService.DeleteReviewAsync(reviewId);
@@ -487,7 +487,7 @@ public class MovieController : BaseController
         try
         {
             var userId = this.User.GetId();
-            var isOwner = await this._movieService.IsUserOwnerOfComment(userId!, commentId);
+            var isOwner = await this._movieService.IsUserOwnerOfCommentAsync(userId!, commentId);
 
             int movieId = 0;
             if (isOwner || this.User.IsAdmin())

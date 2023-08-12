@@ -8,6 +8,7 @@ using Data.Interfaces;
 using Web.ViewModels.Comment;
 using Web.ViewModels.Review;
 using FilmIdea.Data.Models;
+using FilmIdea.Web.ViewModels.Movie;
 
 [TestFixture]
 public class MovieServiceTest
@@ -333,7 +334,7 @@ public class MovieServiceTest
         Assert.That(movie!.Reviews.First().Title, Is.EqualTo(expected));
     }
 
-   
+
     [Test]
     public void EditCommentAsyncShouldThrowsErrorIfCommentIdIsInValid()
     {
@@ -371,7 +372,7 @@ public class MovieServiceTest
 
         result = await this._movieService.GetWatchlistMoviesAsync(userId);
 
-        Assert.That(result.Count,Is.EqualTo(0));
+        Assert.That(result.Count, Is.EqualTo(0));
     }
 
     [Test]
@@ -381,7 +382,7 @@ public class MovieServiceTest
 
         var reviewId = "7DCC5BD6-1133-432B-B6A6-F6C27DA75948".ToLower();
 
-        var result = await this._movieService.IsCriticOwnerOfReview(criticId, reviewId);
+        var result = await this._movieService.IsCriticOwnerOfReviewAsync(criticId, reviewId);
 
         Assert.That(result, Is.False);
     }
@@ -393,7 +394,7 @@ public class MovieServiceTest
 
         var reviewId = "7DCC5BD6-1133-432B-B6A6-F6C27DA75948";
 
-        var result = await this._movieService.IsCriticOwnerOfReview(criticId, reviewId);
+        var result = await this._movieService.IsCriticOwnerOfReviewAsync(criticId, reviewId);
 
         Assert.That(result, Is.False);
     }
@@ -403,7 +404,7 @@ public class MovieServiceTest
     {
         var reviewId = "7DCC5BD6-1133-432B-B6A6-F6C27DA75948".ToLower();
 
-        var result = await this._movieService.IsCriticOwnerOfReview(null, reviewId);
+        var result = await this._movieService.IsCriticOwnerOfReviewAsync(null, reviewId);
 
         Assert.That(result, Is.False);
     }
@@ -413,7 +414,7 @@ public class MovieServiceTest
     {
         var criticId = "bf595423-7323-4e40-bd43-0f876c1beeca";
 
-        var result = await this._movieService.IsCriticOwnerOfReview(criticId, null);
+        var result = await this._movieService.IsCriticOwnerOfReviewAsync(criticId, null);
 
         Assert.That(result, Is.False);
     }
@@ -425,18 +426,18 @@ public class MovieServiceTest
 
         var commentId = "2532DDAA-63F0-4DE8-71CB-08DB8C333253".ToLower();
 
-        var result = await this._movieService.IsUserOwnerOfComment(userId, commentId);
+        var result = await this._movieService.IsUserOwnerOfCommentAsync(userId, commentId);
 
         Assert.That(result, Is.False);
     }
 
-    
+
     [Test]
     public async Task IsUserOwnerOfCommentShouldReturnFalseIfCommentIdIsNull()
     {
         var userId = "2532DDAA-63F0-4DE8-71CB-08DB8C333233".ToLower();
 
-        var result = await this._movieService.IsUserOwnerOfComment(userId, null);
+        var result = await this._movieService.IsUserOwnerOfCommentAsync(userId, null);
 
         Assert.That(result, Is.False);
     }
@@ -450,7 +451,7 @@ public class MovieServiceTest
 
         var result = await this._movieService.GetMovieForEditByIdAsync(movieId);
 
-        Assert.That(result.Title,Is.EqualTo(expected));
+        Assert.That(result.Title, Is.EqualTo(expected));
     }
 
     [Test]
@@ -462,13 +463,13 @@ public class MovieServiceTest
 
         var expectedName = "The Flash2";
 
-        model.Title= expectedName;
+        model.Title = expectedName;
 
         await this._movieService.EditMovieByIdAndModelAsync(movieId, model);
 
         var result = await this._movieService.GetMovieForEditByIdAsync(movieId);
 
-        Assert.That(result.Title,Is.EqualTo(expectedName));
+        Assert.That(result.Title, Is.EqualTo(expectedName));
 
     }
 
@@ -477,7 +478,7 @@ public class MovieServiceTest
     {
         var reviewId = "7DCC5BD6-1133-432B-B6A6-F6C27DA75948";
 
-        var result = await this._movieService.GetMovieIdByReviewId(reviewId);
+        var result = await this._movieService.GetMovieIdByReviewIdAsync(reviewId);
 
         Assert.That(result, Is.Negative);
     }
@@ -502,14 +503,14 @@ public class MovieServiceTest
     public async Task EditMovieGenresShouldEditMovie()
     {
         var movie = this._dbContext.Movies
-            .Include(m=>m.Genres)
+            .Include(m => m.Genres)
             .First();
 
-        var genresIds = new List<int>(){1,2,3};
+        var genresIds = new List<int>() { 1, 2, 3 };
 
-        await this._movieService.EditMovieGenres(genresIds, movie.Id);
+        await this._movieService.EditMovieGenresAsync(genresIds, movie.Id);
 
-        Assert.That(movie.Genres.First().GenreId,Is.EqualTo(1));
+        Assert.That(movie.Genres.First().GenreId, Is.EqualTo(1));
     }
 
     [Test]
@@ -521,9 +522,9 @@ public class MovieServiceTest
 
         string photoUrl = "Url";
 
-        await this._movieService.AddPhoto(movie.Id,photoUrl);
+        await this._movieService.AddPhotoAsync(movie.Id, photoUrl);
 
-        Assert.That(movie.Photos.Any(p=>p.Url==photoUrl), Is.True);
+        Assert.That(movie.Photos.Any(p => p.Url == photoUrl), Is.True);
     }
 
     [Test]
@@ -535,7 +536,7 @@ public class MovieServiceTest
 
         string videoUrl = "Url";
 
-        await this._movieService.AddVideo(movie.Id, videoUrl);
+        await this._movieService.AddVideoAsync(movie.Id, videoUrl);
 
         Assert.That(movie.Videos.Any(p => p.Url == videoUrl), Is.True);
     }
@@ -558,11 +559,11 @@ public class MovieServiceTest
         var reviewId = this._dbContext.Reviews.First().Id.ToString();
 
         var userId = "15EB7825-840B-4528-71CC-08DB8C333233".ToLower();
-        
+
         var likesBefore = await this._dbContext.Likes.CountAsync();
         var result = await this._movieService.AddRemoveLikeAsync(reviewId, userId);
         var likesAfter = await this._dbContext.Likes.CountAsync();
-        
+
         Assert.AreEqual(likesBefore + 1, likesAfter);
         Assert.AreEqual(1, result);
     }
@@ -586,7 +587,7 @@ public class MovieServiceTest
 
         var userId = "15EB7825-840B-4528-71CC-08DB8C333233".ToLower();
         await this._movieService.AddRemoveLikeAsync(reviewId, userId);
-        
+
         var likesBefore = await this._dbContext.Likes.CountAsync();
         var result = await this._movieService.AddRemoveLikeAsync(reviewId, userId);
         var likesAfter = await this._dbContext.Likes.CountAsync();
@@ -614,11 +615,11 @@ public class MovieServiceTest
         var reviewId = this._dbContext.Reviews.First().Id.ToString();
 
         var userId = "15EB7825-840B-4528-71CC-08DB8C333233".ToLower();
-        
+
         var dislikesBefore = await this._dbContext.Dislikes.CountAsync();
         var result = await this._movieService.AddRemoveDislikeAsync(reviewId, userId);
         var dislikesAfter = await this._dbContext.Dislikes.CountAsync();
-        
+
         Assert.AreEqual(dislikesBefore + 1, dislikesAfter);
         Assert.AreEqual(1, result);
     }
@@ -641,13 +642,13 @@ public class MovieServiceTest
         var reviewId = this._dbContext.Reviews.First().Id.ToString();
 
         var userId = "15EB7825-840B-4528-71CC-08DB8C333233".ToLower();
-        
+
         await this._movieService.AddRemoveDislikeAsync(reviewId, userId);
-        
+
         var dislikesBefore = await this._dbContext.Dislikes.CountAsync();
         var result = await this._movieService.AddRemoveDislikeAsync(reviewId, userId);
         var dislikesAfter = await this._dbContext.Dislikes.CountAsync();
-        
+
         Assert.AreEqual(dislikesBefore - 1, dislikesAfter);
         Assert.AreEqual(0, result);
     }
@@ -671,8 +672,34 @@ public class MovieServiceTest
 
         await this._movieService.DeleteReviewAsync(reviewId);
 
-        // Assert
         Assert.AreEqual(0, await this._dbContext.Reviews.CountAsync());
         Assert.AreEqual(0, await this._dbContext.Comments.CountAsync());
+    }
+
+    [Test]
+    public async Task GetAllGenresAsyncShouldReturnCollectionOfGenres()
+    {
+        var movieId = 2;
+
+        Assert.DoesNotThrowAsync(async () => await this._movieService.GetAllGenresAsync(movieId));
+    }
+
+    [Test]
+    public async Task CreateAsyncShouldCreateMovie()
+    {
+        var model = new AddMovieViewModel
+        {
+            Title = "title",
+            Description = "description",
+            ReleaseDate = DateTime.UtcNow,
+            Duration = 143,
+            DirectorId = 2
+        };
+        string photoUrl = "url";
+        string videoUrl = "url";
+
+        var result = this._movieService.CreateAsync(model, photoUrl, videoUrl);
+
+        Assert.IsNotNull(result);
     }
 }

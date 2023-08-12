@@ -128,7 +128,7 @@ public class ActorController : BaseAdminController
     {
 
         var actorsIds = actorIds.Split(",").Select(id=>int.Parse(id)).ToList();
-        await this._actorService.EditMovieActors(actorsIds,movieId);
+        await this._actorService.EditMovieActorsAsync(actorsIds,movieId);
 
         return RedirectToAction("Details", "Movie", new { Area = "", movieId });
     }
@@ -150,7 +150,7 @@ public class ActorController : BaseAdminController
             return this.RedirectToAction("Details", "Actor", new { Area = "", actorId });
         }
 
-        await this._actorService.AddPhoto(actorId, photoUrl);
+        await this._actorService.AddPhotoAsync(actorId, photoUrl);
 
         return this.RedirectToAction("Details", "Actor", new { Area = "", actorId });
 
@@ -173,7 +173,7 @@ public class ActorController : BaseAdminController
             return this.RedirectToAction("Details", "Actor", new { Area = "", actorId });
         }
 
-        await this._actorService.AddVideo(actorId, videoUrl);
+        await this._actorService.AddVideoAsync(actorId, videoUrl);
 
         return this.RedirectToAction("Details", "Actor", new {Area="", actorId });
     }

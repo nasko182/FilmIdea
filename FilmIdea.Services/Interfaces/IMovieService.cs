@@ -52,11 +52,11 @@ public interface IMovieService
 
     Task<int> DeleteCommentAsync(string commentId);
 
-    Task<bool> IsCriticOwnerOfReview(string? criticId, string? reviewId);
+    Task<bool> IsCriticOwnerOfReviewAsync(string? criticId, string? reviewId);
 
-    Task<bool> IsUserOwnerOfComment(string? userId, string? commentId);
+    Task<bool> IsUserOwnerOfCommentAsync(string? userId, string? commentId);
 
-    Task<int> Create(AddMovieViewModel model, string photoUrl, string videoUrl);
+    Task<int> CreateAsync(AddMovieViewModel model, string photoUrl, string videoUrl);
 
     Task<EditMovieViewModel> GetMovieForEditByIdAsync(int id);
 
@@ -64,13 +64,13 @@ public interface IMovieService
 
     Task DeleteMovieByIdAsync(int id);
 
-    Task<int> GetMovieIdByReviewId(string? reviewId);
+    Task<int> GetMovieIdByReviewIdAsync(string? reviewId);
 
     Task<ICollection<EditMovieGenres>> GetAllGenresAsync(int movieId);
 
-    Task EditMovieGenres(List<int> genresIds, int movieId);
+    Task EditMovieGenresAsync(List<int> genresIds, int movieId);
 
-    Task AddPhoto(int movieId, string photoUrl);
+    Task AddPhotoAsync(int movieId, string photoUrl);
 
-    Task AddVideo(int movieId, string videoUrl);
+    Task AddVideoAsync(int movieId, string videoUrl);
 }

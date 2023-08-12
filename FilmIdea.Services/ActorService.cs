@@ -203,7 +203,7 @@ public class ActorService : FilmIdeaService, IActorService
         return actors;
     }
 
-    public async Task EditMovieActors(List<int> actorsIds, int movieId)
+    public async Task EditMovieActorsAsync(List<int> actorsIds, int movieId)
     {
         var movie = await this._dbContext.Movies
             .Include(m => m.Actors)
@@ -241,7 +241,7 @@ public class ActorService : FilmIdeaService, IActorService
         }
     }
 
-    public async Task AddPhoto(int actorId, string photoUrl)
+    public async Task AddPhotoAsync(int actorId, string photoUrl)
     {
 
         await this._dbContext.Photos.AddAsync(new Photo
@@ -260,7 +260,7 @@ public class ActorService : FilmIdeaService, IActorService
         }
     }
 
-    public async Task AddVideo(int actorId, string videoUrl)
+    public async Task AddVideoAsync(int actorId, string videoUrl)
     {
         await this._dbContext.Videos.AddAsync(new Video
         {

@@ -238,7 +238,7 @@ public class ActorServiceTest
         var actorsIds = new List<int> { 1, 2, 3 };
         var movieId = 1; 
 
-        Assert.DoesNotThrowAsync(async () => await this._actorService.EditMovieActors(actorsIds, movieId));
+        Assert.DoesNotThrowAsync(async () => await this._actorService.EditMovieActorsAsync(actorsIds, movieId));
     }
 
     [Test]
@@ -247,7 +247,7 @@ public class ActorServiceTest
         var actorId = 1; 
         var photoUrl = "https://example.com/photo.jpg";
 
-        Assert.DoesNotThrowAsync(async () => await this._actorService.AddPhoto(actorId, photoUrl));
+        Assert.DoesNotThrowAsync(async () => await this._actorService.AddPhotoAsync(actorId, photoUrl));
     }
 
     [Test]
@@ -256,6 +256,6 @@ public class ActorServiceTest
         var actorId = 1; 
         var videoUrl = "https://example.com/video.mp4"; 
 
-        Assert.DoesNotThrowAsync(async () => await this._actorService.AddVideo(actorId, videoUrl));
+        Assert.DoesNotThrowAsync(async () => await this._actorService.AddVideoAsync(actorId, videoUrl));
     }
 }

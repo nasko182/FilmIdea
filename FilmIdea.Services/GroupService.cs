@@ -156,7 +156,7 @@ public class GroupService : FilmIdeaService, IGroupService
 
     public async Task<DetailsGroupModel> GetGroupDetailsAsync(string groupId, string userId)
     {
-        var chat = await GetChatViewModel(groupId);
+        var chat = await this.GetChatViewModelAsync(groupId);
 
         var userRatings = await this._dbContext.UserRatings
             .Where(r => r.UserId.ToString() == userId)
@@ -310,7 +310,7 @@ public class GroupService : FilmIdeaService, IGroupService
         };
     }
 
-    private async Task<ChatViewModel> GetChatViewModel(string groupId)
+    private async Task<ChatViewModel> GetChatViewModelAsync(string groupId)
     {
         var group = await this._dbContext.Groups
             .Include(g => g.Chat)

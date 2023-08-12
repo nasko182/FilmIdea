@@ -10,7 +10,7 @@ public interface ICriticService
 
     Task CreateCriticAsync(string userId, BecomeCriticViewModel model,string photoUrl);
 
-    Task<string?> GetCriticName(string userId);
+    Task<string?> GetCriticNameAsync(string userId);
 
     Task<CriticDetailsViewModel> GetCriticDetailsByIdAsync(string criticId);
 
