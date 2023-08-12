@@ -96,39 +96,39 @@ Password: 123456
 Explore the various features and functionalities of FilmIdea, including movie recommendations, watchlists, reviews, and group interactions. You can also register new users if desired.
 
 Database Diagram
-![Database Diagram](ReadMeImages/diagram.png)
+![Database Diagram](FilmIdea-WebApplication/wwwroot/ReadMeImages/diagram.png)
 
 Test Coverage
-![Test Coverage](ReadMeImages/testCoverage.png)
+![Test Coverage](FilmIdea-WebApplication/wwwroot/ReadMeImages/testCoverage.png)
 
 App Images
 
 Home Page
-![Home Page](ReadMeImages/home.png)
+![Home Page](FilmIdea-WebApplication/wwwroot/ReadMeImages/home.png)
 
 All Movies Page
-![All Movies Page](ReadMeImages/all.png)
+![All Movies Page](FilmIdea-WebApplication/wwwroot/ReadMeImages/all.png)
 
 Roulette Page
-![Alt Text](ReadMeImages/roulette.png)
+![Alt Text](FilmIdea-WebApplication/wwwroot/ReadMeImages/roulette.png)
 
 Swipe Page
-![Roulette Page](ReadMeImages/swipe.png)
+![Roulette Page](FilmIdea-WebApplication/wwwroot/ReadMeImages/swipe.png)
 
 User Watchlist
-![User Watchlist](ReadMeImages/watchlist.png)
+![User Watchlist](FilmIdea-WebApplication/wwwroot/ReadMeImages/watchlist.png)
 
 User All Groups Page
-![User All Groups Page](ReadMeImages/allGroups.png)
+![User All Groups Page](FilmIdea-WebApplication/wwwroot/ReadMeImages/allGroups.png)
 
 Group Page
-![Group Page](ReadMeImages/group.png)
+![Group Page](FilmIdea-WebApplication/wwwroot/ReadMeImages/group.png)
 
 Movie Details Page
-![Movie Details Page](ReadMeImages/movieDetails.png)
+![Movie Details Page](FilmIdea-WebApplication/wwwroot/ReadMeImages/movieDetails.png)
 
 Actor Details Page
-![Actor Details Page](ReadMeImages/actorDetails.png)
+![Actor Details Page](FilmIdea-WebApplication/wwwroot/ReadMeImages/actorDetails.png)
 
 Director Details Page
-![Director Details Page](ReadMeImages/directorDetails.png)
+![Director Details Page](FilmIdea-WebApplication/wwwroot/ReadMeImages/directorDetails.png)
